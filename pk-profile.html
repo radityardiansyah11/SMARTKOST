@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Admin Dashboard - SMARTKOST</title>
+    <title>Admin Dashboard - Profile Pemilik Kost</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -46,9 +46,9 @@
         <div class="d-flex">
             <!-- Sidebar Start -->
             <div class="d-flex flex-column flex-shrink-0 p-3 bg-dark"
-                style=" width: 280px; height: 100vh; position: fixed;">
+                style="width: 280px; height: 100vh; position: fixed;">
                 <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-                    <h3 class=" mt-2 text-light">Dashboard</h3>
+                    <h3 class="mt-2 text-light">Dashboard</h3>
                 </a>
                 <hr>
                 <ul class="nav nav-pills flex-column mb-auto">
@@ -71,7 +71,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="nav-link text-light">
+                        <a href="pk-settings.html" class="nav-link text-light">
                             <i class="bi bi-gear me-2"></i>
                             Settings
                         </a>
@@ -103,36 +103,47 @@
                         <img class="img-fluid w-25 mb-2" src="4. image-web/SMARTKOST 1.png" alt="SMARTKOST Logo">
                     </div>
 
-                    <!-- Stats Overview -->
+                    <!-- Profile Section -->
                     <div class="col-md-4">
                         <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Total Listings</h5>
-                                <h3 class="card-text">120</h3>
+                            <img src="https://via.placeholder.com/250" class="card-img-top" alt="Owner Profile Picture">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Nama Pemilik</h5>
+                                <p class="card-text">Deskripsi singkat mengenai pemilik kost.</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Active Listings</h5>
-                                <h3 class="card-text">95</h3>
+
+                    <div class="col-md-8">
+                        <h2 class="h4 mb-3">Profile Pemilik Kost</h2>
+                        <form>
+                            <div class="mb-3">
+                                <label for="ownerName" class="form-label">Nama Pemilik</label>
+                                <input type="text" class="form-control" id="ownerName" placeholder="Enter Owner Name" value="Nama Pemilik">
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Total Revenue</h5>
-                                <h3 class="card-text">Rp. 12,000,000</h3>
+                            <div class="mb-3">
+                                <label for="ownerEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="ownerEmail" placeholder="Enter Email" value="email@example.com">
                             </div>
-                        </div>
+                            <div class="mb-3">
+                                <label for="ownerPhone" class="form-label">No. Telepon</label>
+                                <input type="tel" class="form-control" id="ownerPhone" placeholder="Enter Phone Number" value="+62-123-456-789">
+                            </div>
+                            <div class="mb-3">
+                                <label for="ownerAddress" class="form-label">Alamat</label>
+                                <textarea class="form-control" id="ownerAddress" rows="3" placeholder="Enter Address">Jl. Contoh Alamat, No. 123, Kota, Negara</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="ownerPassword" class="form-label">Ubah Password</label>
+                                <input type="password" class="form-control" id="ownerPassword" placeholder="Enter New Password">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update Profile</button>
+                        </form>
                     </div>
                 </div>
             </div>
             <!-- Content End -->
         </div>
-
 
         <!-- Footer Start -->
         <footer class="text-light py-4 mt-5" style="background-color: #000;">
