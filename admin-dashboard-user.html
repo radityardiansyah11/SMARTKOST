@@ -53,22 +53,22 @@
                 <hr>
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
-                        <a href="pk-dashboard.html" class="nav-link active text-light"
-                            style="background-color: #0D6EFD;" aria-current="page">
+                        <a href="admin-dashboard.html" class="nav-link text-light">
                             <i class="bi bi-speedometer2 me-2"></i>
                             Dashboard
                         </a>
                     </li>
                     <li>
-                        <a href="pk-dashboard-kost.html" class="nav-link text-light">
+                        <a href="admin-dahsboard-pk.html" class="nav-link text-light">
                             <i class="bi bi-house-door me-2"></i>
-                            List Kost
+                            Pemilik Kost
                         </a>
                     </li>
                     <li>
-                        <a href="pk-dashboard-booking.html" class="nav-link text-light">
+                        <a href="admin-dashboard-user.html" class="nav-link active text-light"
+                        style="background-color: #0D6EFD;"aria-current="page">
                             <i class="bi bi-people me-2"></i>
-                            Booking
+                           User
                         </a>
                     </li>
                 </ul>
@@ -100,26 +100,26 @@
 
                     <!-- Stats Overview -->
                     <div class="col-md-4">
-                        <div class="card" style="height: 150px;">
+                        <div class="card" style="background-color: #0D6EFD; height: 150px;">
                             <div class="card-body">
-                                <h5 class="card-title">Total Listings</h5>
-                                <h3 class="card-text">120</h3>
+                                <h5 class="card-title text-light">User</h5>
+                                <h3 class="card-text text-light">120</h3>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card" style="height: 150px;">
+                        <div class="card" style="background-color: #0E2E50; height: 150px;">
                             <div class="card-body">
-                                <h5 class="card-title">Active Listings</h5>
-                                <h3 class="card-text">95</h3>
+                                <h5 class="card-title text-light">Pemilik Kost</h5>
+                                <h3 class="card-text text-light">95</h3>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card" style="height: 150px;">
+                        <div class="card" style="background-color: #0D6EFD; height: 150px;">
                             <div class="card-body">
-                                <h5 class="card-title">Total Revenue</h5>
-                                <h3 class="card-text">Rp. 12,000,000</h3>
+                                <h5 class="card-title text-light">Promosi</h5>
+                                <h3 class="card-text text-light">Rp. 12,000,000</h3>
                             </div>
                         </div>
                     </div>
@@ -128,9 +128,9 @@
                 <!-- Listings -->
                 <div class="row mt-5">
                     <div class="col-md-12">
-                        <h2 class="h4 mb-3">List Kost</h2>
+                        <h2 class="h4 mb-3">User</h2>
                         <table class="table table-hover">
-                            <thead class="table-dark">
+                            <thead class="table text-light" style="background-color: #0D6EFD;">
                                 <tr>
                                     <th scope="col">ID</th>
                                     <th scope="col">Nama kost</th>
@@ -178,63 +178,6 @@
                             </tbody>
                         </table>
                     </div>
-                    <a href="pk-dashboard-kost.html" class="text-end" style="color: grey;">View More</a> 
-                </div>
-
-                <!-- Booking -->
-                <div class="row mt-5">
-                    <div class="col-md-12">
-                        <h2 class="h4 mb-3">Booking</h2>
-                        <table class="table table-hover">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Nama</th>
-                                    <th scope="col">Kost</th>
-                                    <th scope="col">Bayar</th>
-                                    <th scope="col">Tanggal</th>
-                                    <th scope="col">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>User 1</td>
-                                    <td>Kost Malang</td>
-                                    <td>Rp. 500.000</td>
-                                    <td>2024-08-09</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary">Edit</button>
-                                        <button class="btn btn-sm btn-danger">Delete</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>User 2</td>
-                                    <td>Kost Kepanjen</td>
-                                    <td>Rp. 600.000</td>
-                                    <td>2024-08-08</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary">Edit</button>
-                                        <button class="btn btn-sm btn-danger">Delete</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>User 3</td>
-                                    <td>Kost Batu</td>
-                                    <td>Rp. 600.000</td>
-                                    <td>2024-08-08</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary">Edit</button>
-                                        <button class="btn btn-sm btn-danger">Delete</button>
-                                    </td>
-                                </tr>
-                                <!-- More rows as needed -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <a href="pk-dashboard-booking.html" class="text-end" style="color: grey;">View More</a> 
                 </div>
             </div>
             <!-- Content End -->
