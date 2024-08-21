@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>SMARTKOST - Pembayaran</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="4. image-web/SMARTKOST 2.png" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-xxl bg-white p-0">
+        <!-- Spinner Start -->
+        <div id="spinner"
+            class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+        <!-- Navbar Start -->
+        <div class="container-fluid nav-bar bg-transparent mt-3">
+            <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
+                <!-- Logo -->
+                <a href="index.html" class="navbar-brand d-flex align-items-center ">
+                    <div class="">
+                        <img class="img-fluid w-25" src="4. image-web/SMARTKOST 1.png" alt="Icon">
+                    </div>
+                </a>
+
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav ms-auto">
+                        <a href="#" class="nav-item nav-link active">Pembayaran</a>
+                    </div>
+                    <a href="login.html" class="btn btn-primary px-3 d-none d-lg-flex"
+                        style="background-color: #0D6EFD;">Masuk</a>
+                </div>
+            </nav>
+        </div>
+        <!-- Navbar End -->
+
+        <!-- Pembayaran Start -->
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <div class="card">
+                        <div class="card-header text-white" style="background-color: #0D6EFD;">
+                            <h4 class="mb-2 mt-2 text-light">Rincian Pembayaran</h4>
+                        </div>
+                        <div class="card-body ">
+                            <!-- Rincian Tagihan -->
+                            <h5 class="mb-3">Pembayaran: <strong>Kost Malang</strong></h5>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Deskripsi</th>
+                                        <th>Jumlah</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Sewa Kost </td>
+                                        <td>Rp 700.000</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total</strong></td>
+                                        <td><strong>Rp 700.000</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- Formulir Pembayaran -->
+                            <h5 class="mt-4">Detail Pembayaran</h5>
+                            <form>
+                                <div class="mb-3">
+                                    <label for="namaPenyewa" class="form-label">Nama Penyewa</label>
+                                    <input type="text" class="form-control" id="namaPenyewa" placeholder="Nama Lengkap">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="emailPenyewa" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="emailPenyewa"
+                                        placeholder="email@example.com">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="metodePembayaran" class="form-label">Metode Pembayaran</label>
+                                    <select class="form-select" id="metodePembayaran">
+                                        <option value="transfer">Transfer Bank</option>
+                                        <option value="ewallet">E-Wallet (OVO, GoPay, DANA)</option>
+                                        <option value="creditcard">Kartu Kredit</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100" style="background-color: #0D6EFD;">Bayar Sekarang</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Pembayaran End -->
+
+        <!-- Footer Start -->
+        <footer class="mt-5">
+            <div class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5"
+                style="background-color: #0D6EFD;">
+                <!-- Copyright -->
+                <div class="text-white mb-3 mb-md-0">
+                    SMARTKOST © 2024. All rights reserved.
+                </div>
+                <!-- Copyright -->
+            </div>
+        </footer>
+        <!-- Footer End -->
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top" style="background-color: #0D6EFD;"><i
+                class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>
