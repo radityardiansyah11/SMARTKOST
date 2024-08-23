@@ -30,6 +30,13 @@
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+
+    <style>
+        .card {
+            box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+            border: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -45,12 +52,12 @@
 
         <div class="d-flex">
             <!-- Sidebar Start -->
-            <div class="d-flex flex-column flex-shrink-0 p-3 bg-dark"
-                style=" width: 280px; height: 100vh; position: fixed;">
+            <div class="d-flex flex-column flex-shrink-0 p-3"
+                style=" width: 280px; height: 100vh; position: fixed; background-color: #00765a;">
                 <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
                     <h3 class=" mt-2 text-light">Dashboard</h3>
                 </a>
-                <hr>
+                <hr class="text-light">
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
                         <a href="admin-dashboard.html" class="nav-link text-light">
@@ -60,7 +67,7 @@
                     </li>
                     <li>
                         <a href="admin-dahsboard-pk.html" class="nav-link active text-light"
-                        style="background-color: #0D6EFD;"aria-current="page">
+                        style="background-color: #00B98E;" aria-current="page">
                             <i class="bi bi-house-door me-2"></i>
                             Pemilik Kost
                         </a>
@@ -72,7 +79,7 @@
                         </a>
                     </li>
                 </ul>
-                <hr>
+                <hr class="text-light">
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center text-light text-decoration-none dropdown-toggle"
                         id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -81,10 +88,6 @@
                         <strong>Admin</strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-light text-small shadow">
-                        <li><a class="dropdown-item" href="pk-profile.html">Profile</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
                         <li><a class="dropdown-item" href="#">Sign out</a></li>
                     </ul>
                 </div>
@@ -95,31 +98,31 @@
             <div class="content p-4" style="margin-left: 280px; padding: 20px;">
                 <div class="row">
                     <div class="col-md-12">
-                        <img class="img-fluid w-25 mb-2" src="4. image-web/SMARTKOST 1.png" alt="SMARTKOST Logo">
+                        <img class="img-fluid w-25 mb-2" src="img2/logo smartkost.png" alt="SMARTKOST Logo">
                     </div>
 
                     <!-- Stats Overview -->
                     <div class="col-md-4">
-                        <div class="card" style="background-color: #0D6EFD; height: 150px;">
+                        <div class="card" style=" height: 150px; ">
                             <div class="card-body">
-                                <h5 class="card-title text-light">User</h5>
-                                <h3 class="card-text text-light">120</h3>
+                                <h5 class="card-title ">User</h5>
+                                <h3 class="card-text ">120</h3>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card" style="background-color: #0E2E50; height: 150px;">
+                        <div class="card" style=" height: 150px;">
                             <div class="card-body">
-                                <h5 class="card-title text-light">Pemilik Kost</h5>
-                                <h3 class="card-text text-light">95</h3>
+                                <h5 class="card-title ">Pemilik Kost</h5>
+                                <h3 class="card-text ">95</h3>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card" style="background-color: #0D6EFD; height: 150px;">
+                        <div class="card" style=" height: 150px;">
                             <div class="card-body">
-                                <h5 class="card-title text-light">Promosi</h5>
-                                <h3 class="card-text text-light">Rp. 12,000,000</h3>
+                                <h5 class="card-title">Promosi</h5>
+                                <h3 class="card-text">Rp. 12,000,000</h3>
                             </div>
                         </div>
                     </div>
@@ -130,7 +133,7 @@
                     <div class="col-md-12">
                         <h2 class="h4 mb-3">Pemilik Kost</h2>
                         <table class="table table-hover">
-                            <thead class="table text-light" style="background-color: #0D6EFD;">
+                            <thead class="table text-light" style="background-color: #009270;">
                                 <tr>
                                     <th scope="col">ID</th>
                                     <th scope="col">Pemilik kost</th>

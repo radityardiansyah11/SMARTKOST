@@ -3,13 +3,13 @@
 
 <head>
     <meta charset="utf-8">
-    <title>SMARTKOST-Detail</title>
+    <title>home-SMARTKOST</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
 
     <!-- Favicon -->
-    <link href="4. image-web/SMARTKOST 2.png" rel="icon">
+    <link href="img2/mini logo smartkost.png" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,6 +30,77 @@
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+
+    <style>
+        .main-image {
+            width: 100%;
+            /* Pastikan gambar memenuhi lebar kolom */
+            height: auto;
+            /* Tinggi menyesuaikan secara proporsional */
+            object-fit: cover;
+            /* Pastikan gambar tidak terdistorsi */
+        }
+
+        .thumbnail-image {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .price-discount {
+            font-weight: bold;
+        }
+
+        .final-price {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .facility-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .facility-list li {
+            display: inline;
+            margin-right: 15px;
+        }
+
+        .facility-list li i {
+            color: #28a745;
+        }
+
+        .contact-owner-btn {
+            background-color: #28a745;
+            color: white;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            font-size: 18px;
+        }
+
+        .icon-text {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .icon-text i {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .section-heading {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+        .card-shadow{
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            border: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -45,122 +116,311 @@
 
 
         <!-- Navbar Start -->
-        <div class="container-fluid nav-bar bg-transparent mt-3">
+        <div class="container-fluid nav-bar bg-transparent">
             <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
-                <!-- Logo -->
-                <a href="index.html" class="navbar-brand d-flex align-items-center ">
-                    <div class="">
-                        <img class="img-fluid w-25" src="4. image-web/SMARTKOST 1.png" alt="Icon">
+                <a href="#" class="navbar-brand d-flex align-items-center text-center">
+                    <div class="p-2">
+                        <img class="img-fluid" src="img2/logo smartkost.png" alt="Icon" style="width: 210px; height: 70px;">
                     </div>
                 </a>
-
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto">
-                        <a href="index.html" class="nav-item nav-link">Home</a>
-                        <a href="list kost.html" class="nav-item nav-link">Kost</a>
-                        <a href="#" class="nav-item nav-link active">Detail</a>
+                        <a href="user-home.html" class="nav-item nav-link">Beranda</a>
+
+                        <a href="user-kost.html" class="nav-item nav-link">Kost</a>
+                        <a href="kontak.html" class="nav-item nav-link">Kontak</a>
+                        <a href="user-detail.html" class="nav-item nav-link active">Detail</a>
                     </div>
-                    <a href="#">
-                        <img src="4. image-web/Bulat.png">
-                    </a>
+                    <div class="d-flex">
+                        <div class="me-3 text-end">
+                            <h6 class="mt-2">Halo, User</h6>
+                        </div>
+                        <img src="img2/Bulat.png" style="width: 50px; height: 50px;">
+                    </div>
                 </div>
             </nav>
         </div>
         <!-- Navbar End -->
 
-
-        <!-- Header Start -->
-
-        <!-- Header End -->
-
-        <!-- Property List Start -->
+        <!-- gambar -->
         <div class="container mt-5">
             <div class="row">
-                <div class="col-md-6">
-                    <div id="kostCarousel" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="img/carousel-1.jpg" class="d-block w-100" alt="Gambar Kost 1">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="img/carousel-2.jpg" class="d-block w-100" alt="Gambar Kost 2">
-                            </div>
+                <!-- Left Section: Image Gallery -->
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-12 col-md-12">
+                            <img src="img2/kost1.jpg" class="img-fluid main-image rounded" alt="Main Image">
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#kostCarousel"
-                            data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#kostCarousel"
-                            data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-4">
+                            <img src="img2/kost1.jpg" class="img-fluid thumbnail-image rounded" alt="Thumbnail 1">
+                        </div>
+                        <div class="col-4">
+                            <img src="img2/kost1.jpg" class="img-fluid thumbnail-image rounded" alt="Thumbnail 2">
+                        </div>
+                        <div class="col-4">
+                            <img src="img2/kost1.jpg" class="img-fluid thumbnail-image rounded" alt="Thumbnail 3">
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <h1>Nama Kost</h1>
-                    <div class="d-flex align-items-center">
-                        <a class="d-block h4">Rp 1.500.000</a>
-                        <p class="m-1">/bulan</p>
+            </div>
+
+            <!-- Description Section -->
+            <div class="row mt-5">
+                <div class="col-md-8">
+                    <h2>Kost Comboran</h2>
+                    <div class="icon-text">
+                        <i class="fa fa-map-marker-alt text-primary me-2"></i>
+                        <span>Jl. Tanimbar No. 10 Kec. Klojen Kota Malang</span>
                     </div>
-                    <p><i class="fa fa-map-marker-alt me-2" style="color: #0E2E50;"></i>Jl. Tanimbar
-                        No.4</p>
-                    <p>Deskripsi: Kost nyaman dan bersih dengan fasilitas lengkap. Lokasi strategis dekat dengan pusat
-                        perbelanjaan dan transportasi umum.</p>
-                    <h3>Fasilitas:</h3>
-                    <ul>
-                        <li>AC</li>
-                        <li>Wi-Fi</li>
-                        <li>Kamar Mandi Dalam</li>
-                        <li>Dapur Bersama</li>
-                        <li>Parkir Motor</li>
-                    </ul>
-                    <button type="button" class="btn btn-primary w-25"
-                        style="background-color: #0D6EFD;">Booking</button>
+                    <h5 class="text-muted mt-3"><strong> Deskripsi Kost </strong></h5>
+                    <p>Kost Comboran Tipe A terletak di lokasi strategis di Malang, dengan
+                        akses
+                        mudah ke pusat perbelanjaan dan transportasi umum. Kost ini memiliki fasilitas yang lengkap dan
+                        nyaman untuk para penyewa.</p>
+                    <hr>
+                    <!-- Deskripsi dan Fasilitas Lengkap -->
+                    <div class="row ">
+                        <div class="col-md-12 d-flex">
+                            <!-- Spesifikasi Tipe Kamar -->
+                            <div class="me-5">
+                                <h4 class="section-heading">Spesifikasi Tipe Kamar</h4>
+                                <div class="icon-text">
+                                    <i class="fas fa-ruler-combined"></i>
+                                    <span>3.2 x 3.2 meter</span>
+                                </div>
+                                <div class="icon-text">
+                                    <i class="fas fa-bolt"></i>
+                                    <span>Sudah termasuk Listrik</span>
+                                </div>
+                            </div>
+
+                            <!-- Fasilitas Kamar -->
+                            <div class="me-5">
+                                <h4 class="section-heading">Fasilitas Kamar</h4>
+                                <div class="icon-text">
+                                    <i class="fas fa-bed"></i>
+                                    <span>Kasur</span>
+                                </div>
+                                <div class="icon-text">
+                                    <i class="fas fa-fan"></i>
+                                    <span>Ventilasi</span>
+                                </div>
+                            </div>
+
+                            <!-- Fasilitas Kamar Mandi -->
+                            <div class="desk">
+                                <h4 class="section-heading">Fasilitas Kamar Mandi</h4>
+                                <div class="icon-text">
+                                    <i class="fas fa-shower"></i>
+                                    <span>Kamar Mandi Dalam</span>
+                                </div>
+                                <div class="icon-text">
+                                    <i class="fas fa-toilet"></i>
+                                    <span>Kloset Jongkok</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- card bayar -->
+                <div class="card col-md-4 p-4 card-shadow">
+                    <!-- Discount and Price -->
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="icon-text text-danger">
+                                <i class="fas fa-bolt"></i>
+                                <span><strong>Diskon 55 Ribu</strong></span>
+                            </div>
+                        </div>
+                        <span class="text-decoration-line-through text-muted">Rp1.125.000</span>
+                    </div>
+                    <div class="d-flex">
+                        <p class="final-price mt-2 text-dark">Rp1.070.000 </p>
+                        <span class="mt-3 ml-2">/bulan</span>
+                    </div>
+
+                    <!-- Date Picker and Rent Period -->
+                    <div class="input-group mb-3">
+                        <input type="date" class="form-control" value="2024-08-22">
+                        <select class="form-select">
+                            <option selected>Per Bulan</option>
+                            <option value="1">Per Tahun</option>
+                        </select>
+                    </div>
+
+                    <!-- Apply for Rent Button -->
+                    <button class="btn btn-outline-primary">Ajukan Sewa</button>
+                </div>
+
+            </div>
+        </div>
+
+        <hr class="m-5">
+
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="row g-0 gx-5 align-items-end">
+                    <div class="col-lg-12">
+                        <div class="text-center mx-auto mb-5 wow slideInLeft" data-wow-delay="0.1s">
+                            <h1 class="mb-3">Kost Lainnya</h1>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
+                    </div>
+                </div>
+                <div class="tab-content">
+                    <div id="tab-1" class="tab-pane fade show p-0 active">
+                        <div class="row g-4">
+                            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                <div class="property-item rounded overflow-hidden">
+                                    <div class="position-relative overflow-hidden">
+                                        <a href=""><img class="img-fluid" src="img2/gbr-kost1.jpg" alt=""></a>
+                                        <div
+                                            class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
+                                            Kost</div>
+                                    </div>
+                                    <div class="p-4 pb-0">
+                                        <h5 class="text-primary mb-3">Rp. 500.000</h5>
+                                        <a class="d-block h5 mb-2" href="">Kost Comboran</a>
+                                        <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
+                                    </div>
+                                    <div class="d-flex border-top">
+                                        <small class="flex-fill text-center border-end py-2"><i
+                                                class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
+                                        <small class="flex-fill text-center border-end py-2"><i
+                                                class="fa fa-bed text-primary me-2"></i>1 Bed</small>
+                                        <small class="flex-fill text-center py-2"><i
+                                                class="fa fa-bath text-primary me-2"></i>2 Bath</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                                <div class="property-item rounded overflow-hidden">
+                                    <div class="position-relative overflow-hidden">
+                                        <a href=""><img class="img-fluid" src="img2/gbr-kost2.jpg" alt=""></a>
+                                        <div
+                                            class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
+                                            Kost</div>
+                                    </div>
+                                    <div class="p-4 pb-0">
+                                        <h5 class="text-primary mb-3">Rp. 500.000</h5>
+                                        <a class="d-block h5 mb-2" href="">Kost Comboran</a>
+                                        <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
+                                    </div>
+                                    <div class="d-flex border-top">
+                                        <small class="flex-fill text-center border-end py-2"><i
+                                                class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
+                                        <small class="flex-fill text-center border-end py-2"><i
+                                                class="fa fa-bed text-primary me-2"></i>1 Bed</small>
+                                        <small class="flex-fill text-center py-2"><i
+                                                class="fa fa-bath text-primary me-2"></i>2 Bath</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                                <div class="property-item rounded overflow-hidden">
+                                    <div class="position-relative overflow-hidden">
+                                        <a href=""><img class="img-fluid" src="img2/gbr-kost2.jpg" alt=""></a>
+                                        <div
+                                            class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
+                                            Kost</div>
+                                    </div>
+                                    <div class="p-4 pb-0">
+                                        <h5 class="text-primary mb-3">Rp. 500.000</h5>
+                                        <a class="d-block h5 mb-2" href="">Kost Comboran</a>
+                                        <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
+                                    </div>
+                                    <div class="d-flex border-top">
+                                        <small class="flex-fill text-center border-end py-2"><i
+                                                class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
+                                        <small class="flex-fill text-center border-end py-2"><i
+                                                class="fa fa-bed text-primary me-2"></i>1 Bed</small>
+                                        <small class="flex-fill text-center py-2"><i
+                                                class="fa fa-bath text-primary me-2"></i>2 Bath</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.1s">
+                                <a class="btn btn-primary py-3 px-5" href="kost.html">Lihat Lainnya</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- Property List End -->
+    </div>
 
-        <!-- Footer Start -->
-        <footer class="text-light py-4 mt-5" style="background-color: #000;">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <img src="4. image-web/SMARTKOST 1.png" alt="Logo"
-                            style="max-width: 250px; width: 100%; height: auto;">
-                        <p class="mt-2">Dapatkan info kost murah<br> hanya di SMARTKOST</p>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <h5 style="color: #fff;">SMARTKOST</h5>
-                        <ul class="list-unstyled">
-                            <li><a href="search.html" class="text-light">Cari Kost</a></li>
-                            <li><a href="#" class="text-light">About</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <h5 style="color: #fff;">Hubungi Kami</h5>
-                        <address>
-                            <a href="tel:+1234567890" class="text-light">+62-999-999</a><br>
-                            <a href="mailto:info@smartkost.com" class="text-light">info@smartkost.com</a>
-                        </address>
+
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-white-50 footer pt-5 mt-2 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-white mb-4">Get In Touch</h5>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>comboran</p>
+                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
+                    <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                    <div class="d-flex pt-2">
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
-                <div class="text-center mt-1">
-                    <p class="mb-0 text-end">&copy; 2024 SMARTKOST. All rights reserved.</p>
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-white mb-4">link</h5>
+                    <a class="btn btn-link text-white-50" href="">About Us</a>
+                    <a class="btn btn-link text-white-50" href="">Contact Us</a>
+                    <a class="btn btn-link text-white-50" href="">Our Services</a>
+                    <a class="btn btn-link text-white-50" href="">Privacy Policy</a>
+                    <a class="btn btn-link text-white-50" href="">Terms & Condition</a>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-white mb-4">Newsletter</h5>
+                    <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
+                    <div class="position-relative mx-auto" style="max-width: 400px;">
+                        <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text"
+                            placeholder="Your email">
+                        <button type="button"
+                            class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+                    </div>
                 </div>
             </div>
-        </footer>
-        <!-- Footer End -->
+        </div>
+        <div class="container">
+            <div class="copyright">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; <a class="border-bottom" href="#">SMARTKOST</a>, All Right Reserved.
+
+                        <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                        Designed By <a class="border-bottom" href="https://htmlcodex.com">rdtyardnsyh</a>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <div class="footer-menu">
+                            <a href="">Home</a>
+                            <a href="">Cookies</a>
+                            <a href="">Help</a>
+                            <a href="">FQAs</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
 
 
-        <!-- Back to Top -->
-        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top" style="background-color: #0D6EFD;"><i
-                class="bi bi-arrow-up"></i></a>
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
 
     <!-- JavaScript Libraries -->

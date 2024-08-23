@@ -30,6 +30,28 @@
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+
+    <style>
+         .profile-card {
+            border: none;
+            background-color: #ffffff;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+           height: 350px;
+        }
+
+        .profile-card img {
+            border-radius: 50%;
+            width: 150px;
+            margin-bottom: 1rem;
+        }
+
+        .profile-card h5 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+    </style>
 </head>
 
 <body>
@@ -45,12 +67,12 @@
 
         <div class="d-flex">
             <!-- Sidebar Start -->
-            <div class="d-flex flex-column flex-shrink-0 p-3 bg-dark"
-                style="width: 280px; height: 100vh; position: fixed;">
+            <div class="d-flex flex-column flex-shrink-0 p-3"
+                style="width: 280px; height: 100vh; position: fixed; background-color: #00765a;">
                 <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
                     <h3 class="mt-2 text-light">Dashboard</h3>
                 </a>
-                <hr>
+                <hr class="text-light">
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
                         <a href="pk-dashboard.html" class="nav-link text-light">
@@ -71,13 +93,13 @@
                         </a>
                     </li>
                 </ul>
-                <hr>
+                <hr class="text-light">
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center text-light text-decoration-none dropdown-toggle"
                         id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="https://via.placeholder.com/50" alt="Admin" width="32" height="32"
                             class="rounded-circle me-2">
-                        <strong>Admin</strong>
+                        <strong>Hi, Pemilik Kost</strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-light text-small shadow">
                         <li><a class="dropdown-item" href="pk-profile.html">Profile</a></li>
@@ -94,21 +116,19 @@
             <div class="content p-4" style="margin-left: 280px; padding: 20px;">
                 <div class="row">
                     <div class="col-md-12">
-                        <img class="img-fluid w-25 mb-2" src="4. image-web/SMARTKOST 1.png" alt="SMARTKOST Logo">
+                        <img class="img-fluid w-25 mb-2" src="img2/logo smartkost.png" alt="SMARTKOST Logo">
                     </div>
 
                     <!-- Profile Section -->
-                    <div class="col-md-4">
-                        <div class="card">
-                            <img src="https://via.placeholder.com/250" class="card-img-top" alt="Owner Profile Picture">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Hartono</h5>
-                                <p class="card-text">Pemilik Kost</p>
-                            </div>
+                    <div class="col-lg-4 mb-4 mt-3">
+                        <div class="profile-card text-center">
+                            <img src="https://via.placeholder.com/150" alt="Owner Profile Picture">
+                            <h5>Hartono</h5>
+                            <p class="text-muted">Pemilik Kost</p>
                         </div>
                     </div>
 
-                    <div class="col-md-8">
+                    <div class="col-md-8 mt-3">
                         <h2 class="h4 mb-3">Profile Pemilik Kost</h2>
                         <form>
                             <div class="mb-3">
@@ -123,11 +143,7 @@
                                 <label for="ownerPhone" class="form-label">No. Telepon</label>
                                 <input type="tel" class="form-control" id="ownerPhone" placeholder="Enter Phone Number" value="+62-123-456-789">
                             </div>
-                            <div class="mb-3">
-                                <label for="ownerAddress" class="form-label">Alamat</label>
-                                <textarea class="form-control" id="ownerAddress" rows="3" placeholder="Enter Address">Jl. Contoh Alamat, No. 123, Kota, Negara</textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary" style="background-color: #0D6EFD;">Update Profile</button>
+                            <button type="submit" class="btn btn-primary">Edit Profile</button>
                         </form>
                     </div>
                 </div>

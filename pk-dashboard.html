@@ -30,6 +30,13 @@
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+
+    <style>
+        .card {
+            box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+            border: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -45,16 +52,16 @@
 
         <div class="d-flex">
             <!-- Sidebar Start -->
-            <div class="d-flex flex-column flex-shrink-0 p-3 bg-dark"
-                style=" width: 280px; height: 100vh; position: fixed;">
+            <div class="d-flex flex-column flex-shrink-0 p-3"
+                style=" width: 280px; height: 100vh; position: fixed; background-color: #00765a;">
                 <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
                     <h3 class=" mt-2 text-light">Dashboard</h3>
                 </a>
-                <hr>
+                <hr class="text-light">
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
                         <a href="pk-dashboard.html" class="nav-link active text-light"
-                            style="background-color: #0D6EFD;" aria-current="page">
+                            style="background-color: #00B98E;" aria-current="page">
                             <i class="bi bi-speedometer2 me-2"></i>
                             Dashboard
                         </a>
@@ -72,13 +79,13 @@
                         </a>
                     </li>
                 </ul>
-                <hr>
+                <hr class="text-light">
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center text-light text-decoration-none dropdown-toggle"
                         id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="https://via.placeholder.com/50" alt="Admin" width="32" height="32"
                             class="rounded-circle me-2">
-                        <strong>Admin</strong>
+                        <strong>Hi, Pemilik Kost</strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-light text-small shadow">
                         <li><a class="dropdown-item" href="pk-profile.html">Profile</a></li>
@@ -95,47 +102,46 @@
             <div class="content p-4" style="margin-left: 280px; padding: 20px;">
                 <div class="row">
                     <div class="col-md-12">
-                        <img class="img-fluid w-25 mb-2" src="4. image-web/SMARTKOST 1.png" alt="SMARTKOST Logo">
+                        <img class="img-fluid w-25 mb-2" src="img2/logo smartkost.png" alt="SMARTKOST Logo">
                     </div>
 
                     <!-- Stats Overview -->
                     <div class="col-md-4">
-                        <div class="card" style="height: 150px;">
+                        <div class="card bg-primary" style="height: 150px;">
                             <div class="card-body">
-                                <h5 class="card-title">kost</h5>
-                                <h3 class="card-text">120</h3>
+                                <h5 class="card-title text-light">Kost</h5>
+                                <h3 class="card-text text-light">120</h3>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card" style="height: 150px;">
+                        <div class="card" style="height: 150px; background-color: #009774;">
                             <div class="card-body">
-                                <h5 class="card-title">Booking</h5>
-                                <h3 class="card-text">95</h3>
+                                <h5 class="card-title text-light">Booking</h5>
+                                <h3 class="card-text text-light">95</h3>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card" style="height: 150px;">
+                        <div class="card bg-primary" style="height: 150px;">
                             <div class="card-body">
-                                <h5 class="card-title">Pendapatan</h5>
-                                <h3 class="card-text">Rp. 12,000,000</h3>
+                                <h5 class="card-title text-light">Pendapatan</h5>
+                                <h3 class="card-text text-light">Rp. 12,000,000</h3>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <!-- Listings -->
-                <div class="row mt-5">
+                <div class="row mt-3">
                     <div class="col-md-12">
                         <h2 class="h4 mb-3">Booking</h2>
                         <table class="table table-hover">
-                            <thead class="table-dark">
-                                <tr>
+                            <thead class="table" style="background-color: #009270;">
+                                <tr class="text-light">
                                     <th scope="col">ID</th>
-                                    <th scope="col">Nama kost</th>
-                                    <th scope="col">Lokasi</th>
-                                    <th scope="col">Harga</th>
+                                    <th scope="col">Nama</th>
+                                    <th scope="col">Kost</th>
+                                    <th scope="col">Bayar</th>
                                     <th scope="col">Tanggal</th>
                                     <th scope="col">Actions</th>
                                 </tr>
@@ -143,8 +149,8 @@
                             <tbody>
                                 <tr>
                                     <th scope="row">1</th>
+                                    <td>User 1</td>
                                     <td>Kost Malang</td>
-                                    <td>Jl. Tanimbar No.4</td>
                                     <td>Rp. 500.000</td>
                                     <td>2024-08-09</td>
                                     <td>
@@ -154,8 +160,8 @@
                                 </tr>
                                 <tr>
                                     <th scope="row">2</th>
-                                    <td>Kost Surabaya</td>
-                                    <td>Jl. ABC No.10</td>
+                                    <td>User 2</td>
+                                    <td>Kost Kepanjen</td>
                                     <td>Rp. 600.000</td>
                                     <td>2024-08-08</td>
                                     <td>
@@ -165,8 +171,8 @@
                                 </tr>
                                 <tr>
                                     <th scope="row">2</th>
-                                    <td>Kost Surabaya</td>
-                                    <td>Jl. ABC No.10</td>
+                                    <td>User 3</td>
+                                    <td>Kost Batu</td>
                                     <td>Rp. 600.000</td>
                                     <td>2024-08-08</td>
                                     <td>
@@ -198,62 +204,69 @@
                                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                                         <div class="property-item rounded overflow-hidden">
                                             <div class="position-relative overflow-hidden">
-                                                <a href=""><img class="img-fluid" src="4. image-web/KOST 2.jpg"
-                                                        alt=""></a>
+                                                <a href=""><img class="img-fluid" src="img2/gbr-kost1.jpg" alt=""></a>
+                                                <div
+                                                    class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
+                                                    Kost</div>
                                             </div>
                                             <div class="p-4 pb-0">
-                                                <h3 class="mb-2" style="color: #000d20;">Kost Malang</h3>
-                                                <div class="d-flex align-items-center mb-2">
-                                                    <a class="d-block h5" href="">Rp. 500.000</a>
-                                                    <p class="m-1">/bulan</p>
-                                                </div>
-                                                <p><i class="fa fa-map-marker-alt me-2" style="color: #0D6EFD;"></i>Jl.
-                                                    Tanimbar
-                                                    No.4</p>
-                                                <p><i class="fa fa-star mt-0 mb-4" style="color: darkorange;"></i>5/5
-                                                </p>
+                                                <h5 class="text-primary mb-3">Rp. 500.000</h5>
+                                                <a class="d-block h5 mb-2" href="">Kost Comboran</a>
+                                                <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
+                                            </div>
+                                            <div class="d-flex border-top">
+                                                <small class="flex-fill text-center border-end py-2"><i
+                                                        class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
+                                                <small class="flex-fill text-center border-end py-2"><i
+                                                        class="fa fa-bed text-primary me-2"></i>1 Bed</small>
+                                                <small class="flex-fill text-center py-2"><i
+                                                        class="fa fa-bath text-primary me-2"></i>2 Bath</small>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
                                         <div class="property-item rounded overflow-hidden">
                                             <div class="position-relative overflow-hidden">
-                                                <a href=""><img class="img-fluid" src="4. image-web/KOST 2.jpg"
-                                                        alt=""></a>
+                                                <a href=""><img class="img-fluid" src="img2/gbr-kost2.jpg" alt=""></a>
+                                                <div
+                                                    class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
+                                                    Kost</div>
                                             </div>
                                             <div class="p-4 pb-0">
-                                                <h3 class="mb-2" style="color: #000d20;">Kost Malang</h3>
-                                                <div class="d-flex align-items-center mb-2">
-                                                    <a class="d-block h5" href="">Rp. 500.000</a>
-                                                    <p class="m-1">/bulan</p>
-                                                </div>
-                                                <p><i class="fa fa-map-marker-alt me-2" style="color: #0D6EFD;"></i>Jl.
-                                                    Tanimbar
-                                                    No.4</p>
-                                                <p><i class="fa fa-star mt-0 mb-4" style="color: darkorange;"></i>5/5
-                                                </p>
+                                                <h5 class="text-primary mb-3">Rp. 500.000</h5>
+                                                <a class="d-block h5 mb-2" href="">Kost Comboran</a>
+                                                <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
+                                            </div>
+                                            <div class="d-flex border-top">
+                                                <small class="flex-fill text-center border-end py-2"><i
+                                                        class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
+                                                <small class="flex-fill text-center border-end py-2"><i
+                                                        class="fa fa-bed text-primary me-2"></i>1 Bed</small>
+                                                <small class="flex-fill text-center py-2"><i
+                                                        class="fa fa-bath text-primary me-2"></i>2 Bath</small>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
                                         <div class="property-item rounded overflow-hidden">
                                             <div class="position-relative overflow-hidden">
-                                                <a href=""><img class="img-fluid" src="4. image-web/KOST 2.jpg"
-                                                        alt=""></a>
+                                                <a href=""><img class="img-fluid" src="img2/gbr-kost3.jpg" alt=""></a>
+                                                <div
+                                                    class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
+                                                    Kost</div>
                                             </div>
                                             <div class="p-4 pb-0">
-                                                <h3 class="mb-2" style="color: #000d20;">Kost Malang</h3>
-                                                <div class="d-flex align-items-center mb-2">
-                                                    <a class="d-block h5" href="">Rp. 500.000</a>
-                                                    <p class="m-1">/bulan</p>
-                                                </div>
-                                                <p><i class="fa fa-map-marker-alt me-2" style="color: #0D6EFD;"></i>Jl.
-                                                    Tanimbar
-                                                    No.4</p>
-                                                <p><i class="fa fa-star mt-0 mb-4" style="color: darkorange;"></i>5/5
-                                                </p>
+                                                <h5 class="text-primary mb-3">Rp. 500.000</h5>
+                                                <a class="d-block h5 mb-2" href="">Kost Comboran</a>
+                                                <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
+                                            </div>
+                                            <div class="d-flex border-top">
+                                                <small class="flex-fill text-center border-end py-2"><i
+                                                        class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
+                                                <small class="flex-fill text-center border-end py-2"><i
+                                                        class="fa fa-bed text-primary me-2"></i>1 Bed</small>
+                                                <small class="flex-fill text-center py-2"><i
+                                                        class="fa fa-bath text-primary me-2"></i>2 Bath</small>
                                             </div>
                                         </div>
                                     </div>
