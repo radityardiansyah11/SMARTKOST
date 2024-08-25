@@ -1,3 +1,40 @@
+<?php
+include 'config.php';
+session_start();
+
+// Handle delete request
+if (isset($_GET['delete'])) {
+    $id = intval($_GET['delete']);
+    $sql = "DELETE FROM login_system WHERE id = $id";
+    if (mysqli_query($conn, $sql)) {
+        // Setelah penghapusan, reset urutan ID
+        $reset_id_query = "
+            SET @count = 0;
+            UPDATE login_system SET id = @count := @count + 1;
+            ALTER TABLE login_system AUTO_INCREMENT = 1;
+        ";
+        mysqli_multi_query($conn, $reset_id_query);
+
+        // Redirect setelah penghapusan dan reset
+        header('Location: admin-dashboard-user.php');
+        exit();
+    } else {
+        echo "Error deleting record: " . mysqli_error($conn);
+    }
+}
+
+// Get only 10 user sessions
+$sql = "SELECT * FROM login_system ORDER BY id ASC LIMIT 10";
+$result = mysqli_query($conn, $sql);
+
+// Query to count the total number of users
+$count_user_sql = "SELECT COUNT(*) AS total_users FROM login_system";
+$count_user_result = mysqli_query($conn, $count_user_sql);
+$user_data = mysqli_fetch_assoc($count_user_result);
+$total_users = $user_data['total_users'];
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,6 +67,7 @@
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+
     <style>
         .card {
             box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
@@ -52,14 +90,15 @@
         <div class="d-flex">
             <!-- Sidebar Start -->
             <div class="d-flex flex-column flex-shrink-0 p-3"
-                style=" width: 280px; height: 100vh; position: fixed; background-color: #00765a;">
+                style=" width: 280px; height: 100vh; position: fixed;  background-color: #00765a;">
                 <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
                     <h3 class=" mt-2 text-light">Dashboard</h3>
                 </a>
                 <hr class="text-light">
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
-                        <a href="admin-dashboard.html" class="nav-link text-light">
+                        <a href="admin-dashboard.php" class="nav-link active text-light"
+                            style="background-color: #00B98E;" aria-current="page">
                             <i class="bi bi-speedometer2 me-2"></i>
                             Dashboard
                         </a>
@@ -71,8 +110,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="admin-dashboard-user.html" class="nav-link active text-light"
-                            style="background-color: #00B98E;" aria-current="page">
+                        <a href="admin-dashboard-user.php" class="nav-link text-light">
                             <i class="bi bi-people me-2"></i>
                             User
                         </a>
@@ -102,10 +140,10 @@
 
                     <!-- Stats Overview -->
                     <div class="col-md-4">
-                        <div class="card" style=" height: 150px; ">
+                        <div class="card" style=" height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title ">User</h5>
-                                <h3 class="card-text ">120</h3>
+                                <h3 class="card-text "><?php echo $total_users; ?></h3>
                             </div>
                         </div>
                     </div>
@@ -113,7 +151,7 @@
                         <div class="card" style=" height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title ">Pemilik Kost</h5>
-                                <h3 class="card-text ">95</h3>
+                                <h3 class="card-text ">0</h3>
                             </div>
                         </div>
                     </div>
@@ -121,7 +159,7 @@
                         <div class="card" style=" height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title">Promosi</h5>
-                                <h3 class="card-text">Rp. 12,000,000</h3>
+                                <h3 class="card-text">Rp. 0</h3>
                             </div>
                         </div>
                     </div>
@@ -132,12 +170,48 @@
                     <div class="col-md-12">
                         <h2 class="h4 mb-3">User</h2>
                         <table class="table table-hover">
-                            <thead class="table text-light"  style="background-color: #009270;">
+                            <thead class="table text-light" style="background-color: #009270;">
+                                <tr>
+                                    <th scope=" col">ID</th>
+                                <th scope="col">User</th>
+                                <th scope="col">email</th>
+                                <th scope="col">password</th>
+                                <th scope="col">Tanggal</th>
+                                <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                                    <tr>
+                                        <td><?php echo $row['id']; ?></td>
+                                        <td><?php echo $row['username']; ?></td>
+                                        <td><?php echo $row['email']; ?></td>
+                                        <td><?php echo substr($row['password'], 0, 20) . '...'; ?></td>
+                                        <td><?php echo $row['created_at']; ?></td> <!-- Jika ada kolom created_at -->
+                                        <td>
+                                        <a href="edit-user.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-primary">Edit</a>
+                                            <a href="?delete=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Apa kamu yakin akan menghapus?');">Delete</a>
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <a href="admin-dashboard-user.php" class="text-end" style="color: grey;">View More</a>
+                </div>
+
+                <!-- Booking -->
+                <div class="row mt-5">
+                    <div class="col-md-12">
+                        <h2 class="h4 mb-3">Pemilik Kost</h2>
+                        <table class="table table-hover">
+                            <thead class="table text-light" style="background-color: #009270;">
                                 <tr>
                                     <th scope="col">ID</th>
-                                    <th scope="col">User</th>
+                                    <th scope="col">Pemilik kost</th>
                                     <th scope="col">email</th>
                                     <th scope="col">password</th>
+                                    <th scope="col">pembayaran</th>
                                     <th scope="col">Tanggal</th>
                                     <th scope="col">Actions</th>
                                 </tr>
@@ -145,9 +219,10 @@
                             <tbody>
                                 <tr>
                                     <th scope="row">1</th>
-                                    <td>User contoh</td>
-                                    <td>contoh@gmail.com</td>
-                                    <td>123456789</td>
+                                    <td>pemilik kost 1</td>
+                                    <td>pemkos@gmail.com</td>
+                                    <td>987654321</td>
+                                    <td>Rp. 100.000</td>
                                     <td>2024-08-09</td>
                                     <td>
                                         <button class="btn btn-sm btn-primary">Edit</button>
@@ -158,6 +233,7 @@
                             </tbody>
                         </table>
                     </div>
+                    <a href="" class="text-end" style="color: grey;">View More</a>
                 </div>
             </div>
             <!-- Content End -->

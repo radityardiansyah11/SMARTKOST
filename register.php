@@ -1,3 +1,58 @@
+<?php
+session_start();
+include 'config.php'; // Pastikan config.php mengandung koneksi yang benar ke database
+
+$error_message = '';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $username = htmlspecialchars(trim($_POST['username']));
+    $email = filter_var(trim($_POST['email']), FILTER_VALIDATE_EMAIL);
+    $password = trim($_POST['password']);
+
+    if (!$email) {
+        $error_message = "Email tidak valid.";
+    } else {
+        // Cek apakah email sudah ada
+        $check_email_sql = "SELECT * FROM login_system WHERE email=?";
+        $check_stmt = $conn->prepare($check_email_sql);
+        $check_stmt->bind_param("s", $email);
+        $check_stmt->execute();
+        $check_result = $check_stmt->get_result();
+
+        if ($check_result->num_rows > 0) {
+            $error_message = "Email sudah digunakan.";
+        } else {
+            // Hash password untuk keamanan
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+            // Query untuk menyimpan data ke tabel login_system
+            $sql = "INSERT INTO login_system (username, email, password) VALUES (?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("sss", $username, $email, $hashed_password);
+
+            if ($stmt->execute()) {
+                // Setelah pendaftaran berhasil, simpan informasi pengguna ke dalam sesi
+                $_SESSION['username'] = $username;
+
+                // Arahkan ke halaman user-home
+                header("Location: user-home.php");
+                exit();
+            } else {
+                $error_message = "Terjadi kesalahan: " . $stmt->error;
+            }
+
+            $stmt->close();
+        }
+
+        $check_stmt->close();
+    }
+
+    $conn->close();
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -155,19 +210,24 @@
                         <img src="img2/logo smartkost.png" style="width: 240px; height: 80px;">
                     </div>
                     <h5 class="text-center fw-normal mb-1 pb-3 text-muted">SIGN UP</h5>
-                    <form>
+
+                    <form action="register.php" method="POST">
                         <div class=" justify-content-center d-flex flex-column align-items-center">
-                            <input type="password" placeholder="Username" class="form-control form-control-lg">
-                            <input type="email" placeholder="Email address" class="form-control form-control-lg">
-                            <input type="password" placeholder="Password" class="form-control form-control-lg">
+                            <input type="text" name="username" placeholder="Username"
+                                class="form-control form-control-lg" required />
+                            <input type="email" name="email" placeholder="Email address"
+                                class="form-control form-control-lg" required />
+                            <input type="password" name="password" placeholder="Password"
+                                class="form-control form-control-lg" required />
                         </div>
                         <div class="d-flex justify-content-center">
-                            <button type="button" class=" btn btn-dark btn-lg btn-block mt-4">Register</button>
+                            <button type="submit" class=" btn btn-dark btn-lg btn-block mt-4">Register</button>
                         </div>
-                        <p class="register" style="color: #8d8d8d;">Do you have acount?<a href="login.html"><strong>
-                                    Sign In
+                        <p class="register" style="color: #8d8d8d;">Do you have an account? <a
+                                href="login.php"><strong>Sign In
                                     here</strong> </a></p>
                     </form>
+
                 </div>
             </div>
         </div>
@@ -181,6 +241,21 @@
     <script src="lib/easing/easing.min.js"></script>
     <script src="lib/waypoints/waypoints.min.js"></script>
     <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <script>
+        // Function to show alert if there's an error message
+        function showAlert(message) {
+            if (message) {
+                alert(message);
+            }
+        }
+
+        window.onload = function() {
+            // Show alert on page load if there is an error message
+            var errorMessage = "<?php echo $error_message; ?>";
+            showAlert(errorMessage);
+        };
+    </script>
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>

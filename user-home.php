@@ -1,3 +1,18 @@
+<?php
+session_start();
+
+// Periksa apakah pengguna sudah login
+if (!isset($_SESSION['username'])) {
+    // Jika tidak, arahkan ke halaman login
+    header("Location: login.php");
+    exit();
+}
+
+$username = $_SESSION['username'];
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -64,6 +79,16 @@
             z-index: 2;
         }
 
+        .btn-custom-logout {
+            font-size: 12px;
+            /* Ukuran font lebih kecil */
+            padding: 2px 8px;
+            /* Padding lebih kecil */
+            line-height: 1.5;
+            /* Mengurangi tinggi baris */
+            border-radius: 4px;
+            /* Ujung sedikit melengkung */
+        }
     </style>
 </head>
 
@@ -84,7 +109,8 @@
             <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
                 <a href="#" class="navbar-brand d-flex align-items-center text-center">
                     <div class="p-2">
-                        <img class="img-fluid" src="img2/logo smartkost.png" alt="Icon" style="width: 210px; height: 70px;">
+                        <img class="img-fluid" src="img2/logo smartkost.png" alt="Icon"
+                            style="width: 210px; height: 70px;">
                     </div>
                 </a>
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -92,16 +118,21 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto">
-                        <a href="user-home.html" class="nav-item nav-link active">Beranda</a>
-
-                        <a href="user-kost.html" class="nav-item nav-link">Kost</a>
+                        <a href="user-home.php" class="nav-item nav-link active">Beranda</a>
+                        <a href="user-kost.php" class="nav-item nav-link">Kost</a>
                         <a href="kontak.html" class="nav-item nav-link">Kontak</a>
                     </div>
                     <div class="d-flex">
                         <div class="me-3 text-end">
-                            <h6 class="mt-2">Halo, User</h6>
+                            <h6 class="mt-2">Halo,
+                                <?php echo htmlspecialchars($username); ?>
+                            </h6>
+                            <form action="logout.php" method="POST">
+                                <button type="submit" class="btn btn-outline-danger btn-custom-logout"
+                                    onclick="confirmLogout()">Log out</button>
+                            </form>
                         </div>
-                        <img src="img2/Bulat.png" style="width: 50px; height: 50px;">
+                        <img src="img2/Bulat.png" alt="profile" style="width: 50px; height: 50px;">
                     </div>
                 </div>
             </nav>
@@ -748,6 +779,14 @@
     </div>
 
     <!-- JavaScript Libraries -->
+    <script>
+        function confirmLogout() {
+            if (confirm("Anda yakin ingin logout?")) {
+                // Jika konfirmasi diterima, arahkan ke logout.php
+                window.location.href = "logout.php";
+            }
+        }
+    </script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/wow/wow.min.js"></script>

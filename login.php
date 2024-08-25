@@ -1,3 +1,48 @@
+<?php
+include 'config.php';
+session_start();
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Query untuk mendapatkan user berdasarkan email
+    $sql = "SELECT * FROM login_system WHERE email = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $user = $result->fetch_assoc();
+        
+        // Debugging - Cetak hash password dari database dan password input
+        echo "Password dari database (hash): " . $user['password'] . "<br>";
+        echo "Password input oleh pengguna: " . $password . "<br>";
+        echo "Hasil password_verify(): " . (password_verify($password, $user['password']) ? 'true' : 'false') . "<br>";
+    
+        if (password_verify($password, $user['password'])) {
+            // Password benar, login berhasil
+            $_SESSION['username'] = $user['username']; 
+            header("Location: user-home.php");
+            exit();
+        } else {
+            echo "Password salah!";
+        }
+    } else {
+        echo "Pengguna tidak ditemukan!";
+    }
+
+    $stmt->close();
+    $conn->close();
+}
+?>
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -105,6 +150,7 @@
             font-size: 15px;
             box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
             border: none;
+            margin-left: 50px;
         }
 
         .right-side button {
@@ -155,17 +201,17 @@
                         <img src="img2/logo smartkost.png" style="width: 240px; height: 80px;">
                     </div>
                     <h5 class="text-center fw-normal mb-1 pb-3 text-muted">SIGN IN</h5>
-                    <form>
-                        <div class=" justify-content-center d-flex flex-column align-items-center">
-                            <input type="email" placeholder="Email address" class="form-control form-control-lg">
-                            <input type="password" placeholder="Password" class="form-control form-control-lg">
-                        </div>
+
+                    <form  method="POST" action="">
+                        <input type="email" name="email" placeholder="Email address"
+                            class="form-control form-control-lg">
+                        <input type="password" name="password" placeholder="Password"
+                            class="form-control form-control-lg">
                         <div class="d-flex justify-content-center">
-                            <button type="button" class=" btn btn-dark btn-lg btn-block mt-4">Login</button>
+                            <button type="submit" class="btn btn-dark btn-lg btn-block mt-4">Login</button>
                         </div>
                         <p class="register" style="color: #8d8d8d;">Don't have an account? <a
-                                href="register.html"><strong>Sign Up
-                                    here</strong> </a></p>
+                                href="register.php"><strong>Sign Up here</strong></a></p>
                     </form>
                 </div>
             </div>
