@@ -129,7 +129,7 @@ $total_users = $user_data['total_users'];
                         <strong>Admin</strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-light text-small shadow">
-                        <li><a class="dropdown-item" href="#">Sign out</a></li>
+                        <li><a class="dropdown-item" href="logout.php">Sign out</a></li>
                     </ul>
                 </div>
             </div>
@@ -174,9 +174,10 @@ $total_users = $user_data['total_users'];
                     <div class="col-md-12">
                         <h2 class="h4 mb-3">User</h2>
                         <table class="table table-hover">
-                            <thead class="table text-light"  style="background-color: #009270;">
+                            <thead class="table text-light" style="background-color: #009270;">
                                 <tr>
                                     <th scope="col">ID</th>
+                                    <th scope="col">Profil</th>
                                     <th scope="col">User</th>
                                     <th scope="col">email</th>
                                     <th scope="col">password</th>
@@ -187,14 +188,25 @@ $total_users = $user_data['total_users'];
                             <tbody>
                                 <?php while ($row = mysqli_fetch_assoc($result)): ?>
                                     <tr>
-                                        <td><?php echo $row['id']; ?></td>
-                                        <td><?php echo $row['username']; ?></td>
-                                        <td><?php echo $row['email']; ?></td>
-                                        <td><?php echo substr($row['password'], 0, 20) . '...'; ?></td>
-                                        <td><?php echo $row['created_at']; ?></td> <!-- Jika ada kolom created_at -->
-                                        <td>
-                                        <a href="edit-user.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-primary">Edit</a>
-                                            <a href="?delete=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Apa kamu yakin akan menghapus?');">Delete</a>
+                                        <td class="align-middle"><?php echo $row['id']; ?></td>
+                                        <td class="align-middle">
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <img src="img2/Bulat.png" class="rounded-circle"
+                                                    style="width: 50px; height: 50px;">
+                                            </div>
+                                        </td>
+                                        <td class="align-middle"><strong><?php echo $row['username']; ?></strong></td>
+                                        <td class="align-middle"><?php echo $row['email']; ?></td>
+                                        <td class="align-middle">
+                                            <?php echo substr($row['password'], 0, 20) . '...'; ?>
+                                        </td>
+                                        <td class="align-middle"><?php echo $row['created_at']; ?></td>
+                                        <!-- Jika ada kolom created_at -->
+                                        <td class="">
+                                            <a href="edit-user.php?id=<?php echo $row['id']; ?>"
+                                                class="btn btn-sm btn-primary" style="width:57px ;">Edit</a>
+                                            <a href="?delete=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger mt-1"
+                                                onclick="return confirm('Apa kamu yakin akan menghapus?');">Delete</a>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>

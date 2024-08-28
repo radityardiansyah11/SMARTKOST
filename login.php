@@ -16,15 +16,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
         
-        // Debugging - Cetak hash password dari database dan password input
-        echo "Password dari database (hash): " . $user['password'] . "<br>";
-        echo "Password input oleh pengguna: " . $password . "<br>";
-        echo "Hasil password_verify(): " . (password_verify($password, $user['password']) ? 'true' : 'false') . "<br>";
-    
         if (password_verify($password, $user['password'])) {
             // Password benar, login berhasil
             $_SESSION['username'] = $user['username']; 
-            header("Location: user-home.php");
+            
+            // Cek apakah ini admin
+            if ($email === 'admin@smartkost.com') {
+                header("Location: admin-dashboard.php");
+            } else {
+                header("Location: user-home.php");
+            }
             exit();
         } else {
             echo "Password salah!";
@@ -37,10 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 }
 ?>
-
-
-
-
 
 
 <!DOCTYPE html>

@@ -124,19 +124,21 @@ $username = $_SESSION['username'];
                     </div>
                     <div class="d-flex">
                         <div class="me-3 text-end">
-                            <h6 class="mt-2">Halo,
-                                <?php echo htmlspecialchars($username); ?>
-                            </h6>
+                            <h6 class="mt-2">Halo, <?php echo htmlspecialchars($username); ?></h6>
                             <form action="logout.php" method="POST">
                                 <button type="submit" class="btn btn-outline-danger btn-custom-logout"
                                     onclick="confirmLogout()">Log out</button>
                             </form>
                         </div>
-                        <img src="img2/Bulat.png" alt="profile" style="width: 50px; height: 50px;">
+                        <a href="user-profile.php">
+                            <img src="<?php echo isset($_SESSION['profile_image']) ? $_SESSION['profile_image'] : 'img2/Bulat.png'; ?>"
+                                alt="profile" style="width: 50px; height: 50px;">
+                        </a>
                     </div>
                 </div>
             </nav>
         </div>
+
         <!-- Navbar End -->
 
 

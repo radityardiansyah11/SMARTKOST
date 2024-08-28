@@ -107,7 +107,7 @@
                         <div class="owl-carousel-item position-relative">
                             <img class="img-fluid w-100 custom-height" src="img2/kost1.jpg" alt="" >
                             <div class="overlay-text position-absolute top-50 start-50 translate-middle text-center">
-                                <h1 class="display-5 text-white animated fadeIn mb-1 mt-5">Temukan <span class="text-primary">Kost Impian</span> Hanya di Sini</h1>
+                                <h1 class="display-5 text-white animated fadeIn mb-1 mt-5">Temukan <span class="text-light">Kost Impian</span> Hanya di Sini</h1>
                                 <p class="text-white animated fadeIn mb-4 pb-2">Daftarkan kost anda di sini.</p>
                                 <a href="" class="btn btn-primary py-3 px-5 me-3 animated fadeIn">Daftarkan Kost</a>
                             </div>
