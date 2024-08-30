@@ -1,44 +1,61 @@
 <?php
-include 'config.php';
 session_start();
+include 'config.php'; // Pastikan config.php mengandung koneksi yang benar ke database
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+$error_message = '';
 
-    // Query untuk mendapatkan user berdasarkan email
-    $sql = "SELECT * FROM login_system WHERE email = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $username = htmlspecialchars(trim($_POST['username']));
+    $email = filter_var(trim($_POST['email']), FILTER_VALIDATE_EMAIL);
+    $nomor_hp = htmlspecialchars(trim($_POST['nomor_hp']));
+    $password = trim($_POST['password']);
 
-    if ($result->num_rows > 0) {
-        $user = $result->fetch_assoc();
-        
-        if (password_verify($password, $user['password'])) {
-            // Password benar, login berhasil
-            $_SESSION['username'] = $user['username']; 
-            
-            // Cek apakah ini admin
-            if ($email === 'admin@smartkost.com') {
-                header("Location: admin-dashboard.php");
-            } else {
-                header("Location: user-home.php");
-            }
-            exit();
-        } else {
-            echo "Password salah!";
-        }
+    // Validasi input
+    if (!$email) {
+        $error_message = "Email tidak valid.";
+    } elseif (empty($nomor_hp)) {
+        $error_message = "Nomor HP tidak boleh kosong.";
+    } elseif (empty($password)) {
+        $error_message = "Password tidak boleh kosong.";
     } else {
-        echo "Pengguna tidak ditemukan!";
+        // Cek apakah email sudah ada
+        $check_email_sql = "SELECT * FROM logsys_pk WHERE email=?";
+        $check_stmt = $conn->prepare($check_email_sql);
+        $check_stmt->bind_param("s", $email);
+        $check_stmt->execute();
+        $check_result = $check_stmt->get_result();
+
+        if ($check_result->num_rows > 0) {
+            $error_message = "Email sudah digunakan.";
+        } else {
+            // Hash password untuk keamanan
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+            // Query untuk menyimpan data ke tabel logsys_pk (pemilik kost)
+            $sql = "INSERT INTO logsys_pk (username, email, nomor_hp, password) VALUES (?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ssss", $username, $email, $nomor_hp, $hashed_password);
+
+            if ($stmt->execute()) {
+                // Setelah pendaftaran berhasil, simpan informasi pemilik kost ke dalam sesi
+                $_SESSION['username'] = $username;
+
+                // Arahkan ke halaman dashboard-pk (pemilik kost)
+                header("Location: pk-dashboard.php");
+                exit();
+            } else {
+                $error_message = "Terjadi kesalahan: " . $stmt->error;
+            }
+
+            $stmt->close();
+        }
+
+        $check_stmt->close();
     }
 
-    $stmt->close();
     $conn->close();
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -197,18 +214,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="d-flex justify-content-center align-items-center mb-3 pb-1">
                         <img src="img2/logo smartkost.png" style="width: 240px; height: 80px;">
                     </div>
-                    <h5 class="text-center fw-normal mb-1 pb-3 text-muted">Login</h5>
+                    <h5 class="text-center fw-normal mb-1 pb-3 text-muted">Daftar Akun Pemilik Kost</h5>
 
-                    <form  method="POST" action="">
-                        <input type="email" name="email" placeholder="Email address"
+                    <form method="POST" action="">
+                        <input type="text" name="username" placeholder="Nama"
                             class="form-control form-control-lg">
+
+                        <input type="email" name="email" placeholder="Email"
+                            class="form-control form-control-lg">
+
+                        <input type="number" name="nomor_hp" placeholder="Nomor Hp"
+                            class="form-control form-control-lg">
+
                         <input type="password" name="password" placeholder="Password"
                             class="form-control form-control-lg">
+
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-dark btn-lg btn-block mt-4">Login</button>
+                            <button type="submit" class="btn btn-dark btn-lg btn-block mt-4">Daftar</button>
                         </div>
-                        <p class="register" style="color: #8d8d8d;">Belum punya akun? <a
-                                href="register.php"><strong>Daftar di sini</strong></a></p>
+                        
+                        <p class="register" style="color: #8d8d8d;">Sudah punya akun? <a
+                                href="login-pk.php"><strong>Masuk di sini</strong></a></p>
                     </form>
                 </div>
             </div>

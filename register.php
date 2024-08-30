@@ -209,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="d-flex justify-content-center align-items-center mb-3 pb-1">
                         <img src="img2/logo smartkost.png" style="width: 240px; height: 80px;">
                     </div>
-                    <h5 class="text-center fw-normal mb-1 pb-3 text-muted">SIGN UP</h5>
+                    <h5 class="text-center fw-normal mb-1 pb-3 text-muted">Daftar Pencari Kost</h5>
 
                     <form action="register.php" method="POST">
                         <div class=" justify-content-center d-flex flex-column align-items-center">
@@ -221,11 +221,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 class="form-control form-control-lg" required />
                         </div>
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class=" btn btn-dark btn-lg btn-block mt-4">Register</button>
+                            <button type="submit" class=" btn btn-dark btn-lg btn-block mt-4">Daftar</button>
                         </div>
-                        <p class="register" style="color: #8d8d8d;">Do you have an account? <a
-                                href="login.php"><strong>Sign In
-                                    here</strong> </a></p>
+                        <p class="register" style="color: #8d8d8d;">Sudah punya akun? <a
+                                href="login.php"><strong>Login di sini</strong> </a></p>
                     </form>
 
                 </div>

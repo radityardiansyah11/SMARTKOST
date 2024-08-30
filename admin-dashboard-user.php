@@ -2,10 +2,6 @@
 include 'config.php';
 session_start();
 
-// Mendapatkan semua sesi login pengguna
-$sql = "SELECT * FROM login_system ORDER BY id ASC";
-$result = mysqli_query($conn, $sql);
-
 // Handle delete request
 if (isset($_GET['delete'])) {
     $id = intval($_GET['delete']);
@@ -31,12 +27,21 @@ if (isset($_GET['delete'])) {
 $sql = "SELECT * FROM login_system ORDER BY id ASC";
 $result = mysqli_query($conn, $sql);
 
-// Query to count the number of users
+// Get all user
 $count_user_sql = "SELECT COUNT(*) AS total_users FROM login_system";
 $count_user_result = mysqli_query($conn, $count_user_sql);
 $user_data = mysqli_fetch_assoc($count_user_result);
 $total_users = $user_data['total_users'];
 
+// Get all pemilik kost
+$sql_pk = "SELECT * FROM logsys_pk ORDER BY id ASC";
+$result_pk = mysqli_query($conn, $sql_pk);
+
+// Query to count the number of pemilik kost
+$count_pk_sql = "SELECT COUNT(*) AS total_pk FROM logsys_pk";
+$count_pk_result = mysqli_query($conn, $count_pk_sql);
+$pk_data = mysqli_fetch_assoc($count_pk_result);
+$total_pk = $pk_data['total_pk'];
 ?>
 
 
@@ -77,6 +82,16 @@ $total_users = $user_data['total_users'];
             box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
             border: none;
         }
+
+        .btn-trash {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 31px;
+            height: 31px;
+            border-radius: 3px;
+            padding: 0;
+        }
     </style>
 </head>
 
@@ -107,7 +122,7 @@ $total_users = $user_data['total_users'];
                         </a>
                     </li>
                     <li>
-                        <a href="admin-dahsboard-pk.html" class="nav-link text-light">
+                        <a href="admin-dahsboard-pk.php" class="nav-link text-light">
                             <i class="bi bi-house-door me-2"></i>
                             Pemilik Kost
                         </a>
@@ -155,7 +170,7 @@ $total_users = $user_data['total_users'];
                         <div class="card" style=" height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title ">Pemilik Kost</h5>
-                                <h3 class="card-text ">0</h3>
+                                <h3 class="card-text "><?php echo $total_pk; ?></h3>
                             </div>
                         </div>
                     </div>
@@ -201,12 +216,13 @@ $total_users = $user_data['total_users'];
                                             <?php echo substr($row['password'], 0, 20) . '...'; ?>
                                         </td>
                                         <td class="align-middle"><?php echo $row['created_at']; ?></td>
-                                        <!-- Jika ada kolom created_at -->
-                                        <td class="">
+                                        <td class="mt-3">
                                             <a href="edit-user.php?id=<?php echo $row['id']; ?>"
-                                                class="btn btn-sm btn-primary" style="width:57px ;">Edit</a>
-                                            <a href="?delete=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger mt-1"
-                                                onclick="return confirm('Apa kamu yakin akan menghapus?');">Delete</a>
+                                                class="btn btn-sm btn-primary mt-2" style="width:57px ;">Edit</a>
+                                            <a href="?delete=<?php echo $row['id']; ?>"
+                                                class="btn btn-sm btn-danger mt-2 btn-trash"
+                                                onclick="return confirm('Apa kamu yakin akan menghapus?');"><img
+                                                    src="img2/sampah.png" class="w-75"> </a>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>

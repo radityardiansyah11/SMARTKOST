@@ -132,7 +132,7 @@ $username = $_SESSION['username'];
                         </div>
                         <a href="user-profile.php">
                             <img src="<?php echo isset($_SESSION['profile_image']) ? $_SESSION['profile_image'] : 'img2/Bulat.png'; ?>"
-                                alt="profile" style="width: 50px; height: 50px;">
+                                alt="profile" class="mt-1" style="width: 50px; height: 50px;">
                         </a>
                     </div>
                 </div>

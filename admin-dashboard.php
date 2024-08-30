@@ -16,21 +16,20 @@ if (isset($_GET['delete'])) {
         mysqli_multi_query($conn, $reset_id_query);
 
         // Redirect setelah penghapusan dan reset
-        header('Location: admin-dashboard-user.php');
+        header('Location: admin-dashboard.php');
         exit();
     } else {
         echo "Error deleting record: " . mysqli_error($conn);
     }
-
 }
 
 // Mendapatkan semua pengguna dari tabel login_system
 $sql = "SELECT id, email FROM login_system";
-$result = mysqli_query($conn, $sql);
+$result_users = mysqli_query($conn, $sql);
 
 // Get only 10 user sessions
 $sql = "SELECT * FROM login_system ORDER BY id ASC LIMIT 10";
-$result = mysqli_query($conn, $sql);
+$result_user_sessions = mysqli_query($conn, $sql);
 
 // Query to count the total number of users
 $count_user_sql = "SELECT COUNT(*) AS total_users FROM login_system";
@@ -38,6 +37,20 @@ $count_user_result = mysqli_query($conn, $count_user_sql);
 $user_data = mysqli_fetch_assoc($count_user_result);
 $total_users = $user_data['total_users'];
 
+
+// Get all pemilik kost
+$sql_pk = "SELECT * FROM logsys_pk ORDER BY id ASC";
+$result_pk = mysqli_query($conn, $sql_pk);
+
+// Get only 10 pemilik kost sessions
+$sql_pk = "SELECT * FROM logsys_pk ORDER BY id ASC LIMIT 10";
+$result_pk = mysqli_query($conn, $sql_pk);
+
+// Query to count the number of pemilik kost
+$count_pk_sql = "SELECT COUNT(*) AS total_pk FROM logsys_pk";
+$count_pk_result = mysqli_query($conn, $count_pk_sql);
+$pk_data = mysqli_fetch_assoc($count_pk_result);
+$total_pk = $pk_data['total_pk'];
 ?>
 
 <!DOCTYPE html>
@@ -56,8 +69,7 @@ $total_users = $user_data['total_users'];
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@700;800&display=swap" rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -78,14 +90,23 @@ $total_users = $user_data['total_users'];
             box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
             border: none;
         }
+
+        .btn-trash {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 31px;
+            height: 31px;
+            border-radius: 3px;
+            padding: 0;
+        }
     </style>
 </head>
 
 <body>
     <div class="container-xxl bg-white p-0">
         <!-- Spinner Start -->
-        <div id="spinner"
-            class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
             <div class="spinner-border" style="color: #0D6EFD; width: 3rem; height: 3rem;" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
@@ -94,22 +115,20 @@ $total_users = $user_data['total_users'];
 
         <div class="d-flex">
             <!-- Sidebar Start -->
-            <div class="d-flex flex-column flex-shrink-0 p-3"
-                style=" width: 280px; height: 100vh; position: fixed;  background-color: #00765a;">
+            <div class="d-flex flex-column flex-shrink-0 p-3" style="width: 280px; height: 100vh; position: fixed; background-color: #00765a;">
                 <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-                    <h3 class=" mt-2 text-light">Dashboard</h3>
+                    <h3 class="mt-2 text-light">Dashboard</h3>
                 </a>
                 <hr class="text-light">
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
-                        <a href="admin-dashboard.php" class="nav-link active text-light"
-                            style="background-color: #00B98E;" aria-current="page">
+                        <a href="admin-dashboard.php" class="nav-link active text-light" style="background-color: #00B98E;" aria-current="page">
                             <i class="bi bi-speedometer2 me-2"></i>
                             Dashboard
                         </a>
                     </li>
                     <li>
-                        <a href="admin-dahsboard-pk.html" class="nav-link text-light">
+                        <a href="admin-dahsboard-pk.php" class="nav-link text-light">
                             <i class="bi bi-house-door me-2"></i>
                             Pemilik Kost
                         </a>
@@ -123,10 +142,8 @@ $total_users = $user_data['total_users'];
                 </ul>
                 <hr class="text-light">
                 <div class="dropdown">
-                    <a href="#" class="d-flex align-items-center text-light text-decoration-none dropdown-toggle"
-                        id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://via.placeholder.com/50" alt="Admin" width="32" height="32"
-                            class="rounded-circle me-2">
+                    <a href="#" class="d-flex align-items-center text-light text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://via.placeholder.com/50" alt="Admin" width="32" height="32" class="rounded-circle me-2">
                         <strong>Admin</strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-light text-small shadow">
@@ -145,23 +162,23 @@ $total_users = $user_data['total_users'];
 
                     <!-- Stats Overview -->
                     <div class="col-md-4">
-                        <div class="card" style=" height: 150px;">
+                        <div class="card" style="height: 150px;">
                             <div class="card-body">
-                                <h5 class="card-title ">User</h5>
-                                <h3 class="card-text "><?php echo $total_users; ?></h3>
+                                <h5 class="card-title">User</h5>
+                                <h3 class="card-text"><?php echo $total_users; ?></h3>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card" style=" height: 150px;">
+                        <div class="card" style="height: 150px;">
                             <div class="card-body">
-                                <h5 class="card-title ">Pemilik Kost</h5>
-                                <h3 class="card-text ">0</h3>
+                                <h5 class="card-title">Pemilik Kost</h5>
+                                <h3 class="card-text"><?php echo $total_pk; ?></h3>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card" style=" height: 150px;">
+                        <div class="card" style="height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title">Promosi</h5>
                                 <h3 class="card-text">Rp. 0</h3>
@@ -170,44 +187,38 @@ $total_users = $user_data['total_users'];
                     </div>
                 </div>
 
-                <!-- Listings -->
+                <!-- User Listings -->
                 <div class="row mt-5">
                     <div class="col-md-12">
                         <h2 class="h4 mb-3">User</h2>
                         <table class="table table-hover">
                             <thead class="table text-light" style="background-color: #009270;">
                                 <tr>
-                                    <th scope=" col">ID</th>
-                                    <th scope=" col">Profil</th>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Profil</th>
                                     <th scope="col">User</th>
-                                    <th scope="col">email</th>
-                                    <th scope="col">password</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Password</th>
                                     <th scope="col">Tanggal</th>
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                                <?php while ($row = mysqli_fetch_assoc($result_user_sessions)): ?>
                                     <tr>
                                         <td class="align-middle"><?php echo $row['id']; ?></td>
                                         <td class="align-middle">
                                             <div class="d-flex justify-content-center align-items-center">
-                                                <img src="img2/Bulat.png" class="rounded-circle"
-                                                    style="width: 50px; height: 50px;">
+                                                <img src="img2/Bulat.png" class="rounded-circle" style="width: 50px; height: 50px;">
                                             </div>
                                         </td>
                                         <td class="align-middle"><strong><?php echo $row['username']; ?></strong></td>
                                         <td class="align-middle"><?php echo $row['email']; ?></td>
-                                        <td class="align-middle">
-                                            <?php echo substr($row['password'], 0, 20) . '...'; ?>
-                                        </td>
+                                        <td class="align-middle"><?php echo substr($row['password'], 0, 20) . '...'; ?></td>
                                         <td class="align-middle"><?php echo $row['created_at']; ?></td>
-                                        <!-- Jika ada kolom created_at -->
                                         <td class="">
-                                            <a href="edit-user.php?id=<?php echo $row['id']; ?>"
-                                                class="btn btn-sm btn-primary" style="width:57px ;">Edit</a>
-                                            <a href="?delete=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger mt-1"
-                                                onclick="return confirm('Apa kamu yakin akan menghapus?');">Delete</a>
+                                            <a href="edit-user.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-primary mt-2" style="width:57px;">Edit</a>
+                                            <a href="?delete=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger mt-2 btn-trash" onclick="return confirm('Apa kamu yakin akan menghapus?');"><img src="img2/sampah.png" class="w-75"></a>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
@@ -217,7 +228,7 @@ $total_users = $user_data['total_users'];
                     <a href="admin-dashboard-user.php" class="text-end" style="color: grey;">View More</a>
                 </div>
 
-                <!-- Booking -->
+                <!-- Pemilik Kost Listings -->
                 <div class="row mt-5">
                     <div class="col-md-12">
                         <h2 class="h4 mb-3">Pemilik Kost</h2>
@@ -225,37 +236,38 @@ $total_users = $user_data['total_users'];
                             <thead class="table text-light" style="background-color: #009270;">
                                 <tr>
                                     <th scope="col">ID</th>
-                                    <th scope="col">Pemilik kost</th>
-                                    <th scope="col">email</th>
-                                    <th scope="col">password</th>
-                                    <th scope="col">pembayaran</th>
+                                    <th scope="col">Pemilik Kost</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">No Telp</th>
+                                    <th scope="col">Password</th>
                                     <th scope="col">Tanggal</th>
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>pemilik kost 1</td>
-                                    <td>pemkos@gmail.com</td>
-                                    <td>987654321</td>
-                                    <td>Rp. 100.000</td>
-                                    <td>2024-08-09</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary">Edit</button>
-                                        <button class="btn btn-sm btn-danger">Delete</button>
-                                    </td>
-                                </tr>
+                                <?php while ($row = mysqli_fetch_assoc($result_pk)): ?>
+                                    <tr>
+                                        <td class="align-middle"><?php echo $row['id']; ?></td>
+                                        <td class="align-middle"><strong><?php echo $row['username']; ?></strong></td>
+                                        <td class="align-middle"><?php echo $row['email']; ?></td>
+                                        <td class="align-middle"><?php echo $row['nomor_hp']; ?></td>
+                                        <td class="align-middle"><?php echo substr($row['password'], 0, 10) . '...'; ?></td>
+                                        <td class="align-middle"><?php echo $row['created_at']; ?></td>
+                                        <td class="mt-3">
+                                            <a href="edit-pk.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-primary mt-2" style="width:57px;">Edit</a>
+                                            <a href="?delete=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger mt-2 btn-trash" onclick="return confirm('Apa kamu yakin akan menghapus?');"><img src="img2/sampah.png" class="w-75"></a>
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
                                 <!-- More rows as needed -->
                             </tbody>
                         </table>
                     </div>
-                    <a href="" class="text-end" style="color: grey;">View More</a>
+                    <a href="admin-dahsboard-pk.php" class="text-end" style="color: grey;">View More</a>
                 </div>
             </div>
             <!-- Content End -->
         </div>
-
 
         <!-- Footer Start -->
         <footer class="text-light py-4 mt-5" style="background-color: #000;">
@@ -277,5 +289,4 @@ $total_users = $user_data['total_users'];
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
 </body>
-
 </html>

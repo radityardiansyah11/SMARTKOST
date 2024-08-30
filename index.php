@@ -33,14 +33,18 @@
 
     <style>
         .custom-height {
-            height: 500px; /* Tinggi yang diinginkan */
-            object-fit: cover; /* Memastikan gambar memenuhi area tanpa distorsi */
-            width: 100%; /* Memastikan gambar tetap full-width */
+            height: 500px;
+            /* Tinggi yang diinginkan */
+            object-fit: cover;
+            /* Memastikan gambar memenuhi area tanpa distorsi */
+            width: 100%;
+            /* Memastikan gambar tetap full-width */
         }
 
         @media (max-width: 768px) {
             .custom-height {
-                height: 300px; /* Tinggi lebih pendek untuk layar kecil */
+                height: 300px;
+                /* Tinggi lebih pendek untuk layar kecil */
             }
         }
 
@@ -59,6 +63,49 @@
             color: white;
             z-index: 2;
         }
+
+        .modal-header {
+            border-bottom: none;
+        }
+
+        .modal-body {
+            text-align: center;
+        }
+
+        .option-button {
+            display: flex;
+            align-items: center;
+            justify-content: start;
+            padding: 10px;
+            border: 1px solid #e6e6e6;
+            border-radius: 10px;
+            background-color: white;
+            margin-bottom: 20px;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 4px;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .option-button img {
+            width: 50px;
+            height: 50px;
+            margin-right: 15px;
+        }
+
+        .option-button:hover {
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 8px;
+        }
+
+        .close-btn {
+            font-size: 1.5rem;
+            font-weight: bold;
+            border: none;
+            background: none;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 
@@ -79,7 +126,8 @@
             <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
                 <a href="#" class="navbar-brand d-flex align-items-center text-center">
                     <div class="p-2">
-                        <img class="img-fluid" src="img2/logo smartkost.png" alt="Icon" style="width: 210px; height: 70px;">
+                        <img class="img-fluid" src="img2/logo smartkost.png" alt="Icon"
+                            style="width: 210px; height: 70px;">
                     </div>
                 </a>
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -87,16 +135,49 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto">
-                        <a href="index.html" class="nav-item nav-link active">Beranda</a>
-                        
+                        <a href="index.php" class="nav-item nav-link active">Beranda</a>
+
                         <a href="kost.html" class="nav-item nav-link">Kost</a>
                         <a href="kontak.html" class="nav-item nav-link">Kontak</a>
                     </div>
-                    <a href="login.php" class="btn btn-primary px-3 d-none d-lg-flex">Login</a>
+                    <button type="button" class="btn btn-primary px-3 d-none d-lg-flex" data-bs-toggle="modal"
+                        data-bs-target="#loginModal">Login</button>
                 </div>
             </nav>
         </div>
         <!-- Navbar End -->
+
+        <!-- Modal Start -->
+        <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <img src="img2/logo_smartkost-removebg-preview.png" class="modal-title w-25">
+                        <button type="button" class="close-btn" data-bs-dismiss="modal"
+                            aria-label="Close">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-4">Saya ingin masuk sebagai</p>
+
+                        <a href="login.php" class="text-decoration-none">
+                            <div class="option-button">
+                                <img src="img2/login-tenant.svg" alt="Pencari Kos">
+                                <strong>Pencari Kos</strong>
+                            </div>
+                        </a>
+
+                        <a href="login-pk.php" class="text-decoration-none">
+                            <div class="option-button">
+                                <img src="img2/login-tenant.svg" alt="Pemilik Kos">
+                                <strong>Pemilik Kos</strong>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal End -->
 
 
         <!-- Header Start -->
@@ -105,26 +186,30 @@
                 <div class="col-md-12 position-relative">
                     <div class="owl-carousel header-carousel">
                         <div class="owl-carousel-item position-relative">
-                            <img class="img-fluid w-100 custom-height" src="img2/kost1.jpg" alt="" >
+                            <img class="img-fluid w-100 custom-height" src="img2/kost1.jpg" alt="">
                             <div class="overlay-text position-absolute top-50 start-50 translate-middle text-center">
-                                <h1 class="display-5 text-white animated fadeIn mb-1 mt-5">Temukan <span class="text-light">Kost Impian</span> Hanya di Sini</h1>
+                                <h1 class="display-5 text-white animated fadeIn mb-1 mt-5">Temukan <span
+                                        class="text-light">Kost Impian</span> Hanya di Sini</h1>
                                 <p class="text-white animated fadeIn mb-4 pb-2">Daftarkan kost anda di sini.</p>
-                                <a href="" class="btn btn-primary py-3 px-5 me-3 animated fadeIn">Daftarkan Kost</a>
+                                <a href="register-pk.html" class="btn btn-primary py-3 px-5 me-3 animated fadeIn">Daftarkan
+                                    Kost</a>
                             </div>
                         </div>
                         <div class="owl-carousel-item position-relative">
-                            <img class="img-fluid w-100 custom-height" src="img2/kost2.jpg" alt="" >
+                            <img class="img-fluid w-100 custom-height" src="img2/kost2.jpg" alt="">
                             <div class="overlay-text position-absolute top-50 start-50 translate-middle text-center">
-                                <h1 class="display-5 text-white animated fadeIn mb-1 mt-5">Temukan <span class="text-primary">Kost Impian</span> Hanya di Sini</h1>
+                                <h1 class="display-5 text-white animated fadeIn mb-1 mt-5">Temukan <span
+                                        class="text-primary">Kost Impian</span> Hanya di Sini</h1>
                                 <p class="text-white animated fadeIn mb-4 pb-2">Daftarkan kost anda di sini.</p>
-                                <a href="" class="btn btn-primary py-3 px-5 me-3 animated fadeIn">Daftarkan Kost</a>
+                                <a href="register-pk.html" class="btn btn-primary py-3 px-5 me-3 animated fadeIn">Daftarkan
+                                    Kost</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <!-- Header End -->
 
 
@@ -484,7 +569,8 @@
                             <div class="row gy-4">
                                 <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.1s">
                                     <div class="bg-light rounded p-3">
-                                        <div class="d-flex align-items-center bg-white rounded p-3" style="border: 1px dashed rgba(0, 185, 142, .3)">
+                                        <div class="d-flex align-items-center bg-white rounded p-3"
+                                            style="border: 1px dashed rgba(0, 185, 142, .3)">
                                             <div class="icon me-3" style="width: 45px; height: 45px;">
                                                 <i class="fa fa-map-marker-alt text-primary"></i>
                                             </div>
@@ -494,7 +580,8 @@
                                 </div>
                                 <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.3s">
                                     <div class="bg-light rounded p-3">
-                                        <div class="d-flex align-items-center bg-white rounded p-3" style="border: 1px dashed rgba(0, 185, 142, .3)">
+                                        <div class="d-flex align-items-center bg-white rounded p-3"
+                                            style="border: 1px dashed rgba(0, 185, 142, .3)">
                                             <div class="icon me-3" style="width: 45px; height: 45px;">
                                                 <i class="fa fa-envelope-open text-primary"></i>
                                             </div>
@@ -504,7 +591,8 @@
                                 </div>
                                 <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.5s">
                                     <div class="bg-light rounded p-3">
-                                        <div class="d-flex align-items-center bg-white rounded p-3" style="border: 1px dashed rgba(0, 185, 142, .3)">
+                                        <div class="d-flex align-items-center bg-white rounded p-3"
+                                            style="border: 1px dashed rgba(0, 185, 142, .3)">
                                             <div class="icon me-3" style="width: 45px; height: 45px;">
                                                 <i class="fa fa-phone-alt text-primary"></i>
                                             </div>
@@ -517,8 +605,8 @@
                         <div class="col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                             <iframe class="position-relative rounded w-100 h-100"
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d505737.8453050333!2d112.0523413734375!3d-7.990993800000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd62900c86bf52f%3A0xffb1b6c89ccbdafd!2sComboran!5e0!3m2!1sid!2sid!4v1724291586014!5m2!1sid!2sid"
-                                frameborder="0" style="min-height: 400px; border:0;" allowfullscreen="" aria-hidden="false"
-                                tabindex="0"></iframe>
+                                frameborder="0" style="min-height: 400px; border:0;" allowfullscreen=""
+                                aria-hidden="false" tabindex="0"></iframe>
                         </div>
                         <div class="col-md-6">
                             <div class="wow fadeInUp" data-wow-delay="0.5s">
@@ -527,30 +615,35 @@
                                     <div class="row g-3">
                                         <div class="col-md-6">
                                             <div class="form-floating">
-                                                <input type="text" class="form-control" id="name" placeholder="Your Name">
+                                                <input type="text" class="form-control" id="name"
+                                                    placeholder="Your Name">
                                                 <label for="name">Your Name</label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-floating">
-                                                <input type="email" class="form-control" id="email" placeholder="Your Email">
+                                                <input type="email" class="form-control" id="email"
+                                                    placeholder="Your Email">
                                                 <label for="email">Your Email</label>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-floating">
-                                                <input type="text" class="form-control" id="subject" placeholder="Subject">
+                                                <input type="text" class="form-control" id="subject"
+                                                    placeholder="Subject">
                                                 <label for="subject">Subject</label>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-floating">
-                                                <textarea class="form-control" placeholder="Leave a message here" id="message" style="height: 150px"></textarea>
+                                                <textarea class="form-control" placeholder="Leave a message here"
+                                                    id="message" style="height: 150px"></textarea>
                                                 <label for="message">Message</label>
                                             </div>
                                         </div>
                                         <div class="col-12">
-                                            <button class="btn btn-outline-light w-100 py-3" type="submit">Send Message</button>
+                                            <button class="btn btn-outline-light w-100 py-3" type="submit">Send
+                                                Message</button>
                                         </div>
                                     </div>
                                 </form>

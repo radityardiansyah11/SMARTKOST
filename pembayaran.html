@@ -30,6 +30,22 @@
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+    <style>
+        .card {
+            box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+            border: none;
+        }
+
+        .form-control {
+            box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+            border: none;
+        }
+
+        .form-select {
+            box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+            border: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -44,24 +60,29 @@
         <!-- Spinner End -->
 
         <!-- Navbar Start -->
-        <div class="container-fluid nav-bar bg-transparent mt-3">
+        <div class="container-fluid nav-bar bg-transparent">
             <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
-                <!-- Logo -->
-                <a href="index.html" class="navbar-brand d-flex align-items-center ">
-                    <div class="">
-                        <img class="img-fluid w-25" src="4. image-web/SMARTKOST 1.png" alt="Icon">
+                <a href="#" class="navbar-brand d-flex align-items-center text-center">
+                    <div class="p-2">
+                        <img class="img-fluid" src="img2/logo smartkost.png" alt="Icon" style="width: 210px; height: 70px;">
                     </div>
                 </a>
-
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto">
-                        <a href="#" class="nav-item nav-link active">Pembayaran</a>
+                        <a href="pembayaran.html" class="nav-item nav-link active">Pembayaran</a>
                     </div>
-                    <a href="login.html" class="btn btn-primary px-3 d-none d-lg-flex"
-                        style="background-color: #0D6EFD;">Masuk</a>
+                    <div class="d-flex">
+                        <div class="me-3 text-end">
+                        <h6 class="mt-2">Halo,
+                                <?php echo htmlspecialchars($username); ?>
+                            </h6>
+                            
+                        </div>
+                        <img src="img2/Bulat.png" alt="profile" style="width: 50px; height: 50px;">
+                    </div>
                 </div>
             </nav>
         </div>
@@ -70,13 +91,13 @@
         <!-- Pembayaran Start -->
         <div class="container mt-5">
             <div class="row">
-                <div class="col-md-6 offset-md-3">
+                <!-- Rincian Pembayaran di Kiri -->
+                <div class="col-md-6">
                     <div class="card">
-                        <div class="card-header text-white" style="background-color: #0D6EFD;">
+                        <div class="card-header text-white bg-primary">
                             <h4 class="mb-2 mt-2 text-light">Rincian Pembayaran</h4>
                         </div>
                         <div class="card-body ">
-                            <!-- Rincian Tagihan -->
                             <h5 class="mb-3">Pembayaran: <strong>Kost Malang</strong></h5>
                             <table class="table table-bordered">
                                 <thead>
@@ -87,7 +108,7 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>Sewa Kost </td>
+                                        <td>Sewa Kost</td>
                                         <td>Rp 700.000</td>
                                     </tr>
                                     <tr>
@@ -96,9 +117,17 @@
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
 
-                            <!-- Formulir Pembayaran -->
-                            <h5 class="mt-4">Detail Pembayaran</h5>
+                <!-- Detail Pembayaran di Kanan -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header text-white bg-primary">
+                            <h4 class="mb-2 mt-2 text-light">Detail Pembayaran</h4>
+                        </div>
+                        <div class="card-body ">
                             <form>
                                 <div class="mb-3">
                                     <label for="namaPenyewa" class="form-label">Nama Penyewa</label>
@@ -117,7 +146,7 @@
                                         <option value="creditcard">Kartu Kredit</option>
                                     </select>
                                 </div>
-                                <button type="submit" class="btn btn-primary w-100" style="background-color: #0D6EFD;">Bayar Sekarang</button>
+                                <button type="submit" class="btn btn-primary w-100">Bayar Sekarang</button>
                             </form>
                         </div>
                     </div>
@@ -128,8 +157,8 @@
 
         <!-- Footer Start -->
         <footer class="mt-5">
-            <div class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5"
-                style="background-color: #0D6EFD;">
+            <div
+                class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-dark">
                 <!-- Copyright -->
                 <div class="text-white mb-3 mb-md-0">
                     SMARTKOST © 2024. All rights reserved.

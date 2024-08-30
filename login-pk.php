@@ -1,40 +1,43 @@
 <?php
-include 'config.php';
+include 'config.php'; // Pastikan file ini mengandung koneksi database yang benar
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    if (isset($_POST['email']) && isset($_POST['password'])) {
+        $email = $_POST['email'];
+        $password = $_POST['password'];
 
-    // Query untuk mendapatkan user berdasarkan email
-    $sql = "SELECT * FROM login_system WHERE email = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
+        // Query untuk mendapatkan user berdasarkan email
+        $sql = "SELECT id, username, password FROM logsys_pk WHERE email = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    if ($result->num_rows > 0) {
-        $user = $result->fetch_assoc();
-        
-        if (password_verify($password, $user['password'])) {
-            // Password benar, login berhasil
-            $_SESSION['username'] = $user['username']; 
+        if ($result->num_rows > 0) {
+            $user = $result->fetch_assoc();
             
-            // Cek apakah ini admin
-            if ($email === 'admin@smartkost.com') {
-                header("Location: admin-dashboard.php");
+            // Verifikasi password
+            if (password_verify($password, $user['password'])) {
+                // Password benar, login berhasil
+                $_SESSION['user_id'] = $user['id']; 
+                $_SESSION['username'] = $user['username']; // Simpan username dalam sesi
+                
+                // Arahkan ke dashboard
+                header("Location: pk-dashboard.php");
+                exit();
             } else {
-                header("Location: user-home.php");
+                echo "Password salah!";
             }
-            exit();
         } else {
-            echo "Password salah!";
+            echo "Pengguna tidak ditemukan!";
         }
+
+        $stmt->close();
     } else {
-        echo "Pengguna tidak ditemukan!";
+        echo "Email dan password diperlukan!";
     }
 
-    $stmt->close();
     $conn->close();
 }
 ?>
@@ -197,19 +200,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="d-flex justify-content-center align-items-center mb-3 pb-1">
                         <img src="img2/logo smartkost.png" style="width: 240px; height: 80px;">
                     </div>
-                    <h5 class="text-center fw-normal mb-1 pb-3 text-muted">Login</h5>
+                    <h5 class="text-center fw-normal mb-1 pb-3 text-muted">Login Pemilik Kost</h5>
 
-                    <form  method="POST" action="">
-                        <input type="email" name="email" placeholder="Email address"
-                            class="form-control form-control-lg">
+                    <form method="POST" action="login-pk.php">
+                        <input type="email" name="email" placeholder="Email" class="form-control form-control-lg">
                         <input type="password" name="password" placeholder="Password"
                             class="form-control form-control-lg">
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-dark btn-lg btn-block mt-4">Login</button>
+                            <button type="submit" class="btn btn-dark btn-lg btn-block mt-4">Masuk</button>
                         </div>
-                        <p class="register" style="color: #8d8d8d;">Belum punya akun? <a
-                                href="register.php"><strong>Daftar di sini</strong></a></p>
+                        <p class="register" style="color: #8d8d8d;">Tidak punya akun? <a
+                                href="register-pk.php"><strong>Daftar di sini</strong></a></p>
                     </form>
+
                 </div>
             </div>
         </div>

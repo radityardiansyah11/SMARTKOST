@@ -1,3 +1,16 @@
+<?php
+session_start();
+include 'config.php';
+
+// Pastikan pengguna telah login
+if (!isset($_SESSION['username'])) {
+    header("Location: login-pk.php"); // Redirect ke halaman login jika belum login
+    exit();
+}
+
+$username = $_SESSION['username']; // Ambil username dari sesi
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -85,14 +98,14 @@
                         id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="https://via.placeholder.com/50" alt="Admin" width="32" height="32"
                             class="rounded-circle me-2">
-                        <strong>Hi, Pemilik Kost</strong>
+                        <strong>Hi, <?php echo htmlspecialchars($username); ?></strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-light text-small shadow">
                         <li><a class="dropdown-item" href="pk-profile.html">Profile</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="#">log out</a></li>
+                        <li><a class="dropdown-item" href="logout.php" onclick="confirmLogout()">log out</a></li>
                     </ul>
                 </div>
             </div>
@@ -291,6 +304,14 @@
     </div>
 
     <!-- JavaScript Libraries -->
+    <script>
+        function confirmLogout() {
+            if (confirm("Anda yakin ingin logout?")) {
+                // Jika konfirmasi diterima, arahkan ke logout.php
+                window.location.href = "logout.php";
+            }
+        }
+    </script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/wow/wow.min.js"></script>
