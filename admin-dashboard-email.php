@@ -3,15 +3,24 @@ include 'config.php';
 session_start();
 
 // Ambil data dari database
-$sql = "SELECT id, nama, email, pesan, tanggal FROM kontak ORDER BY tanggal DESC";
+$sql = "SELECT id, nama, email, pesan, tanggal, status_baca FROM kontak ORDER BY tanggal DESC";
 $result = $conn->query($sql);
 
 $messages = [];
+$unreadMessages = false;
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        $messages[] = $row; // Simpan semua pesan dalam array $messages
+        $messages[] = $row;
+        // Jika ada pesan yang belum dibaca, beri tanda
+        if ($row['status_baca'] == 0) {
+            $unreadMessages = true;
+        }
     }
 }
+
+// Jika admin telah membuka dashboard, tandai semua pesan sebagai sudah dibaca
+$sqlUpdate = "UPDATE kontak SET status_baca = 1 WHERE status_baca = 0";
+$conn->query($sqlUpdate);
 
 if (isset($_GET['delete'])) {
     $id = intval($_GET['delete']);
@@ -23,6 +32,9 @@ if (isset($_GET['delete'])) {
             UPDATE kontak SET id = @count := @count + 1;
             ALTER TABLE kontak AUTO_INCREMENT = 1;
         ";
+        $_SESSION['status'] = 'deleted';
+        header('Location: admin-dashboard-email.php');
+        exit();
         mysqli_multi_query($conn, $reset_id_query);
 
         // Redirect setelah penghapusan dan reset
@@ -30,14 +42,14 @@ if (isset($_GET['delete'])) {
         exit();
     } else {
         echo "Error deleting record: " . mysqli_error($conn);
+        $_SESSION['status'] = 'error';
+        header('Location: admin-dashboard-email.php');
+        exit();
     }
 }
 
 $conn->close();
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -71,6 +83,10 @@ $conn->close();
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+
+    <!-- Include SweetAlert CSS and JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <style>
         * {
@@ -264,13 +280,60 @@ $conn->close();
 
     <!-- JavaScript Libraries -->
     <script>
-        function confirmLogout() {
-            if (confirm("Anda yakin ingin logout?")) {
-                // Jika konfirmasi diterima, arahkan ke logout.php
-                window.location.href = "logout.php";
+    document.addEventListener('DOMContentLoaded', function () {
+        <?php if ($unreadMessages): ?>
+            Swal.fire({
+                icon: 'info',
+                title: 'Pesan Terbaru!',
+                text: 'Anda memiliki pesan baru dari user.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#00B98E',
+                background: '#f4f4f9',
+                width: '350px',
+                customClass: {
+                    title: 'custom-title',
+                    content: 'custom-content'
+                }
+            });
+        <?php endif; ?>
+        
+        <?php if (isset($_SESSION['status'])): ?>
+            var status = "<?php echo $_SESSION['status']; ?>";
+
+            if (status === "deleted") {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Pesan Berhasil Dihapus!',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#00B98E',
+                    background: '#f4f4f9',
+                    width: '350px',
+                    customClass: {
+                        title: 'custom-title',
+                        content: 'custom-content'
+                    }
+                });
+            } else if (status === "error") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal Menghapus Pesan!',
+                    text: 'Terjadi kesalahan saat menghapus pesan. Silakan coba lagi.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#00765a',
+                    width: '350px',
+                    customClass: {
+                        title: 'custom-title',
+                        content: 'custom-content'
+                    }
+                });
             }
-        }
-    </script>
+
+            // Clear session status after displaying the message
+            <?php unset($_SESSION['status']); ?>
+        <?php endif; ?>
+    });
+</script>
+
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/wow/wow.min.js"></script>

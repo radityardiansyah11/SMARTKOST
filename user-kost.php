@@ -119,7 +119,7 @@ $username = $_SESSION['username'];
                         <a href="user-home.php" class="nav-item nav-link">Beranda</a>
 
                         <a href="user-kost.php" class="nav-item nav-link active">Kost</a>
-                        <a href="user-kontak.html" class="nav-item nav-link">Kontak</a>
+                        <a href="user-kontak.php" class="nav-item nav-link">Kontak</a>
                     </div>
                     <div class="d-flex">
                         <div class="me-3 text-end">

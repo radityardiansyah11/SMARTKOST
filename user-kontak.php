@@ -111,13 +111,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         .btn-custom-logout {
             font-size: 12px;
-            /* Ukuran font lebih kecil */
             padding: 2px 8px;
-            /* Padding lebih kecil */
             line-height: 1.5;
-            /* Mengurangi tinggi baris */
             border-radius: 4px;
-            /* Ujung sedikit melengkung */
         }
 
         .swal2-title.custom-title {
@@ -410,14 +406,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 Swal.fire({
                     icon: 'success',
                     title: 'Pesan Berhasil Dikirim!',
-                    text: 'Pesan Anda telah berhasil dikirim.',
                     confirmButtonText: 'OK',
-                    confirmButtonColor: '#00B98E', // Warna tombol disesuaikan dengan tema
-                    background: '#f4f4f9', // Warna latar belakang yang lembut
-                    width: '350px', // Ukuran kotak lebih kecil
+                    confirmButtonColor: '#00B98E', 
+                    background: '#f4f4f9',
+                    width: '350px',
                     customClass: {
-                        title: 'custom-title',  // Kustomisasi judul
-                        content: 'custom-content' // Kustomisasi konten
+                        title: 'custom-title',
+                        content: 'custom-content' 
                     }
                 });
             } else if (status === "error") {
@@ -427,7 +422,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     text: 'Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.',
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#00765a', // Warna tombol sesuai tema website
-                    background: '#f4f4f9', // Warna latar belakang
                     width: '350px', // Ukuran kotak lebih kecil
                     customClass: {
                         title: 'custom-title',
@@ -438,10 +432,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Formulir Tidak Lengkap!',
-                    text: 'Harap isi semua kolom sebelum mengirim.',
+                    text: 'Harap isi semua kolom.',
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#f39c12', // Warna tombol peringatan
-                    background: '#f1f1f1', // Warna latar belakang
                     width: '350px', // Ukuran kotak lebih kecil
                     customClass: {
                         title: 'custom-title',
