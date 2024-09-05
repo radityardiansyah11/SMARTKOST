@@ -3,13 +3,13 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Admin Dashboard - SMARTKOST</title>
+    <title><?php echo htmlspecialchars($username); ?> Dashboard - SMARTKOST</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
 
     <!-- Favicon -->
-    <link href="4. image-web/SMARTKOST 2.png" rel="icon">
+    <link href="img2/mini logo smartkost.png" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,7 +32,7 @@
     <link href="css/style.css" rel="stylesheet">
 
     <style>
-        .card{
+        .card {
             box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
             border: none;
         }
@@ -72,8 +72,8 @@
                         </a>
                     </li>
                     <li>
-                        <a href="pk-dashboard-booking.html" class="nav-link active text-light" style="background-color: #00B98E;"
-                            aria-current="page">
+                        <a href="pk-dashboard-booking.html" class="nav-link active text-light"
+                            style="background-color: #00B98E;" aria-current="page">
                             <i class="bi bi-people me-2"></i>
                             Booking
                         </a>
@@ -85,7 +85,9 @@
                         id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="https://via.placeholder.com/50" alt="Admin" width="32" height="32"
                             class="rounded-circle me-2">
-                        <strong>Hi, Pemilik Kost</strong>
+                        <strong>Hi,
+                            <?php echo htmlspecialchars($username); ?>
+                        </strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-light text-small shadow">
                         <li><a class="dropdown-item" href="pk-profile.html">Profile</a></li>
@@ -110,7 +112,7 @@
                         <div class="card bg-primary" style="height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title text-light">Kost</h5>
-                                <h3 class="card-text text-light">120</h3>
+                                <h3 class="card-text text-light">0</h3>
                             </div>
                         </div>
                     </div>
@@ -118,7 +120,7 @@
                         <div class="card" style="height: 150px; background-color: #009774;">
                             <div class="card-body">
                                 <h5 class="card-title text-light">Booking</h5>
-                                <h3 class="card-text text-light">95</h3>
+                                <h3 class="card-text text-light">0</h3>
                             </div>
                         </div>
                     </div>
@@ -126,7 +128,7 @@
                         <div class="card bg-primary" style="height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title text-light">Pendapatan</h5>
-                                <h3 class="card-text text-light">Rp. 12,000,000</h3>
+                                <h3 class="card-text text-light">Rp. 0</h3>
                             </div>
                         </div>
                     </div>
@@ -160,22 +162,22 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">2</th>
-                                    <td>User 2</td>
-                                    <td>Kost Kepanjen</td>
-                                    <td>Rp. 600.000</td>
-                                    <td>2024-08-08</td>
+                                    <th scope="row">1</th>
+                                    <td>User 1</td>
+                                    <td>Kost Malang</td>
+                                    <td>Rp. 500.000</td>
+                                    <td>2024-08-09</td>
                                     <td>
                                         <button class="btn btn-sm btn-primary">Edit</button>
                                         <button class="btn btn-sm btn-danger">Delete</button>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">2</th>
-                                    <td>User 3</td>
-                                    <td>Kost Batu</td>
-                                    <td>Rp. 600.000</td>
-                                    <td>2024-08-08</td>
+                                    <th scope="row">1</th>
+                                    <td>User 1</td>
+                                    <td>Kost Malang</td>
+                                    <td>Rp. 500.000</td>
+                                    <td>2024-08-09</td>
                                     <td>
                                         <button class="btn btn-sm btn-primary">Edit</button>
                                         <button class="btn btn-sm btn-danger">Delete</button>

@@ -109,7 +109,7 @@ $total_pk = $pk_data['total_pk'];
         <div class="d-flex">
             <!-- Sidebar Start -->
             <div class="d-flex flex-column flex-shrink-0 p-3"
-                style=" width: 280px; height: 100vh; position: fixed; background-color: #00765a;">
+                style=" width: 220px; height: 100vh; position: fixed; background-color: #00765a;">
                 <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
                     <h3 class=" mt-2 text-light">Dashboard</h3>
                 </a>
@@ -123,7 +123,7 @@ $total_pk = $pk_data['total_pk'];
                     </li>
                     <li>
                         <a href="admin-dahsboard-pk.php" class="nav-link text-light">
-                            <i class="bi bi-house-door me-2"></i>
+                            <i class="bi bi-person me-2"></i>
                             Pemilik Kost
                         </a>
                     </li>
@@ -132,6 +132,18 @@ $total_pk = $pk_data['total_pk'];
                             style="background-color: #00B98E;" aria-current="page">
                             <i class="bi bi-people me-2"></i>
                             User
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-dashboard-kost.php" class="nav-link text-light">
+                            <i class="bi bi-house-door me-2"></i>
+                            Kost
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-dashboard-email.php" class="nav-link text-light">
+                            <i class="bi bi-envelope me-2"></i>
+                            Email
                         </a>
                     </li>
                 </ul>
@@ -143,22 +155,22 @@ $total_pk = $pk_data['total_pk'];
                             class="rounded-circle me-2">
                         <strong>Admin</strong>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-light text-small shadow">
-                        <li><a class="dropdown-item" href="logout.php">Sign out</a></li>
+                    <ul class="dropdown-menu dropdown-menu-light text-small shadow" onclick="confirmLogout()" >
+                        <li><a class="dropdown-item" href="logout.php" >Sign out</a></li>
                     </ul>
                 </div>
             </div>
             <!-- Sidebar End -->
 
             <!-- Content Start -->
-            <div class="content p-4" style="margin-left: 280px; padding: 20px;">
+            <div class="content p-4" style="margin-left: 220px; padding: 20px;">
                 <div class="row">
                     <div class="col-md-12">
                         <img class="img-fluid w-25 mb-2" src="img2/logo smartkost.png" alt="SMARTKOST Logo">
                     </div>
 
                     <!-- Stats Overview -->
-                    <div class="col-md-4">
+                    <div class="col-md-4  wow fadeInUp" data-wow-delay="0.1s">
                         <div class="card" style=" height: 150px; ">
                             <div class="card-body">
                                 <h5 class="card-title ">User</h5>
@@ -166,7 +178,7 @@ $total_pk = $pk_data['total_pk'];
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4  wow fadeInUp" data-wow-delay="0.2s">
                         <div class="card" style=" height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title ">Pemilik Kost</h5>
@@ -174,7 +186,7 @@ $total_pk = $pk_data['total_pk'];
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4  wow fadeInUp" data-wow-delay="0.3s">
                         <div class="card" style=" height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title">Promosi</h5>
@@ -187,7 +199,7 @@ $total_pk = $pk_data['total_pk'];
                 <!-- Listings -->
                 <div class="row mt-5">
                     <div class="col-md-12">
-                        <h2 class="h4 mb-3">User</h2>
+                        <h2 class="h4 mb-3  wow fadeInDown" data-wow-delay="0.3s">User</h2>
                         <table class="table table-hover">
                             <thead class="table text-light" style="background-color: #009270;">
                                 <tr>
@@ -245,6 +257,14 @@ $total_pk = $pk_data['total_pk'];
     </div>
 
     <!-- JavaScript Libraries -->
+    <script>
+        function confirmLogout() {
+            if (confirm("Anda yakin ingin logout?")) {
+                // Jika konfirmasi diterima, arahkan ke logout.php
+                window.location.href = "logout.php";
+            }
+        }
+    </script>  
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/wow/wow.min.js"></script>

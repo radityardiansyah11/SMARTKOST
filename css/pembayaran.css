@@ -1,0 +1,78 @@
+.card {
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    border: none;
+}
+
+.form-control {
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border: none;
+}
+
+.form-select {
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border: none;
+}
+
+.date-box {
+    background-color: #ffffff;
+    border-radius: 0.375rem;
+    padding: 0.75rem 1.25rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 49%;
+}
+
+.date-box strong {
+    color: #656565;
+}
+
+.table-bordered {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.modal-lg {
+    max-width: 70%;
+    /* Custom width, you can set percentage or fixed value like 900px */
+}
+
+.custom-select {
+    position: relative;
+    width: 100%;
+    font-family: Arial;
+}
+
+/* Style the default select box */
+.custom-select select {
+    display: none;
+}
+
+/* Style the custom select */
+.select-selected {
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    padding: 10px;
+    cursor: pointer;
+}
+
+/* Style the options */
+.select-items div {
+    color: black;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    background-color: white;
+    cursor: pointer;
+}
+
+/* Highlight hovered items */
+.select-items div:hover {
+    background-color: #ddd;
+}
+
+/* Hide the options initially */
+.select-hide {
+    display: none;
+}
+
+/* Show the items when clicked */
+.select-selected.select-arrow-active + .select-items {
+    display: block;
+}

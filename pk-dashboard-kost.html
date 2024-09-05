@@ -3,13 +3,13 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Admin Dashboard - SMARTKOST</title>
+    <title><?php echo htmlspecialchars($username); ?> Dashboard - SMARTKOST</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
 
     <!-- Favicon -->
-    <link href="4. image-web/SMARTKOST 2.png" rel="icon">
+    <link href="img2/mini logo smartkost.png" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -84,7 +84,9 @@
                         id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="https://via.placeholder.com/50" alt="Admin" width="32" height="32"
                             class="rounded-circle me-2">
-                        <strong>Hi, Pemilik Kost</strong>
+                        <strong>Hi,
+                            <?php echo htmlspecialchars($username); ?>
+                        </strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-light text-small shadow">
                         <li><a class="dropdown-item" href="pk-profile.html">Profile</a></li>
@@ -109,7 +111,7 @@
                         <div class="card bg-primary" style="height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title text-light">Kost</h5>
-                                <h3 class="card-text text-light">120</h3>
+                                <h3 class="card-text text-light">0</h3>
                             </div>
                         </div>
                     </div>
@@ -117,7 +119,7 @@
                         <div class="card" style="height: 150px; background-color: #009774;">
                             <div class="card-body">
                                 <h5 class="card-title text-light">Booking</h5>
-                                <h3 class="card-text text-light">95</h3>
+                                <h3 class="card-text text-light">0</h3>
                             </div>
                         </div>
                     </div>
@@ -125,7 +127,7 @@
                         <div class="card bg-primary" style="height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title text-light">Pendapatan</h5>
-                                <h3 class="card-text text-light">Rp. 12,000,000</h3>
+                                <h3 class="card-text text-light">Rp. 0</h3>
                             </div>
                         </div>
                     </div>
@@ -136,10 +138,11 @@
                     <div class="container">
                         <div class="row mt-2 g-0 gx-5">
                             <div class="col-lg-6 d-flex align-items-center">
-                                <h4 class="mb-3">List Kost</h4>
+                                <h4 class="mb-3">List Kost Anda</h4>
                             </div>
                             <div class="col-lg-6 d-flex mb-3 justify-content-end">
-                                <a href="pk-tambah kost.html" class="btn btn-primary px-3 d-none d-lg-flex">Tambah Kost</a>
+                                <a href="pk-tambah kost.html" class="btn btn-primary px-3 d-none d-lg-flex">Tambah
+                                    Kost</a>
                             </div>
                         </div>
                         <div class="tab-content">
@@ -152,7 +155,8 @@
                                                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                                                     <div class="property-item rounded overflow-hidden">
                                                         <div class="position-relative overflow-hidden">
-                                                            <a href=""><img class="img-fluid" src="img2/gbr-kost1.jpg" alt=""></a>
+                                                            <a href=""><img class="img-fluid" src="img2/gbr-kost1.jpg"
+                                                                    alt=""></a>
                                                             <div
                                                                 class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
                                                                 Kost</div>
@@ -160,130 +164,18 @@
                                                         <div class="p-4 pb-0">
                                                             <h5 class="text-primary mb-3">Rp. 500.000</h5>
                                                             <a class="d-block h5 mb-2" href="">Kost Comboran</a>
-                                                            <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
+                                                            <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl.
+                                                                Tanimbar</p>
                                                         </div>
                                                         <div class="d-flex border-top">
                                                             <small class="flex-fill text-center border-end py-2"><i
                                                                     class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
                                                             <small class="flex-fill text-center border-end py-2"><i
-                                                                    class="fa fa-bed text-primary me-2"></i>1 Bed</small>
+                                                                    class="fa fa-bed text-primary me-2"></i>1
+                                                                Bed</small>
                                                             <small class="flex-fill text-center py-2"><i
-                                                                    class="fa fa-bath text-primary me-2"></i>2 Bath</small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                                                    <div class="property-item rounded overflow-hidden">
-                                                        <div class="position-relative overflow-hidden">
-                                                            <a href=""><img class="img-fluid" src="img2/gbr-kost2.jpg" alt=""></a>
-                                                            <div
-                                                                class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                                                Kost</div>
-                                                        </div>
-                                                        <div class="p-4 pb-0">
-                                                            <h5 class="text-primary mb-3">Rp. 500.000</h5>
-                                                            <a class="d-block h5 mb-2" href="">Kost Comboran</a>
-                                                            <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
-                                                        </div>
-                                                        <div class="d-flex border-top">
-                                                            <small class="flex-fill text-center border-end py-2"><i
-                                                                    class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
-                                                            <small class="flex-fill text-center border-end py-2"><i
-                                                                    class="fa fa-bed text-primary me-2"></i>1 Bed</small>
-                                                            <small class="flex-fill text-center py-2"><i
-                                                                    class="fa fa-bath text-primary me-2"></i>2 Bath</small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                                                    <div class="property-item rounded overflow-hidden">
-                                                        <div class="position-relative overflow-hidden">
-                                                            <a href=""><img class="img-fluid" src="img2/gbr-kost3.jpg" alt=""></a>
-                                                            <div
-                                                                class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                                                Kost</div>
-                                                        </div>
-                                                        <div class="p-4 pb-0">
-                                                            <h5 class="text-primary mb-3">Rp. 500.000</h5>
-                                                            <a class="d-block h5 mb-2" href="">Kost Comboran</a>
-                                                            <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
-                                                        </div>
-                                                        <div class="d-flex border-top">
-                                                            <small class="flex-fill text-center border-end py-2"><i
-                                                                    class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
-                                                            <small class="flex-fill text-center border-end py-2"><i
-                                                                    class="fa fa-bed text-primary me-2"></i>1 Bed</small>
-                                                            <small class="flex-fill text-center py-2"><i
-                                                                    class="fa fa-bath text-primary me-2"></i>2 Bath</small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                                                    <div class="property-item rounded overflow-hidden">
-                                                        <div class="position-relative overflow-hidden">
-                                                            <a href=""><img class="img-fluid" src="img2/gbr-kost1.jpg" alt=""></a>
-                                                            <div
-                                                                class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                                                Kost</div>
-                                                        </div>
-                                                        <div class="p-4 pb-0">
-                                                            <h5 class="text-primary mb-3">Rp. 500.000</h5>
-                                                            <a class="d-block h5 mb-2" href="">Kost Comboran</a>
-                                                            <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
-                                                        </div>
-                                                        <div class="d-flex border-top">
-                                                            <small class="flex-fill text-center border-end py-2"><i
-                                                                    class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
-                                                            <small class="flex-fill text-center border-end py-2"><i
-                                                                    class="fa fa-bed text-primary me-2"></i>1 Bed</small>
-                                                            <small class="flex-fill text-center py-2"><i
-                                                                    class="fa fa-bath text-primary me-2"></i>2 Bath</small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                                                    <div class="property-item rounded overflow-hidden">
-                                                        <div class="position-relative overflow-hidden">
-                                                            <a href=""><img class="img-fluid" src="img2/gbr-kost2.jpg" alt=""></a>
-                                                            <div
-                                                                class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                                                Kost</div>
-                                                        </div>
-                                                        <div class="p-4 pb-0">
-                                                            <h5 class="text-primary mb-3">Rp. 500.000</h5>
-                                                            <a class="d-block h5 mb-2" href="">Kost Comboran</a>
-                                                            <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
-                                                        </div>
-                                                        <div class="d-flex border-top">
-                                                            <small class="flex-fill text-center border-end py-2"><i
-                                                                    class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
-                                                            <small class="flex-fill text-center border-end py-2"><i
-                                                                    class="fa fa-bed text-primary me-2"></i>1 Bed</small>
-                                                            <small class="flex-fill text-center py-2"><i
-                                                                    class="fa fa-bath text-primary me-2"></i>2 Bath</small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                                                    <div class="property-item rounded overflow-hidden">
-                                                        <div class="position-relative overflow-hidden">
-                                                            <a href=""><img class="img-fluid" src="img2/gbr-kost3.jpg" alt=""></a>
-                                                            <div
-                                                                class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                                                Kost</div>
-                                                        </div>
-                                                        <div class="p-4 pb-0">
-                                                            <h5 class="text-primary mb-3">Rp. 500.000</h5>
-                                                            <a class="d-block h5 mb-2" href="">Kost Comboran</a>
-                                                            <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
-                                                        </div>
-                                                        <div class="d-flex border-top">
-                                                            <small class="flex-fill text-center border-end py-2"><i
-                                                                    class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
-                                                            <small class="flex-fill text-center border-end py-2"><i
-                                                                    class="fa fa-bed text-primary me-2"></i>1 Bed</small>
-                                                            <small class="flex-fill text-center py-2"><i
-                                                                    class="fa fa-bath text-primary me-2"></i>2 Bath</small>
+                                                                    class="fa fa-bath text-primary me-2"></i>2
+                                                                Bath</small>
                                                         </div>
                                                     </div>
                                                 </div>

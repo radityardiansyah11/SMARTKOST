@@ -1,3 +1,46 @@
+<?php
+session_start();
+include 'config.php';
+
+// Periksa apakah pengguna sudah login
+if (!isset($_SESSION['username'])) {
+    // Jika tidak, arahkan ke halaman login
+    header("Location: login.php");
+    exit();
+}
+
+$username = $_SESSION['username'];
+$message_status = "";  // Variabel untuk menyimpan status pesan
+
+// Periksa apakah formulir telah dikirim
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nama = htmlspecialchars($_POST['nama']);
+    $email = htmlspecialchars($_POST['email']);
+    $pesan = htmlspecialchars($_POST['pesan']);
+
+    // Validasi sederhana
+    if (!empty($nama) && !empty($email) && !empty($pesan)) {
+        // Persiapkan pernyataan SQL untuk menyimpan data ke database
+        $sql = "INSERT INTO kontak (nama, email, pesan) VALUES (?, ?, ?)";
+
+        // Koneksi ke database
+        if ($stmt = $conn->prepare($sql)) {
+            $stmt->bind_param("sss", $nama, $email, $pesan);
+
+            // Eksekusi query
+            if ($stmt->execute()) {
+                $message_status = "success";  // Pesan berhasil dikirim
+            } else {
+                $message_status = "error";  // Pesan gagal dikirim
+            }
+            $stmt->close();
+        }
+    } else {
+        $message_status = "incomplete";  // Kolom tidak lengkap
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,6 +74,8 @@
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         .custom-height {
             height: 500px;
@@ -63,6 +108,35 @@
             color: white;
             z-index: 2;
         }
+
+        .btn-custom-logout {
+            font-size: 12px;
+            /* Ukuran font lebih kecil */
+            padding: 2px 8px;
+            /* Padding lebih kecil */
+            line-height: 1.5;
+            /* Mengurangi tinggi baris */
+            border-radius: 4px;
+            /* Ujung sedikit melengkung */
+        }
+
+        .swal2-title.custom-title {
+            color: #00765a;
+            font-family: 'Heebo', sans-serif;
+        }
+
+        .swal2-content.custom-content {
+            color: #333;
+            font-family: 'Inter', sans-serif;
+        }
+
+
+        .swal2-content.custom-content {
+            color: #333;
+            /* Ubah warna teks konten */
+            font-family: 'Inter', sans-serif;
+            /* Ubah font teks konten */
+        }
     </style>
 </head>
 
@@ -92,12 +166,23 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto">
-                        <a href="index.html" class="nav-item nav-link">Home</a>
-                        <a href="kost.html" class="nav-item nav-link">KOST</a>
-
-                        <a href="contact.html" class="nav-item nav-link active">KONTAK</a>
+                        <a href="user-home.php" class="nav-item nav-link">Home</a>
+                        <a href="user-kost.php" class="nav-item nav-link">KOST</a>
+                        <a href="user-kontak.php" class="nav-item nav-link active">KONTAK</a>
                     </div>
-                    <a href="login.html" class="btn btn-primary px-3 d-none d-lg-flex">LOGIN</a>
+                    <div class="d-flex">
+                        <div class="me-3 text-end">
+                            <h6 class="mt-2">Halo, <?php echo htmlspecialchars($username); ?></h6>
+                            <form action="logout.php" method="POST">
+                                <button type="submit" class="btn btn-outline-danger btn-custom-logout"
+                                    onclick="confirmLogout()">Log out</button>
+                            </form>
+                        </div>
+                        <a href="user-profile.php">
+                            <img src="<?php echo isset($_SESSION['profile_image']) ? $_SESSION['profile_image'] : 'img2/Bulat.png'; ?>"
+                                alt="profile" class="mt-1" style="width: 50px; height: 50px;">
+                        </a>
+                    </div>
                 </div>
             </nav>
         </div>
@@ -168,8 +253,7 @@
             <div class="container">
                 <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
                     <h1 class="mb-3">KONTAK KAMI</h1>
-                    <p>Eirmod sed ipsum dolor sit rebum labore magna erat. Tempor ut dolore lorem kasd vero ipsum sit
-                        eirmod sit. Ipsum diam justo sed rebum vero dolor duo.</p>
+                    <p></p>
                 </div>
                 <div class="row g-4">
                     <div class="col-12">
@@ -181,7 +265,7 @@
                                         <div class="icon me-3" style="width: 45px; height: 45px;">
                                             <i class="fa fa-map-marker-alt text-primary"></i>
                                         </div>
-                                        <span>Comboran Pride</span>
+                                        <span>Malang</span>
                                     </div>
                                 </div>
                             </div>
@@ -192,7 +276,7 @@
                                         <div class="icon me-3" style="width: 45px; height: 45px;">
                                             <i class="fa fa-envelope-open text-primary"></i>
                                         </div>
-                                        <span>info@example.com</span>
+                                        <span>info@smartkost.com</span>
                                     </div>
                                 </div>
                             </div>
@@ -217,35 +301,29 @@
                     </div>
                     <div class="col-md-6">
                         <div class="wow fadeInUp" data-wow-delay="0.5s">
-                            <p class="mb-4">The contact form is currently inactive. Get a functional and working contact
-                                form with Ajax & PHP in a few minutes. Just copy and paste the files, add a little code
-                                and you're done. <a href="https://htmlcodex.com/contact-form">Download Now</a>.</p>
-                            <form>
+                            <p class="mb-4">Kontak kami jika anda memiliki kendala apapun dengan website kami</p>
+
+                            <form method="POST" action="user-kontak.php">
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <div class="form-floating">
-                                            <input type="text" class="form-control" id="name" placeholder="Your Name">
-                                            <label for="name">Your Name</label>
+                                            <input type="text" class="form-control" id="nama" name="nama"
+                                                placeholder="Nama">
+                                            <label for="nama">Nama</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-floating">
-                                            <input type="email" class="form-control" id="email"
-                                                placeholder="Your Email">
-                                            <label for="email">Your Email</label>
+                                            <input type="email" class="form-control" id="email" name="email"
+                                                placeholder="Email">
+                                            <label for="email">Email</label>
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         <div class="form-floating">
-                                            <input type="text" class="form-control" id="subject" placeholder="Subject">
-                                            <label for="subject">Subject</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-floating">
-                                            <textarea class="form-control" placeholder="Leave a message here"
-                                                id="message" style="height: 150px"></textarea>
-                                            <label for="message">Message</label>
+                                            <textarea class="form-control" placeholder="Leave a message here" id="pesan"
+                                                name="pesan" style="height: 250px;"></textarea>
+                                            <label for="pesan">Pesan</label>
                                         </div>
                                     </div>
                                     <div class="col-12">
@@ -324,6 +402,55 @@
     </div>
 
     <!-- JavaScript Libraries -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var status = "<?php echo $message_status; ?>";
+
+            if (status === "success") {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Pesan Berhasil Dikirim!',
+                    text: 'Pesan Anda telah berhasil dikirim.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#00B98E', // Warna tombol disesuaikan dengan tema
+                    background: '#f4f4f9', // Warna latar belakang yang lembut
+                    width: '350px', // Ukuran kotak lebih kecil
+                    customClass: {
+                        title: 'custom-title',  // Kustomisasi judul
+                        content: 'custom-content' // Kustomisasi konten
+                    }
+                });
+            } else if (status === "error") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Pesan Gagal Dikirim!',
+                    text: 'Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#00765a', // Warna tombol sesuai tema website
+                    background: '#f4f4f9', // Warna latar belakang
+                    width: '350px', // Ukuran kotak lebih kecil
+                    customClass: {
+                        title: 'custom-title',
+                        content: 'custom-content'
+                    }
+                });
+            } else if (status === "incomplete") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Formulir Tidak Lengkap!',
+                    text: 'Harap isi semua kolom sebelum mengirim.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#f39c12', // Warna tombol peringatan
+                    background: '#f1f1f1', // Warna latar belakang
+                    width: '350px', // Ukuran kotak lebih kecil
+                    customClass: {
+                        title: 'custom-title',
+                        content: 'custom-content'
+                    }
+                });
+            }
+        });
+    </script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/wow/wow.min.js"></script>

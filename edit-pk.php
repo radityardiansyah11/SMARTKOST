@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         
         <button type="submit" class="btn btn-primary">Update</button>
-        <a href="admin-dashboard-pk.php" class="btn btn-secondary">Cancel</a>
+        <a href="admin-dahsboard-pk.php" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 

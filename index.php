@@ -176,7 +176,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Modal End -->
 
 
@@ -191,7 +190,7 @@
                                 <h1 class="display-5 text-white animated fadeIn mb-1 mt-5">Temukan <span
                                         class="text-light">Kost Impian</span> Hanya di Sini</h1>
                                 <p class="text-white animated fadeIn mb-4 pb-2">Daftarkan kost anda di sini.</p>
-                                <a href="register-pk.html" class="btn btn-primary py-3 px-5 me-3 animated fadeIn">Daftarkan
+                                <a href="register-pk.php" class="btn btn-primary py-3 px-5 me-3 animated fadeIn">Daftarkan
                                     Kost</a>
                             </div>
                         </div>
@@ -199,9 +198,9 @@
                             <img class="img-fluid w-100 custom-height" src="img2/kost2.jpg" alt="">
                             <div class="overlay-text position-absolute top-50 start-50 translate-middle text-center">
                                 <h1 class="display-5 text-white animated fadeIn mb-1 mt-5">Temukan <span
-                                        class="text-primary">Kost Impian</span> Hanya di Sini</h1>
+                                        class="text-light">Kost Impian</span> Hanya di Sini</h1>
                                 <p class="text-white animated fadeIn mb-4 pb-2">Daftarkan kost anda di sini.</p>
-                                <a href="register-pk.html" class="btn btn-primary py-3 px-5 me-3 animated fadeIn">Daftarkan
+                                <a href="register-pk.php" class="btn btn-primary py-3 px-5 me-3 animated fadeIn">Daftarkan
                                     Kost</a>
                             </div>
                         </div>
@@ -287,7 +286,7 @@
                                     <img class="img-fluid" src="img/icon-apartment.png" alt="Icon">
                                 </div>
                                 <h6>Layanan 24 jam</h6>
-                                <span>kami memberikan pelayanan terbaiks</span>
+                                <span>kami memberikan pelayanan terbaik</span>
                             </div>
                         </a>
                     </div>
@@ -308,7 +307,7 @@
                                 <div class="icon mb-3">
                                     <img class="img-fluid" src="img/icon-house.png" alt="Icon">
                                 </div>
-                                <h6>Keamanan pembayaran</h6>
+                                <h6>Pembayaran</h6>
                                 <span>Kami menjamin keamana transaksi</span>
                             </div>
                         </a>
@@ -319,8 +318,8 @@
                                 <div class="icon mb-3">
                                     <img class="img-fluid" src="img/icon-housing.png" alt="Icon">
                                 </div>
-                                <h6>Office</h6>
-                                <span>123 Properties</span>
+                                <h6>Kost</h6>
+                                <span>Terdapat berbagai kost yang tersedia</span>
                             </div>
                         </a>
                     </div>
@@ -667,36 +666,36 @@
                         <div class="position-relative border border-primary pt-5 pb-4 px-4">
                             <div class="d-inline-flex align-items-center justify-content-center bg-primary rounded-circle position-absolute top-0 start-50 translate-middle shadow"
                                 style="width: 100px; height: 100px;">
-                                <i class="fa fa-globe fa-3x text-white"></i>
+                                <i class="fa fa-search fa-3x text-white"></i>
                             </div>
-                            <h5 class="mt-4">Pilih kost</h5>
+                            <h5 class="mt-4">Cari Kost kost</h5>
                             <hr class="w-25 mx-auto bg-primary mb-1">
                             <hr class="w-50 mx-auto bg-primary mt-0">
-                            <p class="mb-0">Pilih kost yang anda inginkan sesuai dengan yang anda butuhkan</p>
+                            <p class="mb-0">Cari kost yang anda inginkan sesuai dengan yang anda butuhkan</p>
                         </div>
                     </div>
                     <div class="col-lg-4 col-sm-6 text-center pt-4 wow fadeInUp" data-wow-delay="0.3s">
                         <div class="position-relative border border-primary pt-5 pb-4 px-4">
                             <div class="d-inline-flex align-items-center justify-content-center bg-primary rounded-circle position-absolute top-0 start-50 translate-middle shadow"
                                 style="width: 100px; height: 100px;">
-                                <i class="fa fa-dollar-sign fa-3x text-white"></i>
+                                <i class="fa fa-bed fa-3x text-white"></i>
                             </div>
-                            <h5 class="mt-4">Pembayaran</h5>
+                            <h5 class="mt-4">Pilih Kost</h5>
                             <hr class="w-25 mx-auto bg-primary mb-1">
                             <hr class="w-50 mx-auto bg-primary mt-0">
-                            <p class="mb-0">Anda dapat melakukan pembayaran pada website maupun cod</p>
+                            <p class="mb-0">Pastikan pilihna kost sesuai dengan kebtuhan</p>
                         </div>
                     </div>
                     <div class="col-lg-4 col-sm-6 text-center pt-4 wow fadeInUp" data-wow-delay="0.5s">
                         <div class="position-relative border border-primary pt-5 pb-4 px-4">
                             <div class="d-inline-flex align-items-center justify-content-center bg-primary rounded-circle position-absolute top-0 start-50 translate-middle shadow"
                                 style="width: 100px; height: 100px;">
-                                <i class="fa fa-plane fa-3x text-white"></i>
+                                <i class="fa fa-dollar-sign fa-3x text-white"></i>
                             </div>
-                            <h5 class="mt-4">kunjungi</h5>
+                            <h5 class="mt-4">Booking</h5>
                             <hr class="w-25 mx-auto bg-primary mb-1">
                             <hr class="w-50 mx-auto bg-primary mt-0">
-                            <p class="mb-0">Tempati kost impianmu</p>
+                            <p class="mb-0">Anda dapat melakukan pembayaran pada website maupun cod</p>
                         </div>
                     </div>
                 </div>
@@ -764,7 +763,7 @@
                         <h5 class="text-white mb-4">Get In Touch</h5>
                         <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>comboran</p>
                         <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
-                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@smartkost.com</p>
                         <div class="d-flex pt-2">
                             <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
                             <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
@@ -774,15 +773,13 @@
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <h5 class="text-white mb-4">link</h5>
-                        <a class="btn btn-link text-white-50" href="">About Us</a>
-                        <a class="btn btn-link text-white-50" href="">Contact Us</a>
-                        <a class="btn btn-link text-white-50" href="">Our Services</a>
-                        <a class="btn btn-link text-white-50" href="">Privacy Policy</a>
-                        <a class="btn btn-link text-white-50" href="">Terms & Condition</a>
+                        <a class="btn btn-link text-white-50" href="index.php">Home</a>
+                        <a class="btn btn-link text-white-50" href="kost.html">Kost</a>
+                        <a class="btn btn-link text-white-50" href="kost.html">Kontak</a>
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <h5 class="text-white mb-4">Newsletter</h5>
-                        <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
+                        <p></p>
                         <div class="position-relative mx-auto" style="max-width: 400px;">
                             <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text"
                                 placeholder="Your email">

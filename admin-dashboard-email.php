@@ -2,58 +2,49 @@
 include 'config.php';
 session_start();
 
-// Mendapatkan semua sesi login pengguna
-$sql = "SELECT * FROM logsys_pk ORDER BY id ASC";
-$result = mysqli_query($conn, $sql);
+// Ambil data dari database
+$sql = "SELECT id, nama, email, pesan, tanggal FROM kontak ORDER BY tanggal DESC";
+$result = $conn->query($sql);
 
-// Handle delete request
+$messages = [];
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $messages[] = $row; // Simpan semua pesan dalam array $messages
+    }
+}
+
 if (isset($_GET['delete'])) {
     $id = intval($_GET['delete']);
-    $sql = "DELETE FROM logsys_pk WHERE id = $id";
+    $sql = "DELETE FROM kontak WHERE id = $id";
     if (mysqli_query($conn, $sql)) {
-        // Setelah penghapusan, reset urutan ID
+        // Setelah penghapusan, reset urutan ID jika diperlukan
         $reset_id_query = "
             SET @count = 0;
-            UPDATE logsys_pk SET id = @count := @count + 1;
-            ALTER TABLE logsys_pk AUTO_INCREMENT = 1;
+            UPDATE kontak SET id = @count := @count + 1;
+            ALTER TABLE kontak AUTO_INCREMENT = 1;
         ";
         mysqli_multi_query($conn, $reset_id_query);
 
         // Redirect setelah penghapusan dan reset
-        header('Location: admin-dahsboard-pk.php');
+        header('Location: admin-dashboard-email.php');
         exit();
     } else {
         echo "Error deleting record: " . mysqli_error($conn);
     }
 }
 
-// Get all user sessions
-$sql = "SELECT * FROM logsys_pk ORDER BY id ASC";
-$result = mysqli_query($conn, $sql);
-
-// Query to count the number of users
-$count_user_sql = "SELECT COUNT(*) AS total_users FROM login_system";
-$count_user_result = mysqli_query($conn, $count_user_sql);
-$user_data = mysqli_fetch_assoc($count_user_result);
-$total_users = $user_data['total_users'];
-
-// Get all pemilik kost
-$sql_pk = "SELECT * FROM logsys_pk ORDER BY id ASC";
-$result_pk = mysqli_query($conn, $sql_pk);
-
-// Query to count the number of pemilik kost
-$count_pk_sql = "SELECT COUNT(*) AS total_pk FROM logsys_pk";
-$count_pk_result = mysqli_query($conn, $count_pk_sql);
-$pk_data = mysqli_fetch_assoc($count_pk_result);
-$total_pk = $pk_data['total_pk'];
+$conn->close();
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
-    <title>Admin Dashboard - SMARTKOST</title>
+    <title>Amin-Dashboard - SMARTKOST</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -82,19 +73,35 @@ $total_pk = $pk_data['total_pk'];
     <link href="css/style.css" rel="stylesheet">
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         .card {
+            display: flex;
+            flex-direction: column;
             box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
             border: none;
         }
 
-        .btn-trash {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 31px;
-            height: 31px;
-            border-radius: 3px;
-            padding: 0;
+        .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .card {
+            flex: 1 1 calc(50% - 1rem);
+            /* Set 50% width minus gap */
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
         }
     </style>
 </head>
@@ -104,30 +111,29 @@ $total_pk = $pk_data['total_pk'];
         <!-- Spinner Start -->
         <div id="spinner"
             class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-border" style="color: #0D6EFD; width: 3rem; height: 3rem;" role="status">
+            <div class="spinner-border" style="color: #00B98E; width: 3rem; height: 3rem;" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
         <!-- Spinner End -->
 
-        <div class="d-flex">
+        <class="d-flex">
             <!-- Sidebar Start -->
             <div class="d-flex flex-column flex-shrink-0 p-3"
-                style=" width: 220px; height: 100vh; position: fixed; background-color: #00765a;">
+                style="width: 220px; height: 100vh; position: fixed; background-color: #00765a;">
                 <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-                    <h3 class=" mt-2 text-light">Dashboard</h3>
+                    <h3 class="mt-2 text-light">Dashboard</h3>
                 </a>
                 <hr class="text-light">
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
-                        <a href="admin-dashboard.php" class="nav-link text-light">
+                        <a href="admin-dashboard.php" class="nav-link text-light" aria-current="page">
                             <i class="bi bi-speedometer2 me-2"></i>
                             Dashboard
                         </a>
                     </li>
                     <li>
-                        <a href="admin-dahsboard-pk.php" class="nav-link active text-light"
-                            style="background-color: #00B98E;" aria-current="page">
+                        <a href="admin-dahsboard-pk.php" class="nav-link text-light">
                             <i class="bi bi-person me-2"></i>
                             Pemilik Kost
                         </a>
@@ -145,7 +151,8 @@ $total_pk = $pk_data['total_pk'];
                         </a>
                     </li>
                     <li>
-                        <a href="admin-dashboard-email.php" class="nav-link text-light">
+                        <a href="admin-dashboard-email.php" class="nav-link active text-light"
+                            style="background-color: #00B98E;" aria-current="page">
                             <i class="bi bi-envelope me-2"></i>
                             Email
                         </a>
@@ -159,8 +166,8 @@ $total_pk = $pk_data['total_pk'];
                             class="rounded-circle me-2">
                         <strong>Admin</strong>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-light text-small shadow" onclick="confirmLogout()" >
-                        <li><a class="dropdown-item" href="logout.php" >Sign out</a></li>
+                    <ul class="dropdown-menu dropdown-menu-light text-small shadow" onclick="confirmLogout()">
+                        <li><a class="dropdown-item" href="logout.php">Sign out</a></li>
                     </ul>
                 </div>
             </div>
@@ -175,23 +182,23 @@ $total_pk = $pk_data['total_pk'];
 
                     <!-- Stats Overview -->
                     <div class="col-md-4  wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="card" style=" height: 150px; ">
+                        <div class="card" style="height: 150px;">
                             <div class="card-body">
-                                <h5 class="card-title ">User</h5>
-                                <h3 class="card-text "><?php echo $total_users; ?></h3>
+                                <h5 class="card-title">User</h5>
+                                <h3 class="card-text">1</h3>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4  wow fadeInUp" data-wow-delay="0.2s">
-                        <div class="card" style=" height: 150px;">
+                        <div class="card" style="height: 150px;">
                             <div class="card-body">
-                                <h5 class="card-title ">Pemilik Kost</h5>
-                                <h3 class="card-text "><?php echo $total_pk; ?></h3>
+                                <h5 class="card-title">Pemilik Kost</h5>
+                                <h3 class="card-text">1</h3>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4  wow fadeInUp" data-wow-delay="0.3s">
-                        <div class="card" style=" height: 150px;">
+                        <div class="card" style="height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title">Promosi</h5>
                                 <h3 class="card-text">Rp. 0</h3>
@@ -200,60 +207,59 @@ $total_pk = $pk_data['total_pk'];
                     </div>
                 </div>
 
-                <!-- Listings -->
+
                 <div class="row mt-5">
-                    <div class="col-md-12">
-                        <h2 class="h4 mb-3  wow fadeInDown" data-wow-delay="0.3s">Pemilik Kost</h2>
-                        <table class="table table-hover">
-                            <thead class="table text-light" style="background-color: #009270;">
-                                <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Pemilik kost</th>
-                                    <th scope="col">email</th>
-                                    <th scope="col">no telp</th>
-                                    <th scope="col">password</th>
-
-                                    <th scope="col">Tanggal</th>
-                                    <th scope="col">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php while ($row = mysqli_fetch_assoc($result)): ?>
-                                    <tr>
-                                        <th class="align-middle" scope="row"><?php echo $row['id']; ?></th>
-                                        <td class="align-middle"><strong><?php echo $row['username']; ?></td>
-                                        <td class="align-middle"><?php echo $row['email']; ?></td>
-                                        <td class="align-middle"><?php echo $row['nomor_hp']; ?></td>
-                                        <td class="align-middle"><?php echo substr($row['password'], 0, 10) . '...'; ?></td>
-
-                                        <td class="align-middle"><?php echo $row['created_at']; ?></td>
-                                        <td class="mt-3">
-                                            <a href="edit-pk.php?id=<?php echo $row['id']; ?>"
-                                                class="btn btn-sm btn-primary mt-2" style="width:57px ;">Edit</a>
-                                            <a href="?delete=<?php echo $row['id']; ?>"
-                                                class="btn btn-sm btn-danger mt-2 btn-trash"
-                                                onclick="return confirm('Apa kamu yakin akan menghapus?');"><img
-                                                    src="img2/sampah.png" class="w-75"> </a>
-                                        </td>
-                                    </tr>
-                                <?php endwhile; ?>
-                                <!-- More rows as needed -->
-                            </tbody>
-                        </table>
-                    </div>
+                    <h3 class="wow fadeInUp mb-4 text-center" data-wow-delay="0.1s">Pesan dari User</h3>
+                    <?php if (!empty($messages)): ?>
+                        <?php foreach ($messages as $message): ?>
+                            <div class="col-md-6 wow fadeInUp mb-4" data-wow-delay="0.1s">
+                                <div class="card border-0 shadow-lg h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar rounded-circle me-3"
+                                                style="background-color: #009270; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; color: white; font-size: 20px;">
+                                                <i class="bi bi-person"></i>
+                                            </div>
+                                            <h5 class="card-title mb-0"><?php echo htmlspecialchars($message['nama']); ?></h5>
+                                        </div>
+                                        <hr>
+                                        <p><strong>Email:</strong> <?php echo htmlspecialchars($message['email']); ?></p>
+                                        <p class="mb-2"><strong>Pesan:</strong>
+                                            <?php echo htmlspecialchars($message['pesan']); ?></p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted"><i
+                                                    class="fa fa-clock me-1"></i><?php echo date("d F Y, H:i", strtotime($message['tanggal'])); ?></small>
+                                            <div>
+                                                <button class="btn btn-sm btn-outline-primary rounded-pill"
+                                                    style="margin-right: 0.5rem;"><i class="fa fa-reply me-2"></i>Balas</button>
+                                                <a href="?delete=<?php echo $message['id']; ?>"
+                                                    class="btn btn-sm btn-outline-danger rounded-pill"
+                                                    onclick="return confirm('Anda yakin ingin menghapus pesan ini?')"><i
+                                                        class="fa fa-trash"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p class="text-center">Tidak ada pesan dari user.</p>
+                    <?php endif; ?>
                 </div>
             </div>
+
             <!-- Content End -->
+
+    </div>
+
+
+    <!-- Footer Start -->
+    <footer class="text-light py-4" style="background-color: #000;">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2024 SMARTKOST. All rights reserved.</p>
         </div>
-
-
-        <!-- Footer Start -->
-        <footer class="text-light py-4 mt-5" style="background-color: #000;">
-            <div class="container text-center">
-                <p class="mb-0">&copy; 2024 SMARTKOST. All rights reserved.</p>
-            </div>
-        </footer>
-        <!-- Footer End -->
+    </footer>
+    <!-- Footer End -->
     </div>
 
     <!-- JavaScript Libraries -->

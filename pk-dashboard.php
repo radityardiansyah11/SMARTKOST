@@ -16,13 +16,13 @@ $username = $_SESSION['username']; // Ambil username dari sesi
 
 <head>
     <meta charset="utf-8">
-    <title>Admin Dashboard - SMARTKOST</title>
+    <title><?php echo htmlspecialchars($username); ?>  Dashboard - SMARTKOST</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
 
     <!-- Favicon -->
-    <link href="4. image-web/SMARTKOST 2.png" rel="icon">
+    <link href="img2/mini logo smartkost.png" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,6 +48,51 @@ $username = $_SESSION['username']; // Ambil username dari sesi
         .card {
             box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
             border: none;
+        }
+
+        .btn-trash {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 31px;
+            height: 31px;
+            border-radius: 3px;
+            padding: 0;
+        }
+
+        .dropdown-menu {
+            border-radius: 10px;
+            padding: 10px 0;
+            transition: 0.3s ease;
+        }
+
+        .dropdown-item {
+            padding: 10px 20px;
+            transition: 0.2s ease-in-out;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .dropdown-toggle::after {
+            display: none;
+        }
+
+        .dropdown-menu .dropdown-divider {
+            margin: 5px 0;
+        }
+
+        .btn-light {
+            background-color: #ffffff;
+            border-radius: 50%;
+            padding: 5px 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-light:focus {
+            outline: none;
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
         }
     </style>
 </head>
@@ -91,6 +136,18 @@ $username = $_SESSION['username']; // Ambil username dari sesi
                             Booking
                         </a>
                     </li>
+                    <li>
+                        <a href="pk-dashboard-booking.html" class="nav-link text-light">
+                            <i class="bi bi-person me-2"></i>
+                            Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a href="logout.php" class="nav-link text-light">
+                            <i class="bi bi-box-arrow-left me-2"></i>
+                            Logout
+                        </a>
+                    </li>
                 </ul>
                 <hr class="text-light">
                 <div class="dropdown">
@@ -98,14 +155,16 @@ $username = $_SESSION['username']; // Ambil username dari sesi
                         id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="https://via.placeholder.com/50" alt="Admin" width="32" height="32"
                             class="rounded-circle me-2">
-                        <strong>Hi, <?php echo htmlspecialchars($username); ?></strong>
+                        <strong>Hi,
+                            <?php echo htmlspecialchars($username); ?>
+                        </strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-light text-small shadow">
                         <li><a class="dropdown-item" href="pk-profile.html">Profile</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="logout.php" onclick="confirmLogout()">log out</a></li>
+                        <li><a class="dropdown-item" href="#">log out</a></li>
                     </ul>
                 </div>
             </div>
@@ -114,38 +173,42 @@ $username = $_SESSION['username']; // Ambil username dari sesi
             <!-- Content Start -->
             <div class="content p-4" style="margin-left: 280px; padding: 20px;">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12 d-flex justify-content-between align-items-center">
                         <img class="img-fluid w-25 mb-2" src="img2/logo smartkost.png" alt="SMARTKOST Logo">
+                        <a href="">
+                            <button class="btn btn-sm btn-danger">Bayar Promosi Kost</button>
+                        </a>
                     </div>
 
+
                     <!-- Stats Overview -->
-                    <div class="col-md-4">
+                    <div class="col-md-4  wow fadeInUp" data-wow-delay="0.1s">
                         <div class="card bg-primary" style="height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title text-light">Kost</h5>
-                                <h3 class="card-text text-light">120</h3>
+                                <h3 class="card-text text-light">0</h3>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4  wow fadeInUp" data-wow-delay="0.2s">
                         <div class="card" style="height: 150px; background-color: #009774;">
                             <div class="card-body">
                                 <h5 class="card-title text-light">Booking</h5>
-                                <h3 class="card-text text-light">95</h3>
+                                <h3 class="card-text text-light">0</h3>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4  wow fadeInUp" data-wow-delay="0.3s">
                         <div class="card bg-primary" style="height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title text-light">Pendapatan</h5>
-                                <h3 class="card-text text-light">Rp. 12,000,000</h3>
+                                <h3 class="card-text text-light">Rp. 0</h3>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- Listings -->
-                <div class="row mt-3">
+                <div class="row mt-5">
                     <div class="col-md-12">
                         <h2 class="h4 mb-3">Booking</h2>
                         <table class="table table-hover">
@@ -161,36 +224,18 @@ $username = $_SESSION['username']; // Ambil username dari sesi
                             </thead>
                             <tbody>
                                 <tr>
-                                    <th scope="row">1</th>
-                                    <td>User 1</td>
-                                    <td>Kost Malang</td>
-                                    <td>Rp. 500.000</td>
-                                    <td>2024-08-09</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary">Edit</button>
-                                        <button class="btn btn-sm btn-danger">Delete</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>User 2</td>
-                                    <td>Kost Kepanjen</td>
-                                    <td>Rp. 600.000</td>
-                                    <td>2024-08-08</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary">Edit</button>
-                                        <button class="btn btn-sm btn-danger">Delete</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>User 3</td>
-                                    <td>Kost Batu</td>
-                                    <td>Rp. 600.000</td>
-                                    <td>2024-08-08</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary">Edit</button>
-                                        <button class="btn btn-sm btn-danger">Delete</button>
+                                    <th scope="row" class="align-middle">1</th>
+                                    <td class="align-middle">User 1</td>
+                                    <td class="align-middle">Kost Malang</td>
+                                    <td class="align-middle">Rp. 500.000</td>
+                                    <td class="align-middle">2024-08-09</td>
+                                    <td class="">
+                                        <a href="edit-user.php?id=<?php echo $row['id']; ?>"
+                                            class="btn btn-sm btn-primary" style="width:57px;">Edit</a>
+                                        <a href="?delete=<?php echo $row['id']; ?>"
+                                            class="btn btn-sm btn-danger btn-trash"
+                                            onclick="return confirm('Apa kamu yakin akan menghapus?');"><img
+                                                src="img2/sampah.png" class="w-75"></a>
                                     </td>
                                 </tr>
                                 <!-- More rows as needed -->
@@ -206,80 +251,64 @@ $username = $_SESSION['username']; // Ambil username dari sesi
                         <div class="row mt-2 g-0 gx-5">
                             <div class="col-lg-6">
                                 <div class="text-start mx-auto mb-5 wow slideInLeft" data-wow-delay="0.1s">
-                                    <h4 class="mb-3">List Kost</h4>
+                                    <h4 class="mb-2">List Kost Anda</h4>
                                 </div>
                             </div>
                         </div>
                         <div class="tab-content">
                             <div id="tab-1" class="tab-pane fade show p-0 active">
                                 <div class="row g-4">
-
                                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                                         <div class="property-item rounded overflow-hidden">
                                             <div class="position-relative overflow-hidden">
                                                 <a href=""><img class="img-fluid" src="img2/gbr-kost1.jpg" alt=""></a>
                                                 <div
-                                                    class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                                    Kost</div>
+                                                    class="bg-white rounded-top text-warning position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
+                                                    Premium
+                                                </div>
+
+                                                <!-- Dropdown Edit & Delete -->
+                                                <div class="dropdown position-absolute top-0 end-0 mt-2 me-2">
+                                                    <button class="btn btn-sm btn-light dropdown-toggle" type="button"
+                                                        id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                                        aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-right shadow border-0"
+                                                        aria-labelledby="dropdownMenuButton">
+                                                        <li>
+                                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                                <i class="fas fa-edit me-2 text-primary"></i> Edit
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <hr class="dropdown-divider">
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                                <i class="fas fa-trash-alt me-2 text-danger"></i> Delete
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
+
                                             <div class="p-4 pb-0">
                                                 <h5 class="text-primary mb-3">Rp. 500.000</h5>
                                                 <a class="d-block h5 mb-2" href="">Kost Comboran</a>
-                                                <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
+                                                <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar
+                                                </p>
                                             </div>
                                             <div class="d-flex border-top">
-                                                <small class="flex-fill text-center border-end py-2"><i
-                                                        class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
-                                                <small class="flex-fill text-center border-end py-2"><i
-                                                        class="fa fa-bed text-primary me-2"></i>1 Bed</small>
-                                                <small class="flex-fill text-center py-2"><i
-                                                        class="fa fa-bath text-primary me-2"></i>2 Bath</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                                        <div class="property-item rounded overflow-hidden">
-                                            <div class="position-relative overflow-hidden">
-                                                <a href=""><img class="img-fluid" src="img2/gbr-kost2.jpg" alt=""></a>
-                                                <div
-                                                    class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                                    Kost</div>
-                                            </div>
-                                            <div class="p-4 pb-0">
-                                                <h5 class="text-primary mb-3">Rp. 500.000</h5>
-                                                <a class="d-block h5 mb-2" href="">Kost Comboran</a>
-                                                <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
-                                            </div>
-                                            <div class="d-flex border-top">
-                                                <small class="flex-fill text-center border-end py-2"><i
-                                                        class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
-                                                <small class="flex-fill text-center border-end py-2"><i
-                                                        class="fa fa-bed text-primary me-2"></i>1 Bed</small>
-                                                <small class="flex-fill text-center py-2"><i
-                                                        class="fa fa-bath text-primary me-2"></i>2 Bath</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                                        <div class="property-item rounded overflow-hidden">
-                                            <div class="position-relative overflow-hidden">
-                                                <a href=""><img class="img-fluid" src="img2/gbr-kost3.jpg" alt=""></a>
-                                                <div
-                                                    class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                                    Kost</div>
-                                            </div>
-                                            <div class="p-4 pb-0">
-                                                <h5 class="text-primary mb-3">Rp. 500.000</h5>
-                                                <a class="d-block h5 mb-2" href="">Kost Comboran</a>
-                                                <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
-                                            </div>
-                                            <div class="d-flex border-top">
-                                                <small class="flex-fill text-center border-end py-2"><i
-                                                        class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
-                                                <small class="flex-fill text-center border-end py-2"><i
-                                                        class="fa fa-bed text-primary me-2"></i>1 Bed</small>
-                                                <small class="flex-fill text-center py-2"><i
-                                                        class="fa fa-bath text-primary me-2"></i>2 Bath</small>
+                                                <small class="flex-fill text-center border-end py-2">
+                                                    <i class="fa fa-ruler-combined text-primary me-2"></i>3x3
+                                                </small>
+                                                <small class="flex-fill text-center border-end py-2">
+                                                    <i class="fa fa-bed text-primary me-2"></i>1 Bed
+                                                </small>
+                                                <small class="flex-fill text-center py-2">
+                                                    <i class="fa fa-bath text-primary me-2"></i>2 Bath
+                                                </small>
                                             </div>
                                         </div>
                                     </div>
