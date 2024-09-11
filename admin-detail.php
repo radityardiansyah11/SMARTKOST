@@ -1,3 +1,37 @@
+<?php
+include 'config.php';
+session_start();
+
+// Fetch kost details from the database based on a specific ID or parameter
+$kost_id = $_GET['id']; // Assuming you pass the ID in the URL as a query string
+
+// Fetch kost details
+$sql = "SELECT * FROM kost WHERE id = '$kost_id'";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    // Output data of the kost
+    $row = $result->fetch_assoc();
+
+    // Fetch spesifikasi kamar
+    $spesifikasi_sql = "SELECT spesifikasi FROM spesifikasi_kamar WHERE kost_id = '$kost_id'";
+    $spesifikasi_result = $conn->query($spesifikasi_sql);
+
+    // Fetch fasilitas kamar
+    $fasilitas_sql = "SELECT fasilitas FROM fasilitas_kamar WHERE kost_id = '$kost_id'";
+    $fasilitas_result = $conn->query($fasilitas_sql);
+
+    // Fetch fasilitas kamar mandi
+    $fasilitas_mandi_sql = "SELECT fasilitas FROM fasilitas_kamar_mandi WHERE kost_id = '$kost_id'";
+    $fasilitas_mandi_result = $conn->query($fasilitas_mandi_sql);
+
+} else {
+    echo "No kost found";
+}
+
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -104,6 +138,18 @@
         .hidden {
             display: none;
         }
+
+        .main-image {
+            width: 100%;
+            height: 700px;
+            object-fit: cover;
+        }
+
+        .thumbnail-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
     </style>
 </head>
 
@@ -152,18 +198,22 @@
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-12 col-md-12">
-                            <img src="img2/kost1.jpg" class="img-fluid main-image rounded" alt="Main Image">
+                            <img src="<?php echo $row['gambar_1']; ?>" class="img-fluid main-image rounded"
+                                alt="Main Image">
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-4">
-                            <img src="img2/kost1.jpg" class="img-fluid thumbnail-image rounded" alt="Thumbnail 1">
+                            <img src="<?php echo $row['gambar_2']; ?>" class="img-fluid thumbnail-image rounded"
+                                alt="Thumbnail 1">
                         </div>
                         <div class="col-4">
-                            <img src="img2/kost1.jpg" class="img-fluid thumbnail-image rounded" alt="Thumbnail 2">
+                            <img src="<?php echo $row['gambar_3']; ?>" class="img-fluid thumbnail-image rounded"
+                                alt="Thumbnail 2">
                         </div>
                         <div class="col-4">
-                            <img src="img2/kost1.jpg" class="img-fluid thumbnail-image rounded" alt="Thumbnail 3">
+                            <img src="<?php echo $row['gambar_4']; ?>" class="img-fluid thumbnail-image rounded"
+                                alt="Thumbnail 3">
                         </div>
                     </div>
                 </div>
@@ -172,68 +222,53 @@
             <!-- Description Section -->
             <div class="row mt-5">
                 <div class="col-md-8">
-                    <h2>Kost Comboran</h2>
+                    <h2><?php echo $row['nama_kost']; ?></h2>
                     <div class="icon-text">
                         <i class="fa fa-map-marker-alt text-primary me-2"></i>
-                        <span>Jl. Tanimbar No. 10 Kec. Klojen Kota Malang</span>
+                        <span><?php echo $row['alamat']; ?></span>
                     </div>
                     <h5 class="text-muted mt-3"><strong> Deskripsi Kost </strong></h5>
-                    <p>Kost Comboran Tipe A terletak di lokasi strategis di Malang, dengan
-                        akses
-                        mudah ke pusat perbelanjaan dan transportasi umum. Kost ini memiliki fasilitas yang lengkap dan
-                        nyaman untuk para penyewa.</p>
+                    <p><?php echo $row['deskripsi']; ?></p>
                     <hr>
                     <!-- Deskripsi dan Fasilitas Lengkap -->
                     <div class="row ">
-                        <div class="col-md-12 d-flex">
-                            <!-- Spesifikasi Tipe Kamar -->
-                            <div class="me-5">
-                                <h4 class="section-heading">Spesifikasi Tipe Kamar</h4>
-                                <div class="icon-text">
-                                    <i class="fas fa-ruler-combined"></i>
-                                    <span>3.2 x 3.2 meter</span>
-                                </div>
-                                <div class="icon-text">
-                                    <i class="fas fa-bolt"></i>
-                                    <span>Sudah termasuk Listrik</span>
-                                </div>
+                    <div class="col-md-12 d-flex">
+                        <!-- Spesifikasi Tipe Kamar -->
+                        <div class="me-5">
+                            <h4 class="section-heading">Spesifikasi Tipe Kamar</h4>
+                            <div class="icon-text">
+                                <ul>
+                                    <?php while ($spesifikasi = $spesifikasi_result->fetch_assoc()) : ?>
+                                        <li><?php echo $spesifikasi['spesifikasi']; ?></li>
+                                    <?php endwhile; ?>
+                                </ul>
                             </div>
-
-                            <!-- Fasilitas Kamar -->
-                            <div class="me-5">
-                                <h4 class="section-heading">Fasilitas Kamar</h4>
-                                <div class="icon-text">
-                                    <i class="fas fa-bed"></i>
-                                    <span>Kasur</span>
-                                </div>
-                                <div class="icon-text">
-                                    <i class="fas fa-bed"></i>
-                                    <span>Meja</span>
-                                </div>
-                                <div class="icon-text">
-                                    <i class="fas fa-fan"></i>
-                                    <span>Kipas Angin</span>
-                                </div>
-                            </div>
-
-                            <!-- Fasilitas Kamar Mandi -->
-                            <div class="desk">
-                                <h4 class="section-heading">Fasilitas Kamar Mandi</h4>
-                                <div class="icon-text">
-                                    <i class="fas fa-bath"></i>
-                                    <span>Kamar Mandi Dalam</span>
-                                </div>
-                                <div class="icon-text">
-                                    <i class="fas fa-bath"></i>
-                                    <span>Kamar Mandi Luar</span>
-                                </div>
-                                <div class="icon-text">
-                                    <i class="fas fa-toilet"></i>
-                                    <span>Kloset Duduk</span>
-                                </div>
-                            </div>
-
                         </div>
+
+                        <!-- Fasilitas Kamar -->
+                        <div class="me-5">
+                            <h4 class="section-heading">Fasilitas Kamar</h4>
+                            <div class="icon-text">
+                                <ul>
+                                    <?php while ($fasilitas = $fasilitas_result->fetch_assoc()) : ?>
+                                        <li><?php echo $fasilitas['fasilitas']; ?></li>
+                                    <?php endwhile; ?>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Fasilitas Kamar Mandi -->
+                        <div class="desk">
+                            <h4 class="section-heading">Fasilitas Kamar Mandi</h4>
+                            <div class="icon-text">
+                                <ul>
+                                    <?php while ($fasilitas_mandi = $fasilitas_mandi_result->fetch_assoc()) : ?>
+                                        <li><?php echo $fasilitas_mandi['fasilitas']; ?></li>
+                                    <?php endwhile; ?>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                     </div>
                 </div>
 
@@ -244,13 +279,13 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="icon-text text-danger">
                                 <i class="fas fa-bolt"></i>
-                                <span><strong>Diskon 55 Ribu</strong></span>
+                                <span><strong>Diskon <?php echo $row['diskon']; ?></strong></span>
                             </div>
                         </div>
-                        <span class="text-decoration-line-through text-muted">Rp1.125.000</span>
+                        <span class="text-decoration-line-through text-muted"><?php echo $row['harga']; ?></span>
                     </div>
                     <div class="d-flex">
-                        <p class="final-price mt-2 text-dark">Rp1.070.000 </p>
+                        <p class="final-price mt-2 text-dark"><?php echo $row['harga']; ?></p>
                         <span class="mt-3 ml-2">/bulan</span>
                     </div>
 

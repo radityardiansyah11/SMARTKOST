@@ -261,8 +261,8 @@ if (isset($_GET['delete'])) {
                                         <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                                             <div class="property-item rounded overflow-hidden">
                                                 <div class="position-relative overflow-hidden">
-                                                    <a href=""><img class="img-fluid" src="<?php echo $row['gambar_1']; ?>"
-                                                            alt="">
+                                                <a href="admin-detail.php?id=<?php echo $row['id']; ?>">
+                                                        <img class="img-fluid" src="<?php echo $row['gambar_1']; ?>" alt="">
                                                     </a>
 
                                                     <div
@@ -302,12 +302,13 @@ if (isset($_GET['delete'])) {
                                                 </div>
 
                                                 <div class="p-4 pb-0">
-                                                <a class="d-block h5 mb-2" href=""><?php echo $row['nama_kost']; ?></a>
+                                                    <a class="d-block h5 mb-2" href=""><?php echo $row['nama_kost']; ?></a>
                                                     <h5 class="text-primary mb-2">Rp.
                                                         <?php echo number_format($row['harga'], 0, ',', '.'); ?>
                                                     </h5>
                                                     <p>
-                                                        <i class="fa fa-map-marker-alt text-primary me-2"></i><?php echo $row['alamat']; ?>
+                                                        <i
+                                                            class="fa fa-map-marker-alt text-primary me-2"></i><?php echo $row['alamat']; ?>
                                                     </p>
                                                 </div>
                                                 <div class="d-flex border-top">
