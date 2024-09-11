@@ -249,7 +249,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="container">
                 <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
                     <h1 class="mb-3">KONTAK KAMI</h1>
-                    <p></p>
                 </div>
                 <div class="row g-4">
                     <div class="col-12">
@@ -323,7 +322,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <button class="btn btn-primary w-100 py-3" type="submit">Send Message</button>
+                                        <button class="btn btn-primary w-100 py-3" type="submit">Kirim Pesan</button>
                                     </div>
                                 </div>
                             </form>

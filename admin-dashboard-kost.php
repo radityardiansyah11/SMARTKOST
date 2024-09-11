@@ -1,9 +1,41 @@
+<?php
+include 'config.php';
+session_start();
+
+// Handle delete request
+if (isset($_GET['delete'])) {
+    $id = intval($_GET['delete']);
+    $sql = "DELETE FROM kost WHERE id = $id";
+
+    if (mysqli_query($conn, $sql)) {
+        // Setelah penghapusan, reset urutan ID
+        $reset_id_query = "
+            SET @count = 0;
+            UPDATE kost SET id = @count := @count + 1;
+            ALTER TABLE kost AUTO_INCREMENT = 1;
+        ";
+        mysqli_multi_query($conn, $reset_id_query);
+
+        // Set session status to 'deleted' after successful deletion
+        $_SESSION['status'] = "deleted";
+    } else {
+        // Set session status to 'error' if deletion fails
+        $_SESSION['status'] = "error";
+    }
+
+    // Redirect setelah penghapusan dan reset
+    header('Location: admin-dashboard-kost.php');
+    exit();
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
-    <title>Amin-Dashboard - SMARTKOST</title>
+    <title>Admin-Dashboard - SMARTKOST</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -31,9 +63,66 @@
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
 
+    <!-- Sweet Alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         .card {
-            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+            border: none;
+        }
+
+        .btn-trash {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 31px;
+            height: 31px;
+            border-radius: 3px;
+            padding: 0;
+        }
+
+        .dropdown-menu {
+            border-radius: 10px;
+            padding: 10px 0;
+            transition: 0.3s ease;
+        }
+
+        .dropdown-item {
+            padding: 10px 20px;
+            transition: 0.2s ease-in-out;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .dropdown-toggle::after {
+            display: none;
+        }
+
+        .dropdown-menu .dropdown-divider {
+            margin: 5px 0;
+        }
+
+        .btn-light {
+            background-color: #ffffff;
+            border-radius: 50%;
+            padding: 5px 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-light:focus {
+            outline: none;
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+        }
+
+        .jenis-kost-label {
+            width: auto;
+            margin-right: 35px;
+            padding-right: 10px;
+            white-space: nowrap;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -117,7 +206,9 @@
                         <div class="card" style="height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title">User</h5>
-                                <h3 class="card-text">1</h3>
+                                <h3 class="card-text">
+
+                                </h3>
                             </div>
                         </div>
                     </div>
@@ -125,7 +216,9 @@
                         <div class="card" style="height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title">Pemilik Kost</h5>
-                                <h3 class="card-text">1</h3>
+                                <h3 class="card-text">
+
+                                </h3>
                             </div>
                         </div>
                     </div>
@@ -133,7 +226,10 @@
                         <div class="card" style="height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title">Promosi</h5>
-                                <h3 class="card-text">Rp. 0</h3>
+                                <h3 class="card-text">
+                                    Rp.
+
+                                </h3>
                             </div>
                         </div>
                     </div>
@@ -147,113 +243,9 @@
                                 <h4 class="mb-3">Kost</h4>
                             </div>
                             <div class="col-lg-6 d-flex mb-3 justify-content-end">
-                                <button type="button" class="btn btn-primary px-3" data-bs-toggle="modal"
-                                    data-bs-target="#tambahKostModal">
+                                <a href="admin-tambah-kost.php" class="btn btn-primary px-3">
                                     Tambah Kost
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Modal Tambah Kost -->
-                        <div class="modal fade" id="tambahKostModal" tabindex="-1"
-                            aria-labelledby="tambahKostModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="tambahKostModalLabel">Tambah Kost Baru</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form>
-                                            <!-- Form Tambah Kost yang telah dibuat -->
-                                            <div class="container">
-                                                <form>
-                                                    <!-- Informasi Umum Kost -->
-                                                    <h4 class="section-heading">Informasi Umum</h4>
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <label for="kostName" class="form-label">Nama Kost</label>
-                                                            <input type="text" class="form-control" id="kostName"
-                                                                placeholder="Masukkan nama kost">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="kostAddress" class="form-label">Alamat
-                                                                Kost</label>
-                                                            <input type="text" class="form-control" id="kostAddress"
-                                                                placeholder="Masukkan alamat kost">
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <label for="kostType" class="form-label">Tipe Kamar</label>
-                                                            <input type="text" class="form-control" id="kostType"
-                                                                placeholder="Masukkan tipe kamar (contoh: Standard)">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="kostSize" class="form-label">Deskripsi</label>
-                                                            <input type="text" class="form-control" id="kostSize"
-                                                                placeholder="Masukkan deskripsi kamar">
-                                                        </div>
-                                                    </div>
-
-                                                    Fasilitas Kost
-                                                    <h4 class="section-heading mt-4">Fasilitas Kost</h4>
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <label for="facilityRoom" class="form-label">Fasilitas
-                                                                Kamar</label>
-                                                            <input type="text" class="form-control" id="facilityRoom"
-                                                                placeholder="Masukkan fasilitas kamar (contoh: AC, Kasur)">
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <label for="facilityBathroom" class="form-label">Fasilitas
-                                                                Kamar Mandi</label>
-                                                            <input type="text" class="form-control"
-                                                                id="facilityBathroom"
-                                                                placeholder="Masukkan fasilitas kamar mandi (contoh: Shower, WC)">
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <label for="facilityOther" class="form-label">Fasilitas
-                                                                Lain</label>
-                                                            <input type="text" class="form-control" id="facilityOther"
-                                                                placeholder="Masukkan fasilitas lain (contoh: WiFi, Parkir)">
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Harga Kost -->
-                                                    <h4 class="section-heading mt-4">Harga Kost</h4>
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <label for="price" class="form-label">Harga per
-                                                                Bulan</label>
-                                                            <input type="number" class="form-control" id="price"
-                                                                placeholder="Masukkan harga per bulan">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="discount" class="form-label">Diskon</label>
-                                                            <input type="number" class="form-control" id="discount"
-                                                                placeholder="Masukkan diskon (contoh: 50000)">
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Upload Gambar Kost -->
-                                                    <h4 class="section-heading mt-4">Upload Gambar Kost</h4>
-                                                    <div class="mb-3">
-                                                        <label for="kostImage" class="form-label">Upload Gambar</label>
-                                                        <input class="form-control" type="file" id="kostImage" multiple
-                                                            accept="image/*" onchange="previewImages()">
-                                                    </div>
-                                                    <div id="imagePreview" class="d-flex flex-wrap"></div>
-
-                                                    <!-- Submit Button -->
-                                                    <button type="submit" class="btn btn-primary w-100 mt-4">Tambah
-                                                        Kost</button>
-                                                </form>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
+                                </a>
                             </div>
                         </div>
 
@@ -261,39 +253,78 @@
                             <div id="tab-1" class="tab-pane fade show p-0 active">
                                 <div class="row g-4">
 
-                                    <div class="tab-content">
-                                        <div id="tab-1" class="tab-pane fade show p-0 active">
-                                            <div class="row g-4">
-                                                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                                                    <div class="property-item rounded overflow-hidden">
-                                                        <div class="position-relative overflow-hidden">
-                                                            <a href=""><img class="img-fluid" src="img2/gbr-kost1.jpg"
-                                                                    alt=""></a>
-                                                            <div
-                                                                class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                                                Kost</div>
-                                                        </div>
-                                                        <div class="p-4 pb-0">
-                                                            <h5 class="text-primary mb-3">Rp. 500.000</h5>
-                                                            <a class="d-block h5 mb-2" href="">Kost Comboran</a>
-                                                            <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl.
-                                                                Tanimbar</p>
-                                                        </div>
-                                                        <div class="d-flex border-top">
-                                                            <small class="flex-fill text-center border-end py-2"><i
-                                                                    class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
-                                                            <small class="flex-fill text-center border-end py-2"><i
-                                                                    class="fa fa-bed text-primary me-2"></i>1
-                                                                Bed</small>
-                                                            <small class="flex-fill text-center py-2"><i
-                                                                    class="fa fa-bath text-primary me-2"></i>2
-                                                                Bath</small>
+                                    <?php
+                                    // Fetch Kost listings from the database
+                                    $result = $conn->query("SELECT * FROM kost");
+                                    while ($row = $result->fetch_assoc()) {
+                                        ?>
+                                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                            <div class="property-item rounded overflow-hidden">
+                                                <div class="position-relative overflow-hidden">
+                                                    <a href=""><img class="img-fluid" src="<?php echo $row['gambar_1']; ?>"
+                                                            alt="">
+                                                    </a>
+
+                                                    <div
+                                                        class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
+                                                        </i><?php echo $row['kategori']; ?>
+                                                    </div>
+
+                                                    <div class="dropdown position-absolute top-0 end-0 mt-2 me-2">
+                                                        <button class="btn btn-sm btn-light dropdown-toggle" type="button"
+                                                            id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                                            aria-expanded="false">
+                                                            <i class="fas fa-ellipsis-v"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-right shadow border-0"
+                                                            aria-labelledby="dropdownMenuButton">
+                                                            <li>
+                                                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                                                    <i class="fas fa-edit me-2 text-primary"></i> Edit
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <hr class="dropdown-divider">
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-item d-flex align-items-center"
+                                                                    href="?delete=<?php echo $row['id']; ?>"
+                                                                    onclick="return confirm('Anda yakin ingin menghapus kost ini?');">
+                                                                    <i class="fas fa-trash-alt me-2 text-danger"></i> Delete
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                        <div
+                                                            class="bg-white text-primary position-absolute end-0 bottom-0 pt-1 px-3 jenis-kost-label">
+                                                            <?php echo $row['jenis_kost']; ?>
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <div class="p-4 pb-0">
+                                                <a class="d-block h5 mb-2" href=""><?php echo $row['nama_kost']; ?></a>
+                                                    <h5 class="text-primary mb-2">Rp.
+                                                        <?php echo number_format($row['harga'], 0, ',', '.'); ?>
+                                                    </h5>
+                                                    <p>
+                                                        <i class="fa fa-map-marker-alt text-primary me-2"></i><?php echo $row['alamat']; ?>
+                                                    </p>
+                                                </div>
+                                                <div class="d-flex border-top">
+                                                    <small class="flex-fill text-center border-end py-2"><i
+                                                            class="fa fa-ruler-combined text-primary me-2"></i><?php echo $row['ukuran_kamar']; ?></small>
+                                                    <small class="flex-fill text-center border-end py-2"><i
+                                                            class="fa fa-bed text-primary me-2"></i><?php echo $row['banyak_kasur']; ?>
+                                                        Bed</small>
+                                                    <small class="flex-fill text-center py-2"><i
+                                                            class="fa fa-bath text-primary me-2"></i><?php echo $row['banyak_kamar_mandi']; ?>
+                                                        Bath</small>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        <?php
+                                    }
+                                    ?>
                                 </div>
                             </div>
                         </div>
@@ -302,7 +333,6 @@
             </div>
             <!-- Content End -->
         </div>
-
 
         <!-- Footer Start -->
         <footer class="text-light py-4 mt-5" style="background-color: #000;">
@@ -315,6 +345,44 @@
 
     <!-- JavaScript Libraries -->
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            <?php if (isset($_SESSION['status'])): ?>
+                var status = "<?php echo $_SESSION['status']; ?>";
+
+                if (status === "deleted") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Kost Berhasil Dihapus!',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#00B98E',
+                        background: '#f4f4f9',
+                        width: '350px',
+                        customClass: {
+                            title: 'custom-title',
+                            content: 'custom-content'
+                        }
+                    });
+                } else if (status === "error") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal Menghapus Pengguna!',
+                        text: 'Terjadi kesalahan saat menghapus pengguna. Silakan coba lagi.',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#00765a',
+                        background: '#f4f4f9',
+                        width: '350px',
+                        customClass: {
+                            title: 'custom-title',
+                            content: 'custom-content'
+                        }
+                    });
+                }
+
+                // Clear session status after displaying the message
+                <?php unset($_SESSION['status']); ?>
+            <?php endif; ?>
+        });
+
         function confirmLogout() {
             if (confirm("Anda yakin ingin logout?")) {
                 // Jika konfirmasi diterima, arahkan ke logout.php

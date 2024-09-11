@@ -56,7 +56,7 @@ $conn->close();
 
 <head>
     <meta charset="utf-8">
-    <title>Amin-Dashboard - SMARTKOST</title>
+    <title>Admin-Dashboard - SMARTKOST</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -85,7 +85,7 @@ $conn->close();
     <link href="css/style.css" rel="stylesheet">
 
     <!-- Include SweetAlert CSS and JS -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
     <style>
@@ -280,30 +280,12 @@ $conn->close();
 
     <!-- JavaScript Libraries -->
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        <?php if ($unreadMessages): ?>
-            Swal.fire({
-                icon: 'info',
-                title: 'Pesan Terbaru!',
-                text: 'Anda memiliki pesan baru dari user.',
-                confirmButtonText: 'OK',
-                confirmButtonColor: '#00B98E',
-                background: '#f4f4f9',
-                width: '350px',
-                customClass: {
-                    title: 'custom-title',
-                    content: 'custom-content'
-                }
-            });
-        <?php endif; ?>
-        
-        <?php if (isset($_SESSION['status'])): ?>
-            var status = "<?php echo $_SESSION['status']; ?>";
-
-            if (status === "deleted") {
+        document.addEventListener('DOMContentLoaded', function () {
+            <?php if ($unreadMessages): ?>
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Pesan Berhasil Dihapus!',
+                    icon: 'info',
+                    title: 'Pesan Terbaru!',
+                    text: 'Anda memiliki pesan baru dari user.',
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#00B98E',
                     background: '#f4f4f9',
@@ -313,26 +295,44 @@ $conn->close();
                         content: 'custom-content'
                     }
                 });
-            } else if (status === "error") {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal Menghapus Pesan!',
-                    text: 'Terjadi kesalahan saat menghapus pesan. Silakan coba lagi.',
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: '#00765a',
-                    width: '350px',
-                    customClass: {
-                        title: 'custom-title',
-                        content: 'custom-content'
-                    }
-                });
-            }
+            <?php endif; ?>
 
-            // Clear session status after displaying the message
-            <?php unset($_SESSION['status']); ?>
-        <?php endif; ?>
-    });
-</script>
+            <?php if (isset($_SESSION['status'])): ?>
+                var status = "<?php echo $_SESSION['status']; ?>";
+
+                if (status === "deleted") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Pesan Berhasil Dihapus!',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#00B98E',
+                        background: '#f4f4f9',
+                        width: '350px',
+                        customClass: {
+                            title: 'custom-title',
+                            content: 'custom-content'
+                        }
+                    });
+                } else if (status === "error") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal Menghapus Pesan!',
+                        text: 'Terjadi kesalahan saat menghapus pesan. Silakan coba lagi.',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#00765a',
+                        width: '350px',
+                        customClass: {
+                            title: 'custom-title',
+                            content: 'custom-content'
+                        }
+                    });
+                }
+
+                // Clear session status after displaying the message
+                <?php unset($_SESSION['status']); ?>
+            <?php endif; ?>
+        });
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>

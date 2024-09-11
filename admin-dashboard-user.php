@@ -6,6 +6,7 @@ session_start();
 if (isset($_GET['delete'])) {
     $id = intval($_GET['delete']);
     $sql = "DELETE FROM login_system WHERE id = $id";
+
     if (mysqli_query($conn, $sql)) {
         // Setelah penghapusan, reset urutan ID
         $reset_id_query = "
@@ -15,12 +16,16 @@ if (isset($_GET['delete'])) {
         ";
         mysqli_multi_query($conn, $reset_id_query);
 
-        // Redirect setelah penghapusan dan reset
-        header('Location: admin-dashboard-user.php');
-        exit();
+        // Set session status to 'deleted' after successful deletion
+        $_SESSION['status'] = "deleted";
     } else {
-        echo "Error deleting record: " . mysqli_error($conn);
+        // Set session status to 'error' if deletion fails
+        $_SESSION['status'] = "error";
     }
+
+    // Redirect setelah penghapusan dan reset
+    header('Location: admin-dashboard-user.php');
+    exit();
 }
 
 // Get all user sessions
@@ -77,6 +82,11 @@ $total_pk = $pk_data['total_pk'];
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+
+    <!-- Include SweetAlert CSS and JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
     <style>
         .card {
             box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
@@ -155,8 +165,8 @@ $total_pk = $pk_data['total_pk'];
                             class="rounded-circle me-2">
                         <strong>Admin</strong>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-light text-small shadow" onclick="confirmLogout()" >
-                        <li><a class="dropdown-item" href="logout.php" >Sign out</a></li>
+                    <ul class="dropdown-menu dropdown-menu-light text-small shadow" onclick="confirmLogout()">
+                        <li><a class="dropdown-item" href="logout.php">Sign out</a></li>
                     </ul>
                 </div>
             </div>
@@ -258,13 +268,52 @@ $total_pk = $pk_data['total_pk'];
 
     <!-- JavaScript Libraries -->
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            <?php if (isset($_SESSION['status'])): ?>
+                var status = "<?php echo $_SESSION['status']; ?>";
+
+                if (status === "deleted") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Pengguna Berhasil Dihapus!',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#00B98E',
+                        background: '#f4f4f9',
+                        width: '350px',
+                        customClass: {
+                            title: 'custom-title',
+                            content: 'custom-content'
+                        }
+                    });
+                } else if (status === "error") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal Menghapus Pengguna!',
+                        text: 'Terjadi kesalahan saat menghapus pengguna. Silakan coba lagi.',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#00765a',
+                        background: '#f4f4f9',
+                        width: '350px',
+                        customClass: {
+                            title: 'custom-title',
+                            content: 'custom-content'
+                        }
+                    });
+                }
+
+                // Clear session status after displaying the message
+                <?php unset($_SESSION['status']); ?>
+            <?php endif; ?>
+        });
+
+
         function confirmLogout() {
             if (confirm("Anda yakin ingin logout?")) {
                 // Jika konfirmasi diterima, arahkan ke logout.php
                 window.location.href = "logout.php";
             }
         }
-    </script>  
+    </script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/wow/wow.min.js"></script>
