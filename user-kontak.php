@@ -116,6 +116,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 4px;
         }
 
+        .profile-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
         .swal2-title.custom-title {
             color: #00765a;
             font-family: 'Heebo', sans-serif;
@@ -125,7 +132,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: #333;
             font-family: 'Inter', sans-serif;
         }
-
 
         .swal2-content.custom-content {
             color: #333;
@@ -176,7 +182,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                         <a href="user-profile.php">
                             <img src="<?php echo isset($_SESSION['profile_image']) ? $_SESSION['profile_image'] : 'img2/Bulat.png'; ?>"
-                                alt="profile" class="mt-1" style="width: 50px; height: 50px;">
+                                alt="profile" class="profile-image mt-1">
                         </a>
                     </div>
                 </div>

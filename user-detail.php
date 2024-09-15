@@ -2,6 +2,16 @@
 include 'config.php';
 session_start();
 
+// Periksa apakah pengguna sudah login
+if (!isset($_SESSION['username'])) {
+    // Jika tidak, arahkan ke halaman login
+    header("Location: login.php");
+    exit();
+}
+
+// Fetch the username from the session
+$username = $_SESSION['username'];
+
 // Fetch kost details from the database based on a specific ID or parameter
 $kost_id = $_GET['id']; // Assuming you pass the ID in the URL as a query string
 
@@ -37,7 +47,7 @@ $conn->close();
 
 <head>
     <meta charset="utf-8">
-    <title>detail-SMARTKOST</title>
+    <title>home-SMARTKOST</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -68,7 +78,7 @@ $conn->close();
     <link href="css/detail-kost.css" rel="stylesheet">
 </head>
 
-<body class="bg-white mb-5">
+<body>
     <div class="container-xxl bg-white p-0">
         <!-- Spinner Start -->
         <div id="spinner"
@@ -78,6 +88,45 @@ $conn->close();
             </div>
         </div>
         <!-- Spinner End -->
+
+
+        <!-- Navbar Start -->
+        <div class="container-fluid nav-bar bg-transparent">
+            <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
+                <a href="#" class="navbar-brand d-flex align-items-center text-center">
+                    <div class="p-2">
+                        <img class="img-fluid" src="img2/logo smartkost.png" alt="Icon"
+                            style="width: 210px; height: 70px;">
+                    </div>
+                </a>
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav ms-auto">
+                        <a href="user-home.php" class="nav-item nav-link">Beranda</a>
+
+                        <a href="user-kost.php" class="nav-item nav-link">Kost</a>
+                        <a href="user-kontak.php" class="nav-item nav-link">Kontak</a>
+                        <a href="#" class="nav-item nav-link active">Detail</a>
+                    </div>
+                    <div class="d-flex">
+                        <div class="me-3 text-end">
+                            <h6 class="mt-2">Halo, <?php echo htmlspecialchars($username); ?></h6>
+                            <form action="logout.php" method="POST">
+                                <button type="submit" class="btn btn-outline-danger btn-custom-logout"
+                                    onclick="confirmLogout()">Log out</button>
+                            </form>
+                        </div>
+                        <a href="user-profile.php">
+                            <img src="<?php echo isset($_SESSION['profile_image']) ? $_SESSION['profile_image'] : 'img2/Bulat.png'; ?>"
+                                alt="profile" class="mt-1" style="width: 50px; height: 50px;">
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <!-- Navbar End -->
 
         <!-- gambar -->
         <div class="container mt-5">
@@ -211,64 +260,95 @@ $conn->close();
                     </a>
                 </div>
 
-            <!-- Back to Top -->
-            <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+                <!-- Back to Top -->
+                <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+            </div>
         </div>
 
-        <!-- JavaScript Libraries -->
-        <script>
-            const rentPeriod = document.getElementById('rentPeriod');
-            const rentRange = document.getElementById('rentRange');
 
-            rentPeriod.addEventListener('change', function () {
-                if (rentPeriod.value !== "") {
-                    rentRange.classList.remove('hidden');
-                } else {
-                    rentRange.classList.add('hidden');
-                }
-            });
 
-            document.addEventListener('DOMContentLoaded', function () {
-                function calculateTotal() {
-                    const rentPeriod = document.getElementById('rentPeriod').value;
-                    const finalPriceElement = document.querySelector('.final-price');
-                    const totalPriceElement = document.getElementById('totalPrice');
-                    const totalAmountElement = document.getElementById('totalAmount');
+        <!-- Footer Start -->
+        <div class="container-fluid bg-dark text-white-50 footer pt-5 mt-2 wow fadeIn" data-wow-delay="0.1s">
+            <div class="container py-5">
+                <div class="row g-5">
+                    <div class="col-lg-3 col-md-6">
+                        <h5 class="text-white mb-4">Get In Touch</h5>
+                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>comboran</p>
+                        <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
+                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                        <div class="d-flex pt-2">
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h5 class="text-white mb-4">link</h5>
+                        <a class="btn btn-link text-white-50" href="">About Us</a>
+                        <a class="btn btn-link text-white-50" href="">Contact Us</a>
+                        <a class="btn btn-link text-white-50" href="">Our Services</a>
+                        <a class="btn btn-link text-white-50" href="">Privacy Policy</a>
+                        <a class="btn btn-link text-white-50" href="">Terms & Condition</a>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h5 class="text-white mb-4">Newsletter</h5>
+                        <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
+                        <div class="position-relative mx-auto" style="max-width: 400px;">
+                            <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text"
+                                placeholder="Your email">
+                            <button type="button"
+                                class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="copyright">
+                    <div class="row">
+                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                            &copy; <a class="border-bottom" href="#">SMARTKOST</a>, All Right Reserved.
 
-                    // Harga dasar per bulan
-                    const pricePerMonth = 1070000; // Rp 1.070.000 per bulan
-                    let totalAmount = 0;
+                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                            Designed By <a class="border-bottom" href="https://htmlcodex.com">rdtyardnsyh</a>
+                        </div>
+                        <div class="col-md-6 text-center text-md-end">
+                            <div class="footer-menu">
+                                <a href="">Home</a>
+                                <a href="">Cookies</a>
+                                <a href="">Help</a>
+                                <a href="">FQAs</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer End -->
 
-                    // Kalkulasi harga berdasarkan periode sewa
-                    if (rentPeriod === 'month') {
-                        totalAmount = pricePerMonth; // Untuk 1 bulan
-                    } else if (rentPeriod === 'year') {
-                        totalAmount = pricePerMonth * 12; // Untuk 1 tahun (12 bulan)
-                    }
 
-                    // Menampilkan total harga jika periode dipilih
-                    if (totalAmount > 0) {
-                        totalPriceElement.style.display = 'block';
-                        totalAmountElement.textContent = `Rp${totalAmount.toLocaleString()}`;
-                    } else {
-                        totalPriceElement.style.display = 'none';
-                    }
-                }
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
 
-                // Inisialisasi listener untuk dropdown rentPeriod
-                document.getElementById('rentPeriod').addEventListener('change', calculateTotal);
-            });
+    <!-- JavaScript Libraries -->
+    <script>
+        function confirmLogout() {
+            if (confirm("Anda yakin ingin logout?")) {
+                // Jika konfirmasi diterima, arahkan ke logout.php
+                window.location.href = "logout.php";
+            }
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
-        </script>
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="lib/wow/wow.min.js"></script>
-        <script src="lib/easing/easing.min.js"></script>
-        <script src="lib/waypoints/waypoints.min.js"></script>
-        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-
-        <!-- Template Javascript -->
-        <script src="js/main.js"></script>
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
 </body>
 
 </html>

@@ -1,3 +1,8 @@
+<?php
+include 'config.php';
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -106,6 +111,12 @@
             cursor: pointer;
         }
 
+        .jenis-kost-label {
+            width: auto;
+            padding: 5px;
+            white-space: nowrap;
+            border-radius: 5px;
+        }
     </style>
 </head>
 
@@ -137,8 +148,8 @@
                     <div class="navbar-nav ms-auto">
                         <a href="index.php" class="nav-item nav-link active">Beranda</a>
 
-                        <a href="kost.html" class="nav-item nav-link">Kost</a>
-                        <a href="kontak.html" class="nav-item nav-link">Kontak</a>
+                        <a href="kost.php" class="nav-item nav-link">Kost</a>
+                        <a href="kontak.php" class="nav-item nav-link">Kontak</a>
                     </div>
                     <button type="button" class="btn btn-primary px-3 d-none d-lg-flex" data-bs-toggle="modal"
                         data-bs-target="#loginModal">Login</button>
@@ -152,7 +163,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                    <img src="img2/logo_smartkost-removebg-preview.png" class="modal-title w-25">
+                        <img src="img2/logo_smartkost-removebg-preview.png" class="modal-title w-25">
                         <button type="button" class="close-btn" data-bs-dismiss="modal"
                             aria-label="Close">&times;</button>
                     </div>
@@ -190,7 +201,8 @@
                                 <h1 class="display-5 text-white animated fadeIn mb-1 mt-5">Temukan <span
                                         class="text-light">Kost Impian</span> Hanya di Sini</h1>
                                 <p class="text-white animated fadeIn mb-4 pb-2">Daftarkan kost anda di sini.</p>
-                                <a href="register-pk.php" class="btn btn-primary py-3 px-5 me-3 animated fadeIn">Daftarkan
+                                <a href="register-pk.php"
+                                    class="btn btn-primary py-3 px-5 me-3 animated fadeIn">Daftarkan
                                     Kost</a>
                             </div>
                         </div>
@@ -200,7 +212,8 @@
                                 <h1 class="display-5 text-white animated fadeIn mb-1 mt-5">Temukan <span
                                         class="text-light">Kost Impian</span> Hanya di Sini</h1>
                                 <p class="text-white animated fadeIn mb-4 pb-2">Daftarkan kost anda di sini.</p>
-                                <a href="register-pk.php" class="btn btn-primary py-3 px-5 me-3 animated fadeIn">Daftarkan
+                                <a href="register-pk.php"
+                                    class="btn btn-primary py-3 px-5 me-3 animated fadeIn">Daftarkan
                                     Kost</a>
                             </div>
                         </div>
@@ -341,152 +354,60 @@
                     <div class="col-lg-6 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
                     </div>
                 </div>
-
                 <div class="tab-content">
                     <div id="tab-1" class="tab-pane fade show p-0 active">
                         <div class="row g-4">
 
-                            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                                <div class="property-item rounded overflow-hidden">
-                                    <div class="position-relative overflow-hidden">
-                                        <a href=""><img class="img-fluid" src="img2/gbr-kost1.jpg" alt=""></a>
-                                        <div
-                                            class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                            Kost</div>
-                                    </div>
-                                    <div class="p-4 pb-0">
-                                        <h5 class="text-primary mb-3">Rp. 500.000</h5>
-                                        <a class="d-block h5 mb-2" href="">Kost Comboran</a>
-                                        <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
-                                    </div>
-                                    <div class="d-flex border-top">
-                                        <small class="flex-fill text-center border-end py-2"><i
-                                                class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
-                                        <small class="flex-fill text-center border-end py-2"><i
-                                                class="fa fa-bed text-primary me-2"></i>1 Bed</small>
-                                        <small class="flex-fill text-center py-2"><i
-                                                class="fa fa-bath text-primary me-2"></i>2 Bath</small>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                                <div class="property-item rounded overflow-hidden">
-                                    <div class="position-relative overflow-hidden">
-                                        <a href=""><img class="img-fluid" src="img2/gbr-kost2.jpg" alt=""></a>
-                                        <div
-                                            class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                            Kost</div>
-                                    </div>
-                                    <div class="p-4 pb-0">
-                                        <h5 class="text-primary mb-3">Rp. 500.000</h5>
-                                        <a class="d-block h5 mb-2" href="">Kost Comboran</a>
-                                        <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
-                                    </div>
-                                    <div class="d-flex border-top">
-                                        <small class="flex-fill text-center border-end py-2"><i
-                                                class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
-                                        <small class="flex-fill text-center border-end py-2"><i
-                                                class="fa fa-bed text-primary me-2"></i>1 Bed</small>
-                                        <small class="flex-fill text-center py-2"><i
-                                                class="fa fa-bath text-primary me-2"></i>2 Bath</small>
+                            <?php
+                            // Fetch Kost listings from the database
+                            $result = $conn->query("SELECT * FROM kost LIMIT 9");
+                            while ($row = $result->fetch_assoc()) {
+                                ?>
+                                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                    <div class="property-item rounded overflow-hidden">
+                                        <div class="position-relative overflow-hidden">
+                                            <a href="detail.php?id=<?php echo $row['id']; ?>">
+                                                <img class="img-fluid" src="<?php echo $row['gambar_1']; ?>" alt="">
+                                            </a>
+                                            <div
+                                                class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
+                                                <?php echo $row['kategori']; ?>
+                                            </div>
+                                            <div class="dropdown position-absolute top-0 end-0 mt-2 me-2">
+                                                <div
+                                                    class="bg-white text-primary position-absolute end-0 bottom-3 pt-1 px-3 jenis-kost-label">
+                                                    <?php echo $row['jenis_kost']; ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="p-4 pb-0">
+                                            <a class="d-block h5 mb-2" href=""><?php echo $row['nama_kost']; ?></a>
+                                            <h5 class="text-primary mb-1">Rp.
+                                                <?php echo number_format($row['harga'], 0, ',', '.'); ?>
+                                            </h5>
+                                            <p>
+                                                <i
+                                                    class="fa fa-map-marker-alt text-primary me-2"></i><?php echo $row['alamat']; ?>
+                                            </p>
+                                        </div>
+                                        <div class="d-flex border-top">
+                                            <small class="flex-fill text-center border-end py-2"><i
+                                                    class="fa fa-ruler-combined text-primary me-2"></i><?php echo $row['ukuran_kamar']; ?></small>
+                                            <small class="flex-fill text-center border-end py-2"><i
+                                                    class="fa fa-bed text-primary me-2"></i><?php echo $row['banyak_kasur']; ?>
+                                                Bed</small>
+                                            <small class="flex-fill text-center py-2"><i
+                                                    class="fa fa-bath text-primary me-2"></i><?php echo $row['banyak_kamar_mandi']; ?>
+                                                Bath</small>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                                <div class="property-item rounded overflow-hidden">
-                                    <div class="position-relative overflow-hidden">
-                                        <a href=""><img class="img-fluid" src="img2/gbr-kost3.jpg" alt=""></a>
-                                        <div
-                                            class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                            Kost</div>
-                                    </div>
-                                    <div class="p-4 pb-0">
-                                        <h5 class="text-primary mb-3">Rp. 500.000</h5>
-                                        <a class="d-block h5 mb-2" href="">Kost Comboran</a>
-                                        <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
-                                    </div>
-                                    <div class="d-flex border-top">
-                                        <small class="flex-fill text-center border-end py-2"><i
-                                                class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
-                                        <small class="flex-fill text-center border-end py-2"><i
-                                                class="fa fa-bed text-primary me-2"></i>1 Bed</small>
-                                        <small class="flex-fill text-center py-2"><i
-                                                class="fa fa-bath text-primary me-2"></i>2 Bath</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                                <div class="property-item rounded overflow-hidden">
-                                    <div class="position-relative overflow-hidden">
-                                        <a href=""><img class="img-fluid" src="img2/gbr-kost1.jpg" alt=""></a>
-                                        <div
-                                            class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                            Kost</div>
-                                    </div>
-                                    <div class="p-4 pb-0">
-                                        <h5 class="text-primary mb-3">Rp. 500.000</h5>
-                                        <a class="d-block h5 mb-2" href="">Kost Comboran</a>
-                                        <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
-                                    </div>
-                                    <div class="d-flex border-top">
-                                        <small class="flex-fill text-center border-end py-2"><i
-                                                class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
-                                        <small class="flex-fill text-center border-end py-2"><i
-                                                class="fa fa-bed text-primary me-2"></i>1 Bed</small>
-                                        <small class="flex-fill text-center py-2"><i
-                                                class="fa fa-bath text-primary me-2"></i>2 Bath</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                                <div class="property-item rounded overflow-hidden">
-                                    <div class="position-relative overflow-hidden">
-                                        <a href=""><img class="img-fluid" src="img2/gbr-kost2.jpg" alt=""></a>
-                                        <div
-                                            class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                            Kost</div>
-                                    </div>
-                                    <div class="p-4 pb-0">
-                                        <h5 class="text-primary mb-3">Rp. 500.000</h5>
-                                        <a class="d-block h5 mb-2" href="">Kost Comboran</a>
-                                        <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
-                                    </div>
-                                    <div class="d-flex border-top">
-                                        <small class="flex-fill text-center border-end py-2"><i
-                                                class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
-                                        <small class="flex-fill text-center border-end py-2"><i
-                                                class="fa fa-bed text-primary me-2"></i>1 Bed</small>
-                                        <small class="flex-fill text-center py-2"><i
-                                                class="fa fa-bath text-primary me-2"></i>2 Bath</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                                <div class="property-item rounded overflow-hidden">
-                                    <div class="position-relative overflow-hidden">
-                                        <a href=""><img class="img-fluid" src="img2/gbr-kost3.jpg" alt=""></a>
-                                        <div
-                                            class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                            Kost</div>
-                                    </div>
-                                    <div class="p-4 pb-0">
-                                        <h5 class="text-primary mb-3">Rp. 500.000</h5>
-                                        <a class="d-block h5 mb-2" href="">Kost Comboran</a>
-                                        <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
-                                    </div>
-                                    <div class="d-flex border-top">
-                                        <small class="flex-fill text-center border-end py-2"><i
-                                                class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
-                                        <small class="flex-fill text-center border-end py-2"><i
-                                                class="fa fa-bed text-primary me-2"></i>1 Bed</small>
-                                        <small class="flex-fill text-center py-2"><i
-                                                class="fa fa-bath text-primary me-2"></i>2 Bath</small>
-                                    </div>
-                                </div>
-                            </div>
+                                <?php
+                            }
+                            ?>
+
                             <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.1s">
-                                <a class="btn btn-primary py-3 px-5" href="kost.html">Lihat Lainnya</a>
+                                <a class="btn btn-primary py-3 px-5" href="user-kost.php">Lihat Lainnya</a>
                             </div>
                         </div>
                     </div>
@@ -561,7 +482,7 @@
 
         <!--Kontak Start -->
         <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
-            <h1 class="mb-1">Contact Us</h1>
+            <h1 class="mb-1">Kontak Kami</h1>
         </div>
         <div class="container-fluid bg-primary mb-5 wow fadeIn" data-wow-delay="0.1s">
             <div class="container-xxl py-5">
@@ -576,7 +497,7 @@
                                             <div class="icon me-3" style="width: 45px; height: 45px;">
                                                 <i class="fa fa-map-marker-alt text-primary"></i>
                                             </div>
-                                            <span>Comboran pride</span>
+                                            <span>Malang</span>
                                         </div>
                                     </div>
                                 </div>
@@ -587,7 +508,7 @@
                                             <div class="icon me-3" style="width: 45px; height: 45px;">
                                                 <i class="fa fa-envelope-open text-primary"></i>
                                             </div>
-                                            <span>info@example.com</span>
+                                            <span>info@smartkost.com</span>
                                         </div>
                                     </div>
                                 </div>
@@ -619,33 +540,28 @@
                                             <div class="form-floating">
                                                 <input type="text" class="form-control" id="name"
                                                     placeholder="Your Name">
-                                                <label for="name">Your Name</label>
+                                                <label for="name">Nama Anda</label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-floating">
                                                 <input type="email" class="form-control" id="email"
                                                     placeholder="Your Email">
-                                                <label for="email">Your Email</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="form-floating">
-                                                <input type="text" class="form-control" id="subject"
-                                                    placeholder="Subject">
-                                                <label for="subject">Subject</label>
+                                                <label for="email">Email</label>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-floating">
                                                 <textarea class="form-control" placeholder="Leave a message here"
-                                                    id="message" style="height: 150px"></textarea>
-                                                <label for="message">Message</label>
+                                                    id="message" style="height: 250px"></textarea>
+                                                <label for="message">Pesan</label>
                                             </div>
                                         </div>
                                         <div class="col-12">
-                                            <button class="btn btn-outline-light w-100 py-3" type="submit">Send
-                                                Message</button>
+                                            <a href="login.php">
+                                                <button class="btn btn-outline-light w-100 py-3" type="button">Kirim
+                                                    Pesan</button>
+                                            </a>
                                         </div>
                                     </div>
                                 </form>

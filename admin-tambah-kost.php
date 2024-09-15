@@ -112,12 +112,8 @@ $conn->close();
     </style>
 </head>
 
-<body>
+<body class="bg-white">
     <div class="container-xxl bg-white p-0">
-        <!-- Navbar Start -->
-
-        <!-- Navbar End -->
-
         <div class="container ">
             <div class="form-section">
                 <h2 class="text-center">Tambah Kost</h2>
@@ -164,6 +160,9 @@ $conn->close();
                             </div>
                         </div>
 
+                        <label class="form-label">
+                                <h5 class="mt-2">Deskripsi Kost</h5>
+                            </label>
                         <!-- Kost Name -->
                         <div class="col-md-6 mb-3">
                             <label for="kostName" class="form-label">Nama Kost</label>

@@ -11,6 +11,36 @@ if (!isset($_SESSION['username'])) {
 
 $username = $_SESSION['username'];
 
+$username = $_SESSION['username'];
+$message_status = "";  // Variabel untuk menyimpan status pesan
+
+// Periksa apakah formulir telah dikirim
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nama = htmlspecialchars($_POST['nama']);
+    $email = htmlspecialchars($_POST['email']);
+    $pesan = htmlspecialchars($_POST['pesan']);
+
+    // Validasi sederhana
+    if (!empty($nama) && !empty($email) && !empty($pesan)) {
+        // Persiapkan pernyataan SQL untuk menyimpan data ke database
+        $sql = "INSERT INTO kontak (nama, email, pesan) VALUES (?, ?, ?)";
+
+        // Koneksi ke database
+        if ($stmt = $conn->prepare($sql)) {
+            $stmt->bind_param("sss", $nama, $email, $pesan);
+
+            // Eksekusi query
+            if ($stmt->execute()) {
+                $message_status = "success";  // Pesan berhasil dikirim
+            } else {
+                $message_status = "error";  // Pesan gagal dikirim
+            }
+            $stmt->close();
+        }
+    } else {
+        $message_status = "incomplete";  // Kolom tidak lengkap
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -45,6 +75,8 @@ $username = $_SESSION['username'];
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         .custom-height {
@@ -84,6 +116,13 @@ $username = $_SESSION['username'];
             padding: 2px 8px;
             line-height: 1.5;
             border-radius: 4px;
+        }
+
+        .profile-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
         }
 
         .jenis-kost-label {
@@ -135,7 +174,7 @@ $username = $_SESSION['username'];
                         </div>
                         <a href="user-profile.php">
                             <img src="<?php echo isset($_SESSION['profile_image']) ? $_SESSION['profile_image'] : 'img2/Bulat.png'; ?>"
-                                alt="profile" class="mt-1" style="width: 50px; height: 50px;">
+                                alt="profile" class="profile-image mt-1">
                         </a>
                     </div>
                 </div>
@@ -309,46 +348,21 @@ $username = $_SESSION['username'];
                     <div id="tab-1" class="tab-pane fade show p-0 active">
                         <div class="row g-4">
 
-                            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                                <div class="property-item rounded overflow-hidden">
-                                    <div class="position-relative overflow-hidden">
-                                        <a href=""><img class="img-fluid" src="img2/gbr-kost1.jpg" alt=""></a>
-                                        <div
-                                            class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                            Kost</div>
-                                    </div>
-                                    <div class="p-4 pb-0">
-                                        <h5 class="text-primary mb-3">Rp. 500.000</h5>
-                                        <a class="d-block h5 mb-2" href="">Kost Comboran</a>
-                                        <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
-                                    </div>
-                                    <div class="d-flex border-top">
-                                        <small class="flex-fill text-center border-end py-2"><i
-                                                class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
-                                        <small class="flex-fill text-center border-end py-2"><i
-                                                class="fa fa-bed text-primary me-2"></i>1 Bed</small>
-                                        <small class="flex-fill text-center py-2"><i
-                                                class="fa fa-bath text-primary me-2"></i>2 Bath</small>
-                                    </div>
-                                </div>
-                            </div>
-
                             <?php
                             // Fetch Kost listings from the database
-                            $result = $conn->query("SELECT * FROM kost");
+                            $result = $conn->query("SELECT * FROM kost LIMIT 9");
                             while ($row = $result->fetch_assoc()) {
                                 ?>
                                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                                     <div class="property-item rounded overflow-hidden">
                                         <div class="position-relative overflow-hidden">
-                                            <a href=""><img class="img-fluid" src="<?php echo $row['gambar_1']; ?>" alt="">
+                                            <a href="user-detail.php?id=<?php echo $row['id']; ?>">
+                                                <img class="img-fluid" src="<?php echo $row['gambar_1']; ?>" alt="">
                                             </a>
-
                                             <div
                                                 class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                                </i><?php echo $row['kategori']; ?>
+                                                <?php echo $row['kategori']; ?>
                                             </div>
-
                                             <div class="dropdown position-absolute top-0 end-0 mt-2 me-2">
                                                 <div
                                                     class="bg-white text-primary position-absolute end-0 bottom-3 pt-1 px-3 jenis-kost-label">
@@ -356,9 +370,8 @@ $username = $_SESSION['username'];
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="p-4 pb-0">
-                                        <a class="d-block h5 mb-2" href=""><?php echo $row['nama_kost']; ?></a>
+                                            <a class="d-block h5 mb-2" href=""><?php echo $row['nama_kost']; ?></a>
                                             <h5 class="text-primary mb-1">Rp.
                                                 <?php echo number_format($row['harga'], 0, ',', '.'); ?>
                                             </h5>
@@ -384,7 +397,7 @@ $username = $_SESSION['username'];
                             ?>
 
                             <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.1s">
-                                <a class="btn btn-primary py-3 px-5" href="kost.html">Lihat Lainnya</a>
+                                <a class="btn btn-primary py-3 px-5" href="user-kost.php">Lihat Lainnya</a>
                             </div>
                         </div>
                     </div>
@@ -459,7 +472,7 @@ $username = $_SESSION['username'];
 
         <!--Kontak Start -->
         <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
-            <h1 class="mb-1">Contact Us</h1>
+            <h1 class="mb-1">Kontak Kami</h1>
         </div>
         <div class="container-fluid bg-primary mb-5 wow fadeIn" data-wow-delay="0.1s">
             <div class="container-xxl py-5">
@@ -474,7 +487,7 @@ $username = $_SESSION['username'];
                                             <div class="icon me-3" style="width: 45px; height: 45px;">
                                                 <i class="fa fa-map-marker-alt text-primary"></i>
                                             </div>
-                                            <span>Comboran pride</span>
+                                            <span>Malang</span>
                                         </div>
                                     </div>
                                 </div>
@@ -511,39 +524,32 @@ $username = $_SESSION['username'];
                         <div class="col-md-6">
                             <div class="wow fadeInUp" data-wow-delay="0.5s">
                                 <p class="mb-4 text-light">Kontak kami jika ada masalah/kendala dalam website kami </p>
-                                <form>
+                                <form method="POST" action="user-home.php">
                                     <div class="row g-3">
                                         <div class="col-md-6">
                                             <div class="form-floating">
-                                                <input type="text" class="form-control" id="name"
-                                                    placeholder="Your Name">
-                                                <label for="name">Your Name</label>
+                                                <input type="text" class="form-control" id="nama" placeholder="Nama"
+                                                    name="nama">
+                                                <label for="nama">Nama</label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-floating">
-                                                <input type="email" class="form-control" id="email"
-                                                    placeholder="Your Email">
-                                                <label for="email">Your Email</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="form-floating">
-                                                <input type="text" class="form-control" id="subject"
-                                                    placeholder="Subject">
-                                                <label for="subject">Subject</label>
+                                                <input type="email" class="form-control" id="email" placeholder="Email"
+                                                    name="email">
+                                                <label for="email">Email</label>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-floating">
                                                 <textarea class="form-control" placeholder="Leave a message here"
-                                                    id="message" style="height: 150px"></textarea>
-                                                <label for="message">Message</label>
+                                                    id="pesan" name="pesan" style="height: 250px;"></textarea>
+                                                <label for="pesan">Pesan</label>
                                             </div>
                                         </div>
                                         <div class="col-12">
-                                            <button class="btn btn-outline-light w-100 py-3" type="submit">Send
-                                                Message</button>
+                                            <button class="btn btn-outline-light w-100 py-3" type="submit">Kirim
+                                                Pesan</button>
                                         </div>
                                     </div>
                                 </form>
@@ -553,7 +559,7 @@ $username = $_SESSION['username'];
                 </div>
             </div>
         </div>
-        <!-- Kontak Start -->
+        <!-- Kontak end -->
 
         <!-- Process Start -->
         <div class="container-xxl py-5">
@@ -720,6 +726,51 @@ $username = $_SESSION['username'];
 
     <!-- JavaScript Libraries -->
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var status = "<?php echo $message_status; ?>";
+
+            if (status === "success") {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Pesan Berhasil Dikirim!',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#00B98E',
+                    background: '#f4f4f9',
+                    width: '350px',
+                    customClass: {
+                        title: 'custom-title',
+                        content: 'custom-content'
+                    }
+                });
+            } else if (status === "error") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Pesan Gagal Dikirim!',
+                    text: 'Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#00765a', // Warna tombol sesuai tema website
+                    width: '350px', // Ukuran kotak lebih kecil
+                    customClass: {
+                        title: 'custom-title',
+                        content: 'custom-content'
+                    }
+                });
+            } else if (status === "incomplete") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Formulir Tidak Lengkap!',
+                    text: 'Harap isi semua kolom.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#f39c12', // Warna tombol peringatan
+                    width: '350px', // Ukuran kotak lebih kecil
+                    customClass: {
+                        title: 'custom-title',
+                        content: 'custom-content'
+                    }
+                });
+            }
+        });
+
         function confirmLogout() {
             if (confirm("Anda yakin ingin logout?")) {
                 // Jika konfirmasi diterima, arahkan ke logout.php

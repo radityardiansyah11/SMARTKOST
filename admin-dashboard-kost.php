@@ -261,7 +261,7 @@ if (isset($_GET['delete'])) {
                                         <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                                             <div class="property-item rounded overflow-hidden">
                                                 <div class="position-relative overflow-hidden">
-                                                <a href="admin-detail.php?id=<?php echo $row['id']; ?>">
+                                                    <a href="admin-detail.php?id=<?php echo $row['id']; ?>">
                                                         <img class="img-fluid" src="<?php echo $row['gambar_1']; ?>" alt="">
                                                     </a>
 
@@ -279,7 +279,8 @@ if (isset($_GET['delete'])) {
                                                         <ul class="dropdown-menu dropdown-menu-right shadow border-0"
                                                             aria-labelledby="dropdownMenuButton">
                                                             <li>
-                                                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                                                <a class="dropdown-item d-flex align-items-center"
+                                                                    href="edit-kost.php?id=<?php echo $row['id']; ?>">
                                                                     <i class="fas fa-edit me-2 text-primary"></i> Edit
                                                                 </a>
                                                             </li>

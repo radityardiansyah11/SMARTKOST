@@ -1,0 +1,154 @@
+.main-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.thumbnail-image {
+    height: 200px;
+    object-fit: cover;
+}
+
+.price-discount {
+    font-weight: bold;
+}
+
+.final-price {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.facility-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.facility-list li {
+    display: inline;
+    margin-right: 15px;
+}
+
+.facility-list li i {
+    color: #28a745;
+}
+
+.contact-owner-btn {
+    background-color: #28a745;
+    color: white;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    font-size: 18px;
+}
+
+.icon-text {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.icon-text i {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.section-heading {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.card-shadow {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border: none;
+}
+
+.btn-custom-logout {
+    font-size: 12px;
+    padding: 2px 8px;
+    line-height: 1.5;
+    border-radius: 4px;
+}
+
+.main-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.thumbnail-image {
+    height: 200px;
+    object-fit: cover;
+}
+
+.price-discount {
+    font-weight: bold;
+}
+
+.final-price {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.facility-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.facility-list li {
+    display: inline;
+    margin-right: 15px;
+}
+
+.facility-list li i {
+    color: #28a745;
+}
+
+.contact-owner-btn {
+    background-color: #28a745;
+    color: white;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    font-size: 18px;
+}
+
+.icon-text {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.icon-text i {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.section-heading {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.card-shadow {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border: none;
+}
+
+.hidden {
+    display: none;
+}
+
+.main-image {
+    width: 100%;
+    height: 700px;
+    object-fit: cover;
+}
+
+.thumbnail-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}

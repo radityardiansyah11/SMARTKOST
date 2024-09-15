@@ -11,6 +11,21 @@ if (!isset($_SESSION['username'])) {
 
 $username = $_SESSION['username'];
 
+// Cek apakah ada input pencarian
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+
+// Query untuk mengambil data kost, jika ada pencarian maka tambahkan WHERE clause
+if ($search) {
+    // Escape input pengguna untuk mencegah SQL Injection
+    $search = $conn->real_escape_string($search);
+    $query = "SELECT * FROM kost WHERE nama_kost LIKE '%$search%'";
+} else {
+    // Jika tidak ada pencarian, tampilkan semua kost
+    $query = "SELECT * FROM kost";
+}
+
+// Eksekusi query
+$result = $conn->query($query);
 ?>
 
 <!DOCTYPE html>
@@ -86,6 +101,13 @@ $username = $_SESSION['username'];
             border-radius: 4px;
         }
 
+        .profile-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
         .jenis-kost-label {
             width: auto;
             padding: 5px;
@@ -136,7 +158,7 @@ $username = $_SESSION['username'];
                         </div>
                         <a href="user-profile.php">
                             <img src="<?php echo isset($_SESSION['profile_image']) ? $_SESSION['profile_image'] : 'img2/Bulat.png'; ?>"
-                                alt="profile" class="mt-1" style="width: 50px; height: 50px;">
+                                alt="profile" class="profile-image mt-1">
                         </a>
                     </div>
                 </div>
@@ -174,33 +196,32 @@ $username = $_SESSION['username'];
         <!-- Search Start -->
         <div class="container-fluid bg-primary mb-5 wow fadeIn" data-wow-delay="0.1s" style="padding: 35px;">
             <div class="container">
-                <div class="row g-2">
-                    <div class="col-md-10">
-                        <div class="row g-2">
-                            <div class="col-md-6">
-                                <input type="text" class="form-control border-0 py-3" placeholder="Cari Kost">
-                            </div>
-                            <div class="col-md-3">
-                                <select class="form-select border-0 py-3">
-                                    <option selected>Tipe Kost</option>
-                                    <option value="1">Standart</option>
-                                    <option value="2">Premium</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <select class="form-select border-0 py-3">
-                                    <option selected>Lokasi</option>
-                                    <option value="1">Location 1</option>
-                                    <option value="2">Location 2</option>
-                                    <option value="3">Location 3</option>
-                                </select>
-                            </div>
+                <form method="GET" action="user-kost.php">
+                    <div class="row g-2">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control border-0 py-3" placeholder="Cari Kost" name="search"
+                                value="<?php echo htmlspecialchars($search); ?>">
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select border-0 py-3">
+                                <option selected>Tipe Kost</option>
+                                <option value="1">Standart</option>
+                                <option value="2">Premium</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select border-0 py-3">
+                                <option selected>Lokasi</option>
+                                <option value="1">Location 1</option>
+                                <option value="2">Location 2</option>
+                                <option value="3">Location 3</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-dark border-0 w-100 py-3">Cari</button>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-dark border-0 w-100 py-3">Cari</button>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
         <!-- Search End -->
@@ -215,6 +236,8 @@ $username = $_SESSION['username'];
                             <h1 class="mb-3">CARI KOST ANDA</h1>
                         </div>
                     </div>
+
+                    <!-- jenis kost -->
                     <div class="col-lg-6 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
                         <ul class="nav nav-pills d-inline-flex justify-content-end mb-5">
                             <li class="nav-item me-2">
@@ -235,46 +258,19 @@ $username = $_SESSION['username'];
                     <div id="tab-1" class="tab-pane fade show p-0 active">
                         <div class="row g-4">
 
-                            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                                <div class="property-item rounded overflow-hidden">
-                                    <div class="position-relative overflow-hidden">
-                                        <a href=""><img class="img-fluid" src="img2/gbr-kost1.jpg" alt=""></a>
-                                        <div
-                                            class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                            Kost</div>
-                                    </div>
-                                    <div class="p-4 pb-0">
-                                        <h5 class="text-primary mb-3">Rp. 500.000</h5>
-                                        <a class="d-block h5 mb-2" href="">Kost Comboran</a>
-                                        <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar</p>
-                                    </div>
-                                    <div class="d-flex border-top">
-                                        <small class="flex-fill text-center border-end py-2"><i
-                                                class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
-                                        <small class="flex-fill text-center border-end py-2"><i
-                                                class="fa fa-bed text-primary me-2"></i>1 Bed</small>
-                                        <small class="flex-fill text-center py-2"><i
-                                                class="fa fa-bath text-primary me-2"></i>2 Bath</small>
-                                    </div>
-                                </div>
-                            </div>
-
                             <?php
                             // Fetch Kost listings from the database
-                            $result = $conn->query("SELECT * FROM kost");
                             while ($row = $result->fetch_assoc()) {
                                 ?>
                                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                                     <div class="property-item rounded overflow-hidden">
                                         <div class="position-relative overflow-hidden">
-                                            <a href=""><img class="img-fluid" src="<?php echo $row['gambar_1']; ?>" alt="">
-                                            </a>
-
+                                            <a href="user-detail.php?id=<?php echo $row['id']; ?>"><img class="img-fluid"
+                                                    src="<?php echo $row['gambar_1']; ?>" alt=""></a>
                                             <div
                                                 class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                                </i><?php echo $row['kategori']; ?>
+                                                <?php echo $row['kategori']; ?>
                                             </div>
-
                                             <div class="dropdown position-absolute top-0 end-0 mt-2 me-2">
                                                 <div
                                                     class="bg-white text-primary position-absolute end-0 bottom-3 pt-1 px-3 jenis-kost-label">
@@ -282,14 +278,12 @@ $username = $_SESSION['username'];
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="p-4 pb-0">
                                             <a class="d-block h5 mb-2" href=""><?php echo $row['nama_kost']; ?></a>
                                             <h5 class="text-primary mb-1">Rp.
                                                 <?php echo number_format($row['harga'], 0, ',', '.'); ?>
                                             </h5>
-                                            <p>
-                                                <i
+                                            <p><i
                                                     class="fa fa-map-marker-alt text-primary me-2"></i><?php echo $row['alamat']; ?>
                                             </p>
                                         </div>
@@ -448,3 +442,5 @@ $username = $_SESSION['username'];
 </body>
 
 </html>
+
+fungsikan jenis kost di sebelah "cari kost anda" sesuai dengan jenis kost
