@@ -185,8 +185,8 @@ $total_pk = $pk_data['total_pk'];
                             class="rounded-circle me-2">
                         <strong>Admin</strong>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-light text-small shadow" onclick="confirmLogout()" >
-                        <li><a class="dropdown-item" href="logout.php" >Sign out</a></li>
+                    <ul class="dropdown-menu dropdown-menu-light text-small shadow" onclick="confirmLogout()">
+                        <li><a class="dropdown-item" href="logout.php">Sign out</a></li>
                     </ul>
                 </div>
             </div>
@@ -220,6 +220,22 @@ $total_pk = $pk_data['total_pk'];
                         <div class="card" style="height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title">Promosi</h5>
+                                <h3 class="card-text">Rp. 0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4  wow fadeInUp" data-wow-delay="0.3s">
+                        <div class="card" style="height: 150px;">
+                            <div class="card-body">
+                                <h5 class="card-title">Kost</h5>
+                                <h3 class="card-text">Rp. 0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4  wow fadeInUp" data-wow-delay="0.3s">
+                        <div class="card" style="height: 150px;">
+                            <div class="card-body">
+                                <h5 class="card-title">Email</h5>
                                 <h3 class="card-text">Rp. 0</h3>
                             </div>
                         </div>
