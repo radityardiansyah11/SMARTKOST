@@ -209,7 +209,55 @@ $total_pk = $pk_data['total_pk'];
                 <!-- Listings -->
                 <div class="row mt-5">
                     <div class="col-md-12">
-                        <h2 class="h4 mb-3  wow fadeInDown" data-wow-delay="0.3s">User</h2>
+                        <div class="row mt-2 g-0 gx-5">
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <h4 class="mb-3">User</h4>
+                            </div>
+                            <div class="col-lg-6 d-flex mb-3 justify-content-end">
+                                <button type="button" class="btn btn-primary px-3" data-bs-toggle="modal"
+                                    data-bs-target="#addUserModal">
+                                    Tambah User
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="addUserModalLabel">Tambah User</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="add-user.php" method="POST">
+                                            <div class="mb-3">
+                                                <label for="username" class="form-label">Nama User</label>
+                                                <input type="text" class="form-control" id="username" name="username"
+                                                    required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="email" name="email"
+                                                    required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="password" class="form-label">Password</label>
+                                                <input type="password" class="form-control" id="password"
+                                                    name="password" required>
+                                            </div>
+                                            <div class="mt-2">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Batal</button>
+                                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <table class="table table-hover">
                             <thead class="table text-light" style="background-color: #009270;">
                                 <tr>
@@ -271,6 +319,27 @@ $total_pk = $pk_data['total_pk'];
         document.addEventListener('DOMContentLoaded', function () {
             <?php if (isset($_SESSION['status'])): ?>
                 var status = "<?php echo $_SESSION['status']; ?>";
+
+                if (status === "added") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'User Berhasil Ditambahkan!',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#00B98E',
+                        background: '#f4f4f9',
+                        width: '350px',
+                    });
+                } else if (status === "error") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal Menambahkan User!',
+                        text: 'Terjadi kesalahan saat menambah data. Silakan coba lagi.',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#00765a',
+                        background: '#f4f4f9',
+                        width: '350px',
+                    });
+                }
 
                 if (status === "deleted") {
                     Swal.fire({

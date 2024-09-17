@@ -257,7 +257,7 @@ $total_pk = $pk_data['total_pk'];
                                                 <input type="password" class="form-control" id="password"
                                                     name="password" required>
                                             </div>
-                                            <div class="modal-footer">
+                                            <div class="mt-2">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-bs-dismiss="modal">Batal</button>
                                                 <button type="submit" class="btn btn-primary">Simpan</button>
