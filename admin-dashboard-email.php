@@ -48,6 +48,46 @@ if (isset($_GET['delete'])) {
     }
 }
 
+// Get all user sessions
+$sql = "SELECT * FROM logsys_pk ORDER BY id ASC";
+$result = mysqli_query($conn, $sql);
+
+// Query to count the number of users
+$count_user_sql = "SELECT COUNT(*) AS total_users FROM login_system";
+$count_user_result = mysqli_query($conn, $count_user_sql);
+$user_data = mysqli_fetch_assoc($count_user_result);
+$total_users = $user_data['total_users'];
+
+// Get all pemilik kost
+$sql_pk = "SELECT * FROM logsys_pk ORDER BY id ASC";
+$result_pk = mysqli_query($conn, $sql_pk);
+
+// Query to count the number of pemilik kost
+$count_pk_sql = "SELECT COUNT(*) AS total_pk FROM logsys_pk";
+$count_pk_result = mysqli_query($conn, $count_pk_sql);
+$pk_data = mysqli_fetch_assoc($count_pk_result);
+$total_pk = $pk_data['total_pk'];
+
+/* Get all Kost */
+$sql_kost = "SELECT * FROM kost ORDER BY id ASC";
+$result_kost = mysqli_query($conn, $sql_kost);
+
+// Query to count the number of kost
+$count_kost_sql = "SELECT COUNT(*) AS total_kost FROM kost";
+$count_kost_result = mysqli_query($conn, $count_kost_sql);
+$kost_data = mysqli_fetch_assoc($count_kost_result);
+$total_kost = $kost_data['total_kost'];
+
+/* Get all email */
+$sql_email = "SELECT * FROM kontak ORDER BY id ASC";
+$result_email = mysqli_query($conn, $sql_email);
+
+// Query to count the number of email
+$count_email_sql = "SELECT COUNT(*) AS total_email FROM kontak";
+$count_email_result = mysqli_query($conn, $count_email_sql);
+$email_data = mysqli_fetch_assoc($count_email_result);
+$total_email = $email_data['total_email'];
+
 $conn->close();
 ?>
 
@@ -118,6 +158,19 @@ $conn->close();
             display: flex;
             flex-direction: column;
             margin-bottom: 1rem;
+        }
+
+        .carousel-item {
+            padding: 0 15px;
+        }
+
+        .carousel-item .row {
+            padding: 15px 0;
+        }
+
+        .carousel-item,
+        .row {
+            overflow: visible;
         }
     </style>
 </head>
@@ -197,29 +250,71 @@ $conn->close();
                     </div>
 
                     <!-- Stats Overview -->
-                    <div class="col-md-4  wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="card" style="height: 150px;">
-                            <div class="card-body">
-                                <h5 class="card-title">User</h5>
-                                <h3 class="card-text">1</h3>
+                    <div id="statsCarousel" class="carousel slide wow fadeInUp" data-bs-ride="carousel"
+                        data-wow-delay="0.1s">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="row" style="overflow: visible; padding: 15px 0;">
+                                    <div class="col-md-4">
+                                        <div class="card" style="height: 160px; margin: 10px 0;">
+                                            <div class="card-body">
+                                                <h5 class="card-title">User</h5>
+                                                <h3 class="card-text"><?php echo $total_users; ?></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card" style="height: 160px; margin: 10px 0;">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Pemilik Kost</h5>
+                                                <h3 class="card-text"><?php echo $total_pk; ?></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card" style="height: 160px; margin: 10px 0;">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Promosi</h5>
+                                                <h3 class="card-text">Rp. 0</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="carousel-item">
+                                <div class="row" style="overflow: visible; padding: 15px 0;">
+                                    <div class="col-md-4">
+                                        <div class="card" style="height: 160px; margin: 10px 0;">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Kost</h5>
+                                                <h3 class="card-text"><?php echo $total_kost; ?></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card" style="height: 160px; margin: 10px 0;">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Email</h5>
+                                                <h3 class="card-text"><?php echo $total_email; ?></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4  wow fadeInUp" data-wow-delay="0.2s">
-                        <div class="card" style="height: 150px;">
-                            <div class="card-body">
-                                <h5 class="card-title">Pemilik Kost</h5>
-                                <h3 class="card-text">1</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4  wow fadeInUp" data-wow-delay="0.3s">
-                        <div class="card" style="height: 150px;">
-                            <div class="card-body">
-                                <h5 class="card-title">Promosi</h5>
-                                <h3 class="card-text">Rp. 0</h3>
-                            </div>
-                        </div>
+
+                        <!-- Carousel Controls -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#statsCarousel"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#statsCarousel"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
                     </div>
                 </div>
 

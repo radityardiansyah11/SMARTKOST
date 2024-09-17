@@ -72,6 +72,26 @@ $count_pk_sql = "SELECT COUNT(*) AS total_pk FROM logsys_pk";
 $count_pk_result = mysqli_query($conn, $count_pk_sql);
 $pk_data = mysqli_fetch_assoc($count_pk_result);
 $total_pk = $pk_data['total_pk'];
+
+/* Get all Kost */
+$sql_kost = "SELECT * FROM kost ORDER BY id ASC";
+$result_kost = mysqli_query($conn, $sql_kost);
+
+// Query to count the number of kost
+$count_kost_sql = "SELECT COUNT(*) AS total_kost FROM kost";
+$count_kost_result = mysqli_query($conn, $count_kost_sql);
+$kost_data = mysqli_fetch_assoc($count_kost_result);
+$total_kost = $kost_data['total_kost'];
+
+/* Get all email */
+$sql_email = "SELECT * FROM kontak ORDER BY id ASC";
+$result_email = mysqli_query($conn, $sql_email);
+
+// Query to count the number of email
+$count_email_sql = "SELECT COUNT(*) AS total_email FROM kontak";
+$count_email_result = mysqli_query($conn, $count_email_sql);
+$email_data = mysqli_fetch_assoc($count_email_result);
+$total_email = $email_data['total_email'];
 ?>
 
 <!DOCTYPE html>
@@ -111,6 +131,8 @@ $total_pk = $pk_data['total_pk'];
         .card {
             box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
             border: none;
+            margin: 10px 0;
+            margin: 0 5px;
         }
 
         .btn-trash {
@@ -121,6 +143,19 @@ $total_pk = $pk_data['total_pk'];
             height: 31px;
             border-radius: 3px;
             padding: 0;
+        }
+
+        .carousel-item {
+            padding: 0 15px;
+        }
+
+        .carousel-item .row {
+            padding: 15px 0;
+        }
+
+        .carousel-item,
+        .row {
+            overflow: visible;
         }
     </style>
 </head>
@@ -199,51 +234,77 @@ $total_pk = $pk_data['total_pk'];
                         <img class="img-fluid w-25 mb-2" src="img2/logo smartkost.png" alt="SMARTKOST Logo">
                     </div>
 
-                    <!-- Stats Overview -->
-                    <div class="col-md-4  wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="card" style="height: 150px;">
-                            <div class="card-body">
-                                <h5 class="card-title">User</h5>
-                                <h3 class="card-text"><?php echo $total_users; ?></h3>
+                    <!-- Stats Overview Carousel -->
+                    <div id="statsCarousel" class="carousel slide wow fadeInUp" data-bs-ride="carousel"
+                        data-wow-delay="0.1s">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="row" style="overflow: visible; padding: 15px 0;">
+                                    <div class="col-md-4">
+                                        <div class="card" style="height: 160px; margin: 10px 0;">
+                                            <div class="card-body">
+                                                <h5 class="card-title">User</h5>
+                                                <h3 class="card-text"><?php echo $total_users; ?></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card" style="height: 160px; margin: 10px 0;">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Pemilik Kost</h5>
+                                                <h3 class="card-text"><?php echo $total_pk; ?></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card" style="height: 160px; margin: 10px 0;">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Promosi</h5>
+                                                <h3 class="card-text">Rp. 0</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="carousel-item">
+                                <div class="row" style="overflow: visible; padding: 15px 0;">
+                                    <div class="col-md-4">
+                                        <div class="card" style="height: 160px; margin: 10px 0;">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Kost</h5>
+                                                <h3 class="card-text"><?php echo $total_kost; ?></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card" style="height: 160px; margin: 10px 0;">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Email</h5>
+                                                <h3 class="card-text"><?php echo $total_email; ?></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4  wow fadeInUp" data-wow-delay="0.2s">
-                        <div class="card" style="height: 150px;">
-                            <div class="card-body">
-                                <h5 class="card-title">Pemilik Kost</h5>
-                                <h3 class="card-text"><?php echo $total_pk; ?></h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4  wow fadeInUp" data-wow-delay="0.3s">
-                        <div class="card" style="height: 150px;">
-                            <div class="card-body">
-                                <h5 class="card-title">Promosi</h5>
-                                <h3 class="card-text">Rp. 0</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4  wow fadeInUp" data-wow-delay="0.3s">
-                        <div class="card" style="height: 150px;">
-                            <div class="card-body">
-                                <h5 class="card-title">Kost</h5>
-                                <h3 class="card-text">Rp. 0</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4  wow fadeInUp" data-wow-delay="0.3s">
-                        <div class="card" style="height: 150px;">
-                            <div class="card-body">
-                                <h5 class="card-title">Email</h5>
-                                <h3 class="card-text">Rp. 0</h3>
-                            </div>
-                        </div>
+
+                        <!-- Carousel Controls -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#statsCarousel"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#statsCarousel"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
                     </div>
                 </div>
 
                 <!-- User Listings -->
-                <div class="row mt-5">
+                <div class="row mt-3">
                     <div class="col-md-12">
                         <h2 class="h4 mb-3  wow fadeInZoom  wow fadeInDown" data-wow-delay="0.3s" data-wow-delay="0.1s">
                             User</h2>
@@ -333,7 +394,7 @@ $total_pk = $pk_data['total_pk'];
                     <a href="admin-dahsboard-pk.php" class="text-end" style="color: grey;">View More</a>
                 </div>
             </div>
-            <!-- Content End -->
+            
         </div>
 
         <!-- Footer Start -->
