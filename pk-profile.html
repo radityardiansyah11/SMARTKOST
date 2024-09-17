@@ -68,28 +68,35 @@
         <div class="d-flex">
             <!-- Sidebar Start -->
             <div class="d-flex flex-column flex-shrink-0 p-3"
-                style="width: 280px; height: 100vh; position: fixed; background-color: #00765a;">
+                style="width: 220px; height: 100vh; position: fixed; background-color: #00765a;">
                 <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
                     <h3 class="mt-2 text-light">Dashboard</h3>
                 </a>
                 <hr class="text-light">
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
-                        <a href="pk-dashboard.html" class="nav-link text-light">
+                        <a href="pk-dashboard.php" class="nav-link text-light">
                             <i class="bi bi-speedometer2 me-2"></i>
                             Dashboard
                         </a>
                     </li>
                     <li>
-                        <a href="pk-dashboard-kost.html" class="nav-link text-light">
+                        <a href="pk-dashboard-kost.php" class="nav-link text-light">
                             <i class="bi bi-house-door me-2"></i>
-                            List Kost
+                            Kost
                         </a>
                     </li>
                     <li>
-                        <a href="pk-dashboard-booking.html" class="nav-link text-light">
+                        <a href="pk-dashboard-booking.php" class="nav-link text-light">
                             <i class="bi bi-people me-2"></i>
                             Booking
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pk-profile.html" class="nav-link active text-light"
+                        style="background-color: #00B98E;" aria-current="page">
+                            <i class="bi bi-person me-2"></i>
+                            Profile
                         </a>
                     </li>
                 </ul>
@@ -99,21 +106,19 @@
                         id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="https://via.placeholder.com/50" alt="Admin" width="32" height="32"
                             class="rounded-circle me-2">
-                        <strong>Hi, Pemilik Kost</strong>
+                        <strong>Hi,
+                            <?php echo htmlspecialchars($username); ?>
+                        </strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-light text-small shadow">
-                        <li><a class="dropdown-item" href="pk-profile.html">Profile</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">Sign out</a></li>
+                        <li><a class="dropdown-item" href="logout.php"  onclick="confirmLogout()">log out</a></li>
                     </ul>
                 </div>
             </div>
             <!-- Sidebar End -->
 
             <!-- Content Start -->
-            <div class="content p-4" style="margin-left: 280px; padding: 20px;">
+            <div class="content p-4" style="margin-left: 220px; padding: 20px;">
                 <div class="row">
                     <div class="col-md-12">
                         <img class="img-fluid w-25 mb-2" src="img2/logo smartkost.png" alt="SMARTKOST Logo">

@@ -1,3 +1,16 @@
+<?php
+session_start();
+include 'config.php';
+
+// Pastikan pengguna telah login
+if (!isset($_SESSION['username'])) {
+    header("Location: login-pk.php"); // Redirect ke halaman login jika belum login
+    exit();
+}
+
+$username = $_SESSION['username']; // Ambil username dari sesi
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,8 +46,7 @@
 
     <style>
         .card {
-            box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-            border: none;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
         }
     </style>
 </head>
@@ -53,29 +65,35 @@
         <div class="d-flex">
             <!-- Sidebar Start -->
             <div class="d-flex flex-column flex-shrink-0 p-3"
-                style=" width: 280px; height: 100vh; position: fixed; background-color: #00765a;">
+                style=" width: 220px; height: 100vh; position: fixed;  background-color: #00765a;">
                 <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
                     <h3 class=" mt-2 text-light">Dashboard</h3>
                 </a>
                 <hr class="text-light">
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
-                        <a href="pk-dashboard.html" class="nav-link text-light">
+                        <a href="pk-dashboard.php" class="nav-link text-light">
                             <i class="bi bi-speedometer2 me-2"></i>
                             Dashboard
                         </a>
                     </li>
                     <li>
-                        <a href="pk-dashboard-kost.html" class="nav-link text-light">
+                        <a href="pk-dashboard-kost.php"  class="nav-link active text-light"
+                        style="background-color: #00B98E;" aria-current="page">
                             <i class="bi bi-house-door me-2"></i>
-                            List Kost
+                            Kost
                         </a>
                     </li>
                     <li>
-                        <a href="pk-dashboard-booking.html" class="nav-link active text-light"
-                            style="background-color: #00B98E;" aria-current="page">
+                        <a href="pk-dashboard-booking.php" class="nav-link text-light">
                             <i class="bi bi-people me-2"></i>
                             Booking
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pk-profile.html" class="nav-link text-light">
+                            <i class="bi bi-person me-2"></i>
+                            Profile
                         </a>
                     </li>
                 </ul>
@@ -90,18 +108,14 @@
                         </strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-light text-small shadow">
-                        <li><a class="dropdown-item" href="pk-profile.html">Profile</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">log out</a></li>
+                        <li><a class="dropdown-item" href="logout.php"  onclick="confirmLogout()">log out</a></li>
                     </ul>
                 </div>
             </div>
             <!-- Sidebar End -->
 
             <!-- Content Start -->
-            <div class="content p-4" style="margin-left: 280px; padding: 20px;">
+            <div class="content p-4" style="margin-left: 220px; padding: 20px;">
                 <div class="row">
                     <div class="col-md-12">
                         <img class="img-fluid w-25 mb-2" src="img2/logo smartkost.png" alt="SMARTKOST Logo">
@@ -135,57 +149,57 @@
                 </div>
 
                 <!-- Listings -->
-                <div class="row mt-3">
-                    <div class="col-md-12">
-                        <h2 class="h4 mb-3">Booking</h2>
-                        <table class="table table-hover">
-                            <thead class="table" style="background-color: #009270;">
-                                <tr class="text-light">
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Nama</th>
-                                    <th scope="col">Kost</th>
-                                    <th scope="col">Bayar</th>
-                                    <th scope="col">Tanggal</th>
-                                    <th scope="col">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>User 1</td>
-                                    <td>Kost Malang</td>
-                                    <td>Rp. 500.000</td>
-                                    <td>2024-08-09</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary">Edit</button>
-                                        <button class="btn btn-sm btn-danger">Delete</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>User 1</td>
-                                    <td>Kost Malang</td>
-                                    <td>Rp. 500.000</td>
-                                    <td>2024-08-09</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary">Edit</button>
-                                        <button class="btn btn-sm btn-danger">Delete</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>User 1</td>
-                                    <td>Kost Malang</td>
-                                    <td>Rp. 500.000</td>
-                                    <td>2024-08-09</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary">Edit</button>
-                                        <button class="btn btn-sm btn-danger">Delete</button>
-                                    </td>
-                                </tr>
-                                <!-- More rows as needed -->
-                            </tbody>
-                        </table>
+                <div class="container-xxl py-5">
+                    <div class="container">
+                        <div class="row mt-2 g-0 gx-5">
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <h4 class="mb-3">List Kost Anda</h4>
+                            </div>
+                            <div class="col-lg-6 d-flex mb-3 justify-content-end">
+                                <a href="pk-tambah kost.html" class="btn btn-primary px-3 d-none d-lg-flex">Tambah
+                                    Kost</a>
+                            </div>
+                        </div>
+                        <div class="tab-content">
+                            <div id="tab-1" class="tab-pane fade show p-0 active">
+                                <div class="row g-4">
+
+                                    <div class="tab-content">
+                                        <div id="tab-1" class="tab-pane fade show p-0 active">
+                                            <div class="row g-4">
+                                                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                                    <div class="property-item rounded overflow-hidden">
+                                                        <div class="position-relative overflow-hidden">
+                                                            <a href=""><img class="img-fluid" src="img2/gbr-kost1.jpg"
+                                                                    alt=""></a>
+                                                            <div
+                                                                class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
+                                                                Kost</div>
+                                                        </div>
+                                                        <div class="p-4 pb-0">
+                                                            <h5 class="text-primary mb-3">Rp. 500.000</h5>
+                                                            <a class="d-block h5 mb-2" href="">Kost Comboran</a>
+                                                            <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl.
+                                                                Tanimbar</p>
+                                                        </div>
+                                                        <div class="d-flex border-top">
+                                                            <small class="flex-fill text-center border-end py-2"><i
+                                                                    class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
+                                                            <small class="flex-fill text-center border-end py-2"><i
+                                                                    class="fa fa-bed text-primary me-2"></i>1
+                                                                Bed</small>
+                                                            <small class="flex-fill text-center py-2"><i
+                                                                    class="fa fa-bath text-primary me-2"></i>2
+                                                                Bath</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
