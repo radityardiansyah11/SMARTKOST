@@ -16,7 +16,7 @@ $username = $_SESSION['username']; // Ambil username dari sesi
 
 <head>
     <meta charset="utf-8">
-    <title><?php echo htmlspecialchars($username); ?>  Dashboard - SMARTKOST</title>
+    <title><?php echo htmlspecialchars($username); ?> Dashboard - SMARTKOST</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -118,8 +118,8 @@ $username = $_SESSION['username']; // Ambil username dari sesi
                 <hr class="text-light">
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
-                        <a href="pk-dashboard.php" class="nav-link active text-light"
-                            style="background-color: #00B98E;" aria-current="page">
+                        <a href="pk-dashboard.php" class="nav-link active text-light" style="background-color: #00B98E;"
+                            aria-current="page">
                             <i class="bi bi-speedometer2 me-2"></i>
                             Dashboard
                         </a>
@@ -137,7 +137,7 @@ $username = $_SESSION['username']; // Ambil username dari sesi
                         </a>
                     </li>
                     <li>
-                        <a href="pk-profile.html" class="nav-link text-light">
+                        <a href="pk-profile.php" class="nav-link text-light">
                             <i class="bi bi-person me-2"></i>
                             Profile
                         </a>
@@ -154,7 +154,7 @@ $username = $_SESSION['username']; // Ambil username dari sesi
                         </strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-light text-small shadow">
-                        <li><a class="dropdown-item" href="logout.php"  onclick="confirmLogout()">log out</a></li>
+                        <li><a class="dropdown-item" href="logout.php" onclick="confirmLogout()">log out</a></li>
                     </ul>
                 </div>
             </div>

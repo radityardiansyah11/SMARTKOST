@@ -1,15 +1,28 @@
+<?php
+session_start();
+include 'config.php';
+
+// Pastikan pengguna telah login
+if (!isset($_SESSION['username'])) {
+    header("Location: login-pk.php"); // Redirect ke halaman login jika belum login
+    exit();
+}
+
+$username = $_SESSION['username']; // Ambil username dari sesi
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
-    <title>Admin Dashboard - Profile Pemilik Kost</title>
+    <title><?php echo htmlspecialchars($username); ?> Dashboard - Profile Pemilik Kost</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
 
     <!-- Favicon -->
-    <link href="4. image-web/SMARTKOST 2.png" rel="icon">
+    <link href="img2/mini logo smartkost.png" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,13 +45,13 @@
     <link href="css/style.css" rel="stylesheet">
 
     <style>
-         .profile-card {
+        .profile-card {
             border: none;
             background-color: #ffffff;
             padding: 1.5rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             border-radius: 12px;
-           height: 350px;
+            height: 350px;
         }
 
         .profile-card img {
@@ -93,8 +106,8 @@
                         </a>
                     </li>
                     <li>
-                        <a href="pk-profile.html" class="nav-link active text-light"
-                        style="background-color: #00B98E;" aria-current="page">
+                        <a href="pk-profile.php" class="nav-link active text-light" style="background-color: #00B98E;"
+                            aria-current="page">
                             <i class="bi bi-person me-2"></i>
                             Profile
                         </a>
@@ -111,7 +124,7 @@
                         </strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-light text-small shadow">
-                        <li><a class="dropdown-item" href="logout.php"  onclick="confirmLogout()">log out</a></li>
+                        <li><a class="dropdown-item" href="logout.php" onclick="confirmLogout()">log out</a></li>
                     </ul>
                 </div>
             </div>
@@ -138,15 +151,18 @@
                         <form>
                             <div class="mb-3">
                                 <label for="ownerName" class="form-label">Nama Pemilik</label>
-                                <input type="text" class="form-control" id="ownerName" placeholder="Enter Owner Name" value="Nama Pemilik">
+                                <input type="text" class="form-control" id="ownerName" placeholder="Enter Owner Name"
+                                    value="Nama Pemilik">
                             </div>
                             <div class="mb-3">
                                 <label for="ownerEmail" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="ownerEmail" placeholder="Enter Email" value="email@example.com">
+                                <input type="email" class="form-control" id="ownerEmail" placeholder="Enter Email"
+                                    value="email@example.com">
                             </div>
                             <div class="mb-3">
                                 <label for="ownerPhone" class="form-label">No. Telepon</label>
-                                <input type="tel" class="form-control" id="ownerPhone" placeholder="Enter Phone Number" value="+62-123-456-789">
+                                <input type="tel" class="form-control" id="ownerPhone" placeholder="Enter Phone Number"
+                                    value="+62-123-456-789">
                             </div>
                             <button type="submit" class="btn btn-primary">Edit Profile</button>
                         </form>

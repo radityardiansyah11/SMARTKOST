@@ -86,13 +86,13 @@ $username = $_SESSION['username']; // Ambil username dari sesi
                     </li>
                     <li>
                         <a href="pk-dashboard-booking.php" class="nav-link active text-light"
-                        style="background-color: #00B98E;" aria-current="page">
+                            style="background-color: #00B98E;" aria-current="page">
                             <i class="bi bi-people me-2"></i>
                             Booking
                         </a>
                     </li>
                     <li>
-                        <a href="pk-profile.html" class="nav-link text-light">
+                        <a href="pk-profile.php" class="nav-link text-light">
                             <i class="bi bi-person me-2"></i>
                             Profile
                         </a>
@@ -109,7 +109,7 @@ $username = $_SESSION['username']; // Ambil username dari sesi
                         </strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-light text-small shadow">
-                        <li><a class="dropdown-item" href="logout.php"  onclick="confirmLogout()">log out</a></li>
+                        <li><a class="dropdown-item" href="logout.php" onclick="confirmLogout()">log out</a></li>
                     </ul>
                 </div>
             </div>
