@@ -3,13 +3,13 @@ include 'config.php';
 session_start();
 
 // Periksa apakah pengguna sudah login
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['user_username'])) {
     header("Location: login.php");
     exit();
 }
 
 // Ambil data pengguna dari database
-$username_session = $_SESSION['username'];
+$username_session = $_SESSION['user_username'];
 $sql = "SELECT username, email, profile_image FROM login_system WHERE username = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $username_session);
@@ -50,9 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("ss", $uploadFile, $username_session);
 
-                // Setelah gambar berhasil diunggah, simpan ke dalam session
                 if ($stmt->execute()) {
-                    $_SESSION['profile_image'] = $uploadFile; // Simpan jalur gambar di session
+                    $_SESSION['profile_image'] = $uploadFile;
                     echo "Profile image updated successfully.";
                     header("Location: user-profile.php");
                     exit();

@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (password_verify($password, $user['password'])) {
                 // Password benar, login berhasil
                 $_SESSION['user_id'] = $user['id']; 
-                $_SESSION['username'] = $user['username']; // Simpan username dalam sesi
+                $_SESSION['pk_username'] = $user['username']; // Simpan username dalam sesi
                 
                 // Arahkan ke dashboard
                 header("Location: pk-dashboard.php");

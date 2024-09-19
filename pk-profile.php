@@ -3,13 +3,13 @@ include 'config.php';
 session_start();
 
 // Periksa apakah pengguna sudah login
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['pk_username']))  {
     header("Location: login-pk.php");
     exit();
 }
 
 // Ambil data pengguna dari session
-$username_session = $_SESSION['username'];
+$username_session = $_SESSION['pk_username'];
 $sql = "SELECT username, email, nomor_hp, image_profile FROM logsys_pk WHERE username = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $username_session);
