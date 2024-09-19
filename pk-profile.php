@@ -1,14 +1,114 @@
 <?php
-session_start();
 include 'config.php';
+session_start();
 
-// Pastikan pengguna telah login
+// Periksa apakah pengguna sudah login
 if (!isset($_SESSION['username'])) {
-    header("Location: login-pk.php"); // Redirect ke halaman login jika belum login
+    header("Location: login-pk.php");
     exit();
 }
 
-$username = $_SESSION['username']; // Ambil username dari sesi
+// Ambil data pengguna dari session
+$username_session = $_SESSION['username'];
+$sql = "SELECT username, email, nomor_hp, image_profile FROM logsys_pk WHERE username = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $username_session);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $username = $row['username'];
+    $email = $row['email'];
+    $nomor_hp = $row['nomor_hp'];
+    $image_profile = $row['image_profile'];
+} else {
+    echo "Pengguna tidak ditemukan.";
+    exit();
+}
+
+// Proses pembaruan profil
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Proses upload gambar profil
+    if (isset($_FILES['image_profile']) && $_FILES['image_profile']['error'] === UPLOAD_ERR_OK) {
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        $fileType = mime_content_type($_FILES['image_profile']['tmp_name']);
+
+        if (in_array($fileType, $allowedTypes)) {
+            // Pastikan folder uploads ada
+            $uploadDir = 'uploads/';
+            $userFolder = $uploadDir . 'pk-' . $username_session . '/';
+
+
+            if (!is_dir($userFolder)) {
+                mkdir($userFolder, 0777, true); // Buat folder jika belum ada
+            }
+
+            // Buat nama file unik
+            $uploadFile = $userFolder . time() . '_' . basename($_FILES['image_profile']['name']);
+
+            if (move_uploaded_file($_FILES['image_profile']['tmp_name'], $uploadFile)) {
+                // Simpan path file gambar ke database
+                $sql = "UPDATE logsys_pk SET image_profile = ? WHERE username = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("ss", $uploadFile, $username_session);
+
+                if ($stmt->execute()) {
+                    $_SESSION['image_profile'] = $uploadFile;
+                    header("Location: pk-profile.php");
+                    exit();
+                } else {
+                    echo "Terjadi kesalahan saat menyimpan gambar ke database.";
+                }
+            } else {
+                echo "Terjadi kesalahan saat mengupload file.";
+            }
+        } else {
+            echo "Hanya file gambar (JPEG, PNG, GIF) yang diperbolehkan.";
+        }
+    }
+
+    // Update username, email, dan nomor telepon
+    if (!empty($_POST['username']) && !empty($_POST['email']) && !empty($_POST['nomor_hp'])) {
+        $new_username = htmlspecialchars($_POST['username']);
+        $new_email = htmlspecialchars($_POST['email']);
+        $new_nomor_hp = htmlspecialchars($_POST['nomor_hp']);
+
+        // Cek apakah username baru sudah ada di database (selain pengguna saat ini)
+        if ($new_username !== $username_session) {
+            $sql_check_username = "SELECT username FROM logsys_pk WHERE username = ?";
+            $stmt_check = $conn->prepare($sql_check_username);
+            $stmt_check->bind_param("s", $new_username);
+            $stmt_check->execute();
+            $result_check = $stmt_check->get_result();
+
+            if ($result_check->num_rows > 0) {
+                echo "Username sudah digunakan oleh pengguna lain. Silakan pilih username lain.";
+                exit();
+            }
+        }
+
+        // Simpan perubahan ke dalam database
+        $sql = "UPDATE logsys_pk SET username = ?, email = ?, nomor_hp = ? WHERE username = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssss", $new_username, $new_email, $new_nomor_hp, $username_session);
+
+        if ($stmt->execute()) {
+            // Update session dengan data terbaru
+            $_SESSION['username'] = $new_username;
+            $_SESSION['email'] = $new_email;
+            $_SESSION['nomor_hp'] = $new_nomor_hp;
+
+            // Redirect ke halaman profil setelah update berhasil
+            header("Location: pk-profile.php");
+            exit();
+        } else {
+            echo "Terjadi kesalahan saat memperbarui data.";
+        }
+    }
+}
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -64,6 +164,10 @@ $username = $_SESSION['username']; // Ambil username dari sesi
             font-size: 1.5rem;
             font-weight: 600;
         }
+
+        #image_profile_input {
+            display: none;
+        }
     </style>
 </head>
 
@@ -117,7 +221,7 @@ $username = $_SESSION['username']; // Ambil username dari sesi
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center text-light text-decoration-none dropdown-toggle"
                         id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://via.placeholder.com/50" alt="Admin" width="32" height="32"
+                        <img src="<?php echo htmlspecialchars($image_profile); ?>" alt="Admin" width="32" height="32"
                             class="rounded-circle me-2">
                         <strong>Hi,
                             <?php echo htmlspecialchars($username); ?>
@@ -140,31 +244,43 @@ $username = $_SESSION['username']; // Ambil username dari sesi
                     <!-- Profile Section -->
                     <div class="col-lg-4 mb-4 mt-3">
                         <div class="profile-card text-center">
-                            <img src="https://via.placeholder.com/150" alt="Owner Profile Picture">
-                            <h5>Hartono</h5>
+                            <?php if (isset($image_profile) && file_exists($image_profile)): ?>
+                                <img id="image_profile_preview" src="<?php echo $image_profile; ?>" alt="Profile_Image"
+                                    class="profile-image" onclick="document.getElementById('image_profile_input').click();">
+                            <?php else: ?>
+                                <img src="img2/Bulat.png" alt="Default Profile Image" class="profile-image"
+                                    onclick="document.getElementById('image_profile_input').click();">
+                            <?php endif; ?>
+                            <h5><?php echo htmlspecialchars($username); ?></h5>
                             <p class="text-muted">Pemilik Kost</p>
                         </div>
                     </div>
 
                     <div class="col-md-8 mt-3">
                         <h2 class="h4 mb-3">Profile Pemilik Kost</h2>
-                        <form>
+                        <form action="pk-profile.php" method="POST" enctype="multipart/form-data">
+                            <input type="file" name="image_profile" id="image_profile_input" class="form-control"
+                                accept="image/*">
+
                             <div class="mb-3">
                                 <label for="ownerName" class="form-label">Nama Pemilik</label>
-                                <input type="text" class="form-control" id="ownerName" placeholder="Enter Owner Name"
-                                    value="Nama Pemilik">
+                                <input type="text" class="form-control" id="ownerName" name="username"
+                                    placeholder="Enter Owner Name" value="<?php echo htmlspecialchars($username); ?>">
                             </div>
+
                             <div class="mb-3">
                                 <label for="ownerEmail" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="ownerEmail" placeholder="Enter Email"
-                                    value="email@example.com">
+                                <input type="email" class="form-control" id="ownerEmail" name="email"
+                                    placeholder="Enter Email" value="<?php echo htmlspecialchars($email); ?>">
                             </div>
+
                             <div class="mb-3">
                                 <label for="ownerPhone" class="form-label">No. Telepon</label>
-                                <input type="tel" class="form-control" id="ownerPhone" placeholder="Enter Phone Number"
-                                    value="+62-123-456-789">
+                                <input type="tel" class="form-control" id="ownerPhone" name="nomor_hp"
+                                    placeholder="Enter Phone Number" value="<?php echo htmlspecialchars($nomor_hp); ?>">
                             </div>
-                            <button type="submit" class="btn btn-primary">Edit Profile</button>
+
+                            <button type="submit" class="btn btn-success">Simpan Perubahan</button>
                         </form>
                     </div>
                 </div>
@@ -182,6 +298,19 @@ $username = $_SESSION['username']; // Ambil username dari sesi
     </div>
 
     <!-- JavaScript Libraries -->
+    <script>
+        document.getElementById('image_profile_input').addEventListener('change', function (event) {
+            const file = event.target.files[0]; // Get the selected file
+            if (file) {
+                const reader = new FileReader(); // Create a new FileReader to readA the file
+                reader.onload = function (e) {
+                    // Set the src of the preview image to the loaded file data
+                    document.getElementById('image_profile_preview').src = e.target.result;
+                }
+                reader.readAsDataURL(file); // Read the file as a data URL
+            }
+        });
+    </script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/wow/wow.min.js"></script>

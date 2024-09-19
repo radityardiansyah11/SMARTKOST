@@ -2,6 +2,14 @@
 include 'config.php';
 session_start();
 
+$sql = "SELECT id, username, email, password, created_at, profile_image FROM login_system";
+$result = mysqli_query($conn, $sql);
+
+// Cek apakah query berhasil
+if (!$result) {
+    die("Query error: " . mysqli_error($conn));
+}
+
 // Handle delete request
 if (isset($_GET['delete'])) {
     $id = intval($_GET['delete']);
@@ -194,7 +202,7 @@ $total_email = $email_data['total_email'];
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center text-light text-decoration-none dropdown-toggle"
                         id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://via.placeholder.com/50" alt="Admin" width="32" height="32"
+                        <img src="img2/mini logo smartkost.png" alt="Admin" width="32" height="32"
                             class="rounded-circle me-2">
                         <strong>Admin</strong>
                     </a>
@@ -339,8 +347,8 @@ $total_email = $email_data['total_email'];
                                     <th scope="col">ID</th>
                                     <th scope="col">Profil</th>
                                     <th scope="col">User</th>
-                                    <th scope="col">email</th>
-                                    <th scope="col">password</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Password</th>
                                     <th scope="col">Tanggal</th>
                                     <th scope="col">Actions</th>
                                 </tr>
@@ -351,8 +359,10 @@ $total_email = $email_data['total_email'];
                                         <td class="align-middle"><?php echo $row['id']; ?></td>
                                         <td class="align-middle">
                                             <div class="d-flex justify-content-center align-items-center">
-                                                <img src="img2/Bulat.png" class="rounded-circle"
-                                                    style="width: 50px; height: 50px;">
+                                                <!-- Tampilkan gambar profil sesuai dengan database -->
+                                                <img src="<?php echo !empty($row['profile_image']) ? $row['profile_image'] : 'img2/Bulat.png'; ?>"
+                                                    class="rounded-circle"
+                                                    style="width: 50px; height: 50px; object-fit: cover;">
                                             </div>
                                         </td>
                                         <td class="align-middle"><strong><?php echo $row['username']; ?></strong></td>
@@ -363,11 +373,12 @@ $total_email = $email_data['total_email'];
                                         <td class="align-middle"><?php echo $row['created_at']; ?></td>
                                         <td class="mt-3">
                                             <a href="edit-user.php?id=<?php echo $row['id']; ?>"
-                                                class="btn btn-sm btn-primary mt-2" style="width:57px ;">Edit</a>
+                                                class="btn btn-sm btn-primary mt-2" style="width:57px;">Edit</a>
                                             <a href="?delete=<?php echo $row['id']; ?>"
                                                 class="btn btn-sm btn-danger mt-2 btn-trash"
-                                                onclick="return confirm('Apa kamu yakin akan menghapus?');"><img
-                                                    src="img2/sampah.png" class="w-75"> </a>
+                                                onclick="return confirm('Apa kamu yakin akan menghapus?');">
+                                                <img src="img2/sampah.png" class="w-75">
+                                            </a>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>

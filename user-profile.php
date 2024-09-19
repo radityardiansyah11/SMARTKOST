@@ -50,8 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("ss", $uploadFile, $username_session);
 
+                // Setelah gambar berhasil diunggah, simpan ke dalam session
                 if ($stmt->execute()) {
-                    $_SESSION['profile_image'] = $uploadFile;
+                    $_SESSION['profile_image'] = $uploadFile; // Simpan jalur gambar di session
                     echo "Profile image updated successfully.";
                     header("Location: user-profile.php");
                     exit();

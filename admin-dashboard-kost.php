@@ -236,7 +236,7 @@ $total_email = $email_data['total_email'];
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center text-light text-decoration-none dropdown-toggle"
                         id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://via.placeholder.com/50" alt="Admin" width="32" height="32"
+                        <img src="img2/mini logo smartkost.png" alt="Admin" width="32" height="32"
                             class="rounded-circle me-2">
                         <strong>Admin</strong>
                     </a>

@@ -18,8 +18,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         if (password_verify($password, $user['password'])) {
             // Password benar, login berhasil
-            $_SESSION['username'] = $user['username']; 
-            
+            $_SESSION['username'] = $user['username'];
+
+            // Ambil gambar profil dari database
+            $sql_profile_image = "SELECT profile_image FROM login_system WHERE username = ?";
+            $stmt_profile = $conn->prepare($sql_profile_image);
+            $stmt_profile->bind_param("s", $user['username']);
+            $stmt_profile->execute();
+            $result_profile = $stmt_profile->get_result();
+
+            if ($result_profile->num_rows > 0) {
+                $row_profile = $result_profile->fetch_assoc();
+                $_SESSION['profile_image'] = $row_profile['profile_image']; // Set gambar profil ke session
+            }
+
             // Cek apakah ini admin
             if ($email === 'admin@smartkost.com') {
                 header("Location: admin-dashboard.php");
@@ -38,7 +50,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">

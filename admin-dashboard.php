@@ -2,6 +2,14 @@
 include 'config.php';
 session_start();
 
+$sql = "SELECT id, username, email, password, created_at, profile_image FROM login_system";
+$result = mysqli_query($conn, $sql);
+
+// Cek apakah query berhasil
+if (!$result) {
+    die("Query error: " . mysqli_error($conn));
+}
+
 // Handle delete request for user
 if (isset($_GET['delete_user'])) {
     $id = intval($_GET['delete_user']);
@@ -21,6 +29,14 @@ if (isset($_GET['delete_user'])) {
     } else {
         echo "Error deleting record: " . mysqli_error($conn);
     }
+}
+
+$sql = "SELECT id, username, email, password, nomor_hp, created_at, image_profile FROM logsys_pk";
+$result = mysqli_query($conn, $sql);
+
+// Cek apakah query berhasil
+if (!$result) {
+    die("Query error: " . mysqli_error($conn));
 }
 
 // Handle delete request for pemilik kost
@@ -216,7 +232,7 @@ $total_email = $email_data['total_email'];
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center text-light text-decoration-none dropdown-toggle"
                         id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://via.placeholder.com/50" alt="Admin" width="32" height="32"
+                        <img src="img2/mini logo smartkost.png" alt="Admin" width="32" height="32"
                             class="rounded-circle me-2">
                         <strong>Admin</strong>
                     </a>
@@ -326,8 +342,9 @@ $total_email = $email_data['total_email'];
                                         <td class="align-middle"><?php echo $row['id']; ?></td>
                                         <td class="align-middle">
                                             <div class="d-flex justify-content-center align-items-center">
-                                                <img src="img2/Bulat.png" class="rounded-circle"
-                                                    style="width: 50px; height: 50px;">
+                                            <img src="<?php echo !empty($row['profile_image']) ? $row['profile_image'] : 'img2/Bulat.png'; ?>"
+                                                    class="rounded-circle"
+                                                    style="width: 50px; height: 50px; object-fit: cover;">
                                             </div>
                                         </td>
                                         <td class="align-middle"><strong><?php echo $row['username']; ?></strong></td>
@@ -359,31 +376,40 @@ $total_email = $email_data['total_email'];
                             <thead class="table text-light" style="background-color: #009270;">
                                 <tr>
                                     <th scope="col">ID</th>
-                                    <th scope="col">Pemilik Kost</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">No Telp</th>
-                                    <th scope="col">Password</th>
+                                    <th scope="col">Profil</th>
+                                    <th scope="col">nama</th>
+                                    <th scope="col">email</th>
+                                    <th scope="col">no telp</th>
+                                    <th scope="col">password</th>
                                     <th scope="col">Tanggal</th>
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php while ($row = mysqli_fetch_assoc($result_pk)): ?>
+                                <?php while ($row = mysqli_fetch_assoc($result)): ?>
                                     <tr>
-                                        <td class="align-middle"><?php echo $row['id']; ?></td>
-                                        <td class="align-middle"><strong><?php echo $row['username']; ?></strong></td>
+                                        <th class="align-middle" scope="row"><?php echo $row['id']; ?></th>
+                                        <td class="align-middle">
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <!-- Tampilkan gambar profil sesuai dengan database -->
+                                                <img src="<?php echo !empty($row['image_profile']) ? $row['image_profile'] : 'img2/Bulat.png'; ?>"
+                                                    class="rounded-circle"
+                                                    style="width: 50px; height: 50px; object-fit: cover;">
+                                            </div>
+                                        </td>
+                                        <td class="align-middle"><strong><?php echo $row['username']; ?></td>
                                         <td class="align-middle"><?php echo $row['email']; ?></td>
                                         <td class="align-middle"><?php echo $row['nomor_hp']; ?></td>
                                         <td class="align-middle"><?php echo substr($row['password'], 0, 10) . '...'; ?></td>
+
                                         <td class="align-middle"><?php echo $row['created_at']; ?></td>
                                         <td class="mt-3">
                                             <a href="edit-pk.php?id=<?php echo $row['id']; ?>"
-                                                class="btn btn-sm btn-primary mt-2" style="width:57px;">Edit</a>
-                                            <a href="?delete_pk=<?php echo $row['id']; ?>"
+                                                class="btn btn-sm btn-primary mt-2" style="width:57px ;">Edit</a>
+                                            <a href="?delete=<?php echo $row['id']; ?>"
                                                 class="btn btn-sm btn-danger mt-2 btn-trash"
-                                                onclick="return confirm('Apa kamu yakin akan menghapus pemilik kost ini?');">
-                                                <img src="img2/sampah.png" class="w-75">
-                                            </a>
+                                                onclick="return confirm('Apa kamu yakin akan menghapus?');"><img
+                                                    src="img2/sampah.png" class="w-75"> </a>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>

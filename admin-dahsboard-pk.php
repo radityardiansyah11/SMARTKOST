@@ -2,6 +2,14 @@
 include 'config.php';
 session_start();
 
+$sql = "SELECT id, username, email, password, nomor_hp, created_at, image_profile FROM logsys_pk";
+$result = mysqli_query($conn, $sql);
+
+// Cek apakah query berhasil
+if (!$result) {
+    die("Query error: " . mysqli_error($conn));
+}
+
 // Mendapatkan semua sesi login pengguna
 $sql = "SELECT * FROM logsys_pk ORDER BY id ASC";
 $result = mysqli_query($conn, $sql);
@@ -195,7 +203,7 @@ $total_email = $email_data['total_email'];
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center text-light text-decoration-none dropdown-toggle"
                         id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://via.placeholder.com/50" alt="Admin" width="32" height="32"
+                        <img src="img2/mini logo smartkost.png" alt="Admin" width="32" height="32"
                             class="rounded-circle me-2">
                         <strong>Admin</strong>
                     </a>
@@ -345,11 +353,11 @@ $total_email = $email_data['total_email'];
                             <thead class="table text-light" style="background-color: #009270;">
                                 <tr>
                                     <th scope="col">ID</th>
-                                    <th scope="col">Pemilik kost</th>
+                                    <th scope="col">Profil</th>
+                                    <th scope="col">nama</th>
                                     <th scope="col">email</th>
                                     <th scope="col">no telp</th>
                                     <th scope="col">password</th>
-
                                     <th scope="col">Tanggal</th>
                                     <th scope="col">Actions</th>
                                 </tr>
@@ -358,6 +366,14 @@ $total_email = $email_data['total_email'];
                                 <?php while ($row = mysqli_fetch_assoc($result)): ?>
                                     <tr>
                                         <th class="align-middle" scope="row"><?php echo $row['id']; ?></th>
+                                        <td class="align-middle">
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <!-- Tampilkan gambar profil sesuai dengan database -->
+                                                <img src="<?php echo !empty($row['image_profile']) ? $row['image_profile'] : 'img2/Bulat.png'; ?>"
+                                                    class="rounded-circle"
+                                                    style="width: 50px; height: 50px; object-fit: cover;">
+                                            </div>
+                                        </td>
                                         <td class="align-middle"><strong><?php echo $row['username']; ?></td>
                                         <td class="align-middle"><?php echo $row['email']; ?></td>
                                         <td class="align-middle"><?php echo $row['nomor_hp']; ?></td>
