@@ -100,7 +100,7 @@
                     <div class="d-flex">
                         <div class="me-3 text-end">
                             <h6 class="mt-2">Halo,
-                                <?php echo htmlspecialchars($username); ?>
+                                
                             </h6>
 
                         </div>

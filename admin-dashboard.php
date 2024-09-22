@@ -31,7 +31,7 @@ if (isset($_GET['delete_user'])) {
     }
 }
 
-$sql = "SELECT id, username, email, password, nomor_hp, created_at, image_profile FROM logsys_pk";
+$sql = "SELECT id, pkname, email, password, nomor_hp, created_at, image_profile FROM logsys_pk";
 $result = mysqli_query($conn, $sql);
 
 // Cek apakah query berhasil
@@ -397,7 +397,7 @@ $total_email = $email_data['total_email'];
                                                     style="width: 50px; height: 50px; object-fit: cover;">
                                             </div>
                                         </td>
-                                        <td class="align-middle"><strong><?php echo $row['username']; ?></td>
+                                        <td class="align-middle"><strong><?php echo $row['pkname']; ?></td>
                                         <td class="align-middle"><?php echo $row['email']; ?></td>
                                         <td class="align-middle"><?php echo $row['nomor_hp']; ?></td>
                                         <td class="align-middle"><?php echo substr($row['password'], 0, 10) . '...'; ?></td>

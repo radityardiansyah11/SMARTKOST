@@ -575,7 +575,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 style="width: 100px; height: 100px;">
                                 <i class="fa fa-search fa-3x text-white"></i>
                             </div>
-                            <h5 class="mt-4">Cari Kost kost</h5>
+                            <h5 class="mt-4">Cari Kost</h5>
                             <hr class="w-25 mx-auto bg-primary mb-1">
                             <hr class="w-50 mx-auto bg-primary mt-0">
                             <p class="mb-0">Cari kost yang anda inginkan sesuai dengan yang anda butuhkan</p>

@@ -3,22 +3,22 @@ include 'config.php';
 session_start();
 
 // Periksa apakah pengguna sudah login
-if (!isset($_SESSION['pk_username']))  {
+if (!isset($_SESSION['pkname']))  {
     header("Location: login-pk.php");
     exit();
 }
 
 // Ambil data pengguna dari session
-$username_session = $_SESSION['pk_username'];
-$sql = "SELECT username, email, nomor_hp, image_profile FROM logsys_pk WHERE username = ?";
+$pkname_session = $_SESSION['pkname'];
+$sql = "SELECT pkname, email, nomor_hp, image_profile FROM logsys_pk WHERE pkname = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $username_session);
+$stmt->bind_param("s", $pkname_session);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    $username = $row['username'];
+    $pkname = $row['pkname'];
     $email = $row['email'];
     $nomor_hp = $row['nomor_hp'];
     $image_profile = $row['image_profile'];
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (in_array($fileType, $allowedTypes)) {
             // Pastikan folder uploads ada
             $uploadDir = 'uploads/';
-            $userFolder = $uploadDir . 'pk-' . $username_session . '/';
+            $userFolder = $uploadDir . 'pk-' . $pkname_session . '/';
 
 
             if (!is_dir($userFolder)) {
@@ -49,9 +49,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (move_uploaded_file($_FILES['image_profile']['tmp_name'], $uploadFile)) {
                 // Simpan path file gambar ke database
-                $sql = "UPDATE logsys_pk SET image_profile = ? WHERE username = ?";
+                $sql = "UPDATE logsys_pk SET image_profile = ? WHERE pkname = ?";
                 $stmt = $conn->prepare($sql);
-                $stmt->bind_param("ss", $uploadFile, $username_session);
+                $stmt->bind_param("ss", $uploadFile, $pkname_session);
 
                 if ($stmt->execute()) {
                     $_SESSION['image_profile'] = $uploadFile;
@@ -69,16 +69,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Update username, email, dan nomor telepon
-    if (!empty($_POST['username']) && !empty($_POST['email']) && !empty($_POST['nomor_hp'])) {
-        $new_username = htmlspecialchars($_POST['username']);
+    if (!empty($_POST['pkname']) && !empty($_POST['email']) && !empty($_POST['nomor_hp'])) {
+        $new_pkname = htmlspecialchars($_POST['pkname']);
         $new_email = htmlspecialchars($_POST['email']);
         $new_nomor_hp = htmlspecialchars($_POST['nomor_hp']);
 
         // Cek apakah username baru sudah ada di database (selain pengguna saat ini)
-        if ($new_username !== $username_session) {
-            $sql_check_username = "SELECT username FROM logsys_pk WHERE username = ?";
-            $stmt_check = $conn->prepare($sql_check_username);
-            $stmt_check->bind_param("s", $new_username);
+        if ($new_pkname !== $pkname_session) {
+            $sql_check_pkname = "SELECT pkname FROM logsys_pk WHERE pkname = ?";
+            $stmt_check = $conn->prepare($sql_check_pkname);
+            $stmt_check->bind_param("s", $new_pkname);
             $stmt_check->execute();
             $result_check = $stmt_check->get_result();
 
@@ -89,13 +89,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Simpan perubahan ke dalam database
-        $sql = "UPDATE logsys_pk SET username = ?, email = ?, nomor_hp = ? WHERE username = ?";
+        $sql = "UPDATE logsys_pk SET pkname = ?, email = ?, nomor_hp = ? WHERE pkname = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssss", $new_username, $new_email, $new_nomor_hp, $username_session);
+        $stmt->bind_param("ssss", $new_pkname, $new_email, $new_nomor_hp, $pkname_session);
 
         if ($stmt->execute()) {
             // Update session dengan data terbaru
-            $_SESSION['username'] = $new_username;
+            $_SESSION['pkname'] = $new_pkname;
             $_SESSION['email'] = $new_email;
             $_SESSION['nomor_hp'] = $new_nomor_hp;
 
@@ -116,7 +116,7 @@ $conn->close();
 
 <head>
     <meta charset="utf-8">
-    <title><?php echo htmlspecialchars($username); ?> Dashboard - Profile Pemilik Kost</title>
+    <title><?php echo htmlspecialchars($pkname); ?> Dashboard - Profile Pemilik Kost</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -163,6 +163,17 @@ $conn->close();
         .profile-card h5 {
             font-size: 1.5rem;
             font-weight: 600;
+        }
+
+        .form-control {
+            border-radius: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+
+        .btn {
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
         }
 
         #image_profile_input {
@@ -224,7 +235,7 @@ $conn->close();
                         <img src="<?php echo htmlspecialchars($image_profile); ?>" alt="Admin" width="32" height="32"
                             class="rounded-circle me-2">
                         <strong>Hi,
-                            <?php echo htmlspecialchars($username); ?>
+                            <?php echo htmlspecialchars($pkname); ?>
                         </strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-light text-small shadow">
@@ -251,7 +262,7 @@ $conn->close();
                                 <img src="img2/Bulat.png" alt="Default Profile Image" class="profile-image"
                                     onclick="document.getElementById('image_profile_input').click();">
                             <?php endif; ?>
-                            <h5><?php echo htmlspecialchars($username); ?></h5>
+                            <h5><?php echo htmlspecialchars($pkname); ?></h5>
                             <p class="text-muted">Pemilik Kost</p>
                         </div>
                     </div>
@@ -264,8 +275,8 @@ $conn->close();
 
                             <div class="mb-3">
                                 <label for="ownerName" class="form-label">Nama Pemilik</label>
-                                <input type="text" class="form-control" id="ownerName" name="username"
-                                    placeholder="Enter Owner Name" value="<?php echo htmlspecialchars($username); ?>">
+                                <input type="text" class="form-control" id="ownerName" name="pkname"
+                                    placeholder="Enter Owner Name" value="<?php echo htmlspecialchars($pkname); ?>">
                             </div>
 
                             <div class="mb-3">
@@ -310,6 +321,13 @@ $conn->close();
                 reader.readAsDataURL(file); // Read the file as a data URL
             }
         });
+
+        function confirmLogout() {
+            if (confirm("Anda yakin ingin logout?")) {
+                // Jika konfirmasi diterima, arahkan ke logout.php
+                window.location.href = "logout.php";
+            }
+        }
     </script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>

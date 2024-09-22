@@ -68,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         .btn {
             border-radius:10px;
+            box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
         }
     </style>
 </head>
@@ -92,8 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="password" id="password" name="password" class="form-control" value="<?php echo htmlspecialchars($user['password']); ?>" required>
             </div>
             
-            <button type="submit" class="btn btn-primary">Update</button>
-            <a href="admin-dashboard-user.php" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+            <a href="admin-dashboard-user.php" class="btn btn-secondary">Kembali</a>
         </form>
     </div>
 

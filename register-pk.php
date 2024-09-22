@@ -5,7 +5,7 @@ include 'config.php'; // Pastikan config.php mengandung koneksi yang benar ke da
 $error_message = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = htmlspecialchars(trim($_POST['username']));
+    $pkname = htmlspecialchars(trim($_POST['pkname']));
     $email = filter_var(trim($_POST['email']), FILTER_VALIDATE_EMAIL);
     $nomor_hp = htmlspecialchars(trim($_POST['nomor_hp']));
     $password = trim($_POST['password']);
@@ -32,13 +32,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
             // Query untuk menyimpan data ke tabel logsys_pk (pemilik kost)
-            $sql = "INSERT INTO logsys_pk (username, email, nomor_hp, password) VALUES (?, ?, ?, ?)";
+            $sql = "INSERT INTO logsys_pk (pkname, email, nomor_hp, password) VALUES (?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ssss", $username, $email, $nomor_hp, $hashed_password);
+            $stmt->bind_param("ssss", $pkname, $email, $nomor_hp, $hashed_password);
 
             if ($stmt->execute()) {
                 // Setelah pendaftaran berhasil, simpan informasi pemilik kost ke dalam sesi
-                $_SESSION['username'] = $username;
+                $_SESSION['pkname'] = $pkname;
 
                 // Arahkan ke halaman dashboard-pk (pemilik kost)
                 header("Location: pk-dashboard.php");
@@ -217,7 +217,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <h5 class="text-center fw-normal mb-1 pb-3 text-muted">Daftar Akun Pemilik Kost</h5>
 
                     <form method="POST" action="">
-                        <input type="text" name="username" placeholder="Nama"
+                        <input type="text" name="pkname" placeholder="Nama"
                             class="form-control form-control-lg">
 
                         <input type="email" name="email" placeholder="Email"

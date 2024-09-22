@@ -442,5 +442,3 @@ $result = $conn->query($query);
 </body>
 
 </html>
-
-fungsikan jenis kost di sebelah "cari kost anda" sesuai dengan jenis kost

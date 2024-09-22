@@ -2,7 +2,7 @@
 include 'config.php';
 session_start();
 
-$sql = "SELECT id, username, email, password, nomor_hp, created_at, image_profile FROM logsys_pk";
+$sql = "SELECT id, pkname, email, password, nomor_hp, created_at, image_profile FROM logsys_pk";
 $result = mysqli_query($conn, $sql);
 
 // Cek apakah query berhasil
@@ -319,8 +319,8 @@ $total_email = $email_data['total_email'];
                                     <div class="modal-body">
                                         <form action="add-pk.php" method="POST">
                                             <div class="mb-3">
-                                                <label for="username" class="form-label">Nama Pemilik Kost</label>
-                                                <input type="text" class="form-control" id="username" name="username"
+                                                <label for="pkname" class="form-label">Nama Pemilik Kost</label>
+                                                <input type="text" class="form-control" id="pkname" name="pkname"
                                                     required>
                                             </div>
                                             <div class="mb-3">
@@ -374,7 +374,7 @@ $total_email = $email_data['total_email'];
                                                     style="width: 50px; height: 50px; object-fit: cover;">
                                             </div>
                                         </td>
-                                        <td class="align-middle"><strong><?php echo $row['username']; ?></td>
+                                        <td class="align-middle"><strong><?php echo $row['pkname']; ?></td>
                                         <td class="align-middle"><?php echo $row['email']; ?></td>
                                         <td class="align-middle"><?php echo $row['nomor_hp']; ?></td>
                                         <td class="align-middle"><?php echo substr($row['password'], 0, 10) . '...'; ?></td>

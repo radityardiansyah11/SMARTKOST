@@ -23,6 +23,9 @@ if ($result->num_rows > 0) {
     // Output data of the kost
     $row = $result->fetch_assoc();
 
+    // Menghitung harga setelah diskon
+    $harga_setelah_diskon = $row['harga'] - $row['diskon'];
+
     // Fetch spesifikasi kamar
     $spesifikasi_sql = "SELECT spesifikasi FROM spesifikasi_kamar WHERE kost_id = '$kost_id'";
     $spesifikasi_result = $conn->query($spesifikasi_sql);
@@ -76,9 +79,17 @@ $conn->close();
     <link href="css/style.css" rel="stylesheet">
 
     <link href="css/detail-kost.css" rel="stylesheet">
+    <style>
+        .profile-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    </style>
 </head>
 
-<body>
+<body class="bg-white">
     <div class="container-xxl bg-white p-0">
         <!-- Spinner Start -->
         <div id="spinner"
@@ -120,7 +131,7 @@ $conn->close();
                         </div>
                         <a href="user-profile.php">
                             <img src="<?php echo isset($_SESSION['profile_image']) ? $_SESSION['profile_image'] : 'img2/Bulat.png'; ?>"
-                                alt="profile" class="mt-1" style="width: 50px; height: 50px;">
+                                alt="profile" class="profile-image  mt-1" style="width: 50px; height: 50px;">
                         </a>
                     </div>
                 </div>
@@ -212,6 +223,7 @@ $conn->close();
                 <!-- card bayar -->
                 <div class="card col-md-4 p-4 card-shadow">
                     <!-- Discount and Price -->
+                    <!-- Discount and Price -->
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="icon-text text-danger mt-3">
@@ -224,8 +236,8 @@ $conn->close();
                             <?php echo number_format($row['harga'], 0, ',', '.'); ?></span>
                     </div>
                     <div class="d-flex">
-                        <p class="final-price mt-2 text-dark">Rp.
-                            <?php echo number_format($row['harga'], 0, ',', '.'); ?>
+                        <p class="final-price mt-2 text-dark" id="finalPrice">Rp.
+                            <?php echo number_format($harga_setelah_diskon, 0, ',', '.'); ?>
                         </p>
                         <span class="mt-3 ml-2">/bulan</span>
                     </div>
@@ -235,11 +247,15 @@ $conn->close();
                         <input type="date" class="form-control" value="2024-08-22">
                         <select class="form-select" id="rentPeriod" onchange="calculateTotal()">
                             <option value="" selected>Waktu kost</option>
-                            <option value="month">Per Bulan</option>
+                            <option value="month">1 Bulan</option>
+                            <option value="3months">3 Bulan</option>
+                            <option value="6months">6 Bulan</option>
                             <option value="year">Per Tahun</option>
                         </select>
+
                     </div>
 
+                    <!-- Total Price -->
                     <!-- Total Price -->
                     <div id="totalPrice" class="mb-3" style="display: none;">
                         <h5>Total Harga: <span id="totalAmount">Rp0</span></h5>
@@ -333,6 +349,39 @@ $conn->close();
 
     <!-- JavaScript Libraries -->
     <script>
+        function calculateTotal() {
+            var hargaSetelahDiskon = <?php echo $harga_setelah_diskon; ?>; // Harga setelah diskon dari PHP
+            var rentPeriod = document.getElementById('rentPeriod').value; // Nilai waktu sewa (bulan/tahun)
+
+            var totalAmount = 0;
+
+            // Hitung total berdasarkan periode yang dipilih
+            switch (rentPeriod) {
+                case 'month':
+                    totalAmount = hargaSetelahDiskon;
+                    break;
+                case '3months':
+                    totalAmount = hargaSetelahDiskon * 3;
+                    break;
+                case '6months':
+                    totalAmount = hargaSetelahDiskon * 6;
+                    break;
+                case 'year':
+                    totalAmount = hargaSetelahDiskon * 12;
+                    break;
+            }
+
+            // Tampilkan total harga
+            document.getElementById('totalAmount').innerText = 'Rp. ' + totalAmount.toLocaleString();
+
+            // Tampilkan total price jika ada rent period
+            document.getElementById('totalPrice').style.display = (rentPeriod ? 'block' : 'none');
+        }
+
+
+        // Panggil fungsi ini saat halaman selesai dimuat
+        window.onload = calculateTotal;
+
         function confirmLogout() {
             if (confirm("Anda yakin ingin logout?")) {
                 // Jika konfirmasi diterima, arahkan ke logout.php

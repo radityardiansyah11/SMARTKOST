@@ -3,12 +3,12 @@ session_start();
 include 'config.php';
 
 // Pastikan pengguna telah login
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['pkname'])) {
     header("Location: login-pk.php"); // Redirect ke halaman login jika belum login
     exit();
 }
 
-$username = $_SESSION['username']; // Ambil username dari sesi
+$pkname = $_SESSION['pkname']; // Ambil username dari sesi
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +16,7 @@ $username = $_SESSION['username']; // Ambil username dari sesi
 
 <head>
     <meta charset="utf-8">
-    <title><?php echo htmlspecialchars($username); ?> Dashboard - SMARTKOST</title>
+    <title><?php echo htmlspecialchars($pkname); ?> Dashboard - SMARTKOST</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -148,10 +148,10 @@ $username = $_SESSION['username']; // Ambil username dari sesi
                     <a href="#" class="d-flex align-items-center text-light text-decoration-none dropdown-toggle"
                         id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                         <!-- gambarprofile -->
-                        <img src="<?php echo isset($_SESSION['image_profile']) ? htmlspecialchars($_SESSION['image_profile']) : 'https://via.placeholder.com/50'; ?>" alt="Admin" width="32" height="32"
+                        <img src="<?php echo isset($_SESSION['image_profile']) ? $_SESSION['image_profile'] : 'img2/Bulat.png'; ?>" alt="Admin" width="32" height="32"
                             class="rounded-circle me-2">
                         <strong>Hi,
-                            <?php echo htmlspecialchars($username); ?>
+                            <?php echo htmlspecialchars($pkname); ?>
                         </strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-light text-small shadow">

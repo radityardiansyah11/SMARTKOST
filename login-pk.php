@@ -2,53 +2,54 @@
 include 'config.php'; // Pastikan file ini mengandung koneksi database yang benar
 session_start();
 
+$error_message = ''; // Variabel untuk menyimpan pesan kesalahan
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['email']) && isset($_POST['password'])) {
         $email = $_POST['email'];
         $password = $_POST['password'];
 
         // Query untuk mendapatkan user berdasarkan email
-        $sql = "SELECT id, username, password FROM logsys_pk WHERE email = ?";
+        $sql = "SELECT id, pkname, password FROM logsys_pk WHERE email = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
-            $user = $result->fetch_assoc();
+            $pk = $result->fetch_assoc();
             
             // Verifikasi password
-            if (password_verify($password, $user['password'])) {
+            if (password_verify($password, $pk['password'])) {
                 // Password benar, login berhasil
-                $_SESSION['user_id'] = $user['id']; 
-                $_SESSION['pk_username'] = $user['username']; // Simpan username dalam sesi
+                $_SESSION['user_id'] = $pk['id']; 
+                $_SESSION['pkname'] = $pk['pkname']; // Simpan pkname dalam sesi
                 
                 // Arahkan ke dashboard
                 header("Location: pk-dashboard.php");
                 exit();
             } else {
-                echo "Password salah!";
+                $error_message = 'Password salah!'; // Set pesan kesalahan jika password salah
             }
         } else {
-            echo "Pengguna tidak ditemukan!";
+            $error_message = 'Pengguna tidak ditemukan!'; // Set pesan kesalahan jika pengguna tidak ditemukan
         }
 
         $stmt->close();
     } else {
-        echo "Email dan password diperlukan!";
+        $error_message = 'Email dan password diperlukan!'; // Set pesan jika email dan password tidak diisi
     }
 
     $conn->close();
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
-    <title>sign in-SMARTKOST</title>
+    <title>Sign In - SMARTKOST</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -78,13 +79,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <style>
         .gradient-custom-2 {
-            /* fallback for old browsers */
-            background: #fccb90;
-
-            /* Chrome 10-25, Safari 5.1-6 */
-            background: -webkit-linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
-
-            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
             background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
         }
 
@@ -203,14 +197,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <h5 class="text-center fw-normal mb-1 pb-3 text-muted">Login Pemilik Kost</h5>
 
                     <form method="POST" action="login-pk.php">
-                        <input type="email" name="email" placeholder="Email" class="form-control form-control-lg">
-                        <input type="password" name="password" placeholder="Password"
-                            class="form-control form-control-lg">
+                        <input type="email" name="email" placeholder="Email" class="form-control form-control-lg" required>
+                        <input type="password" name="password" placeholder="Password" class="form-control form-control-lg" required>
                         <div class="d-flex justify-content-center">
                             <button type="submit" class="btn btn-dark btn-lg btn-block mt-4">Masuk</button>
                         </div>
-                        <p class="register" style="color: #8d8d8d;">Tidak punya akun? <a
-                                href="register-pk.php"><strong>Daftar di sini</strong></a></p>
+                        <p class="register" style="color: #8d8d8d;">Tidak punya akun? <a href="register-pk.php"><strong>Daftar di sini</strong></a></p>
                     </form>
 
                 </div>
@@ -229,5 +221,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+
+    <!-- Script untuk menampilkan alert jika ada pesan kesalahan -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var errorMessage = "<?php echo $error_message; ?>";
+            if (errorMessage) {
+                alert(errorMessage);
+            }
+        });
+    </script>
 </body>
-</body>
+
+</html>

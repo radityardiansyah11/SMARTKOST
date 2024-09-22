@@ -3,13 +3,13 @@ include 'config.php';
 session_start();
 
 // Periksa apakah pengguna sudah login
-if (!isset($_SESSION['user_username'])) {
+if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
 
 // Ambil data pengguna dari database
-$username_session = $_SESSION['user_username'];
+$username_session = $_SESSION['username'];
 $sql = "SELECT username, email, profile_image FROM login_system WHERE username = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $username_session);
@@ -163,6 +163,12 @@ $conn->close();
 
         .form-control {
             border-radius: 30px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+
+        .btn {
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         .form-section {
@@ -232,8 +238,8 @@ $conn->close();
 
                     <!-- Tombol Save Changes dan Back to Home -->
                     <div class="button-group">
-                        <button type="submit" class="btn btn-primary text-white">Save Changes</button>
-                        <a href="user-home.php" class="btn btn-secondary text-white">Back to Home</a>
+                        <button type="submit" class="btn btn-primary text-white">Simpan Perubahan</button>
+                        <a href="user-home.php" class="btn btn-secondary text-white">Kembali</a>
                     </div>
                 </form>
             </div>

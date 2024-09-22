@@ -2,6 +2,8 @@
 include 'config.php';
 session_start();
 
+$error_message = ''; // Variabel untuk menyimpan pesan kesalahan
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
@@ -18,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         if (password_verify($password, $user['password'])) {
             // Password benar, login berhasil
-            $_SESSION['user_username'] = $user['username'];
+            $_SESSION['username'] = $user['username'];
 
             // Ambil gambar profil dari database
             $sql_profile_image = "SELECT profile_image FROM login_system WHERE username = ?";
@@ -35,21 +37,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Cek apakah ini admin
             if ($email === 'admin@smartkost.com') {
                 header("Location: admin-dashboard.php");
+                exit(); // Pindah halaman hanya jika login admin berhasil
             } else {
                 header("Location: user-home.php");
+                exit(); // Pindah halaman jika login user berhasil
             }
-            exit();
         } else {
-            echo "Password salah!";
+            $error_message = 'Password salah!'; // Set pesan kesalahan jika password salah
         }
     } else {
-        echo "Pengguna tidak ditemukan!";
+        $error_message = 'Pengguna tidak ditemukan!'; // Set pesan kesalahan jika pengguna tidak ditemukan
     }
 
     $stmt->close();
     $conn->close();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -228,6 +232,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Section: Design Block -->
 
     <!-- JavaScript Libraries -->
+    <script>
+   document.addEventListener("DOMContentLoaded", function() {
+            // Cek apakah ada pesan kesalahan dari PHP
+            var errorMessage = "<?php echo $error_message; ?>";
+            if (errorMessage) {
+                // Tampilkan alert dengan pesan kesalahan
+                alert(errorMessage);
+            }
+        });
+</script>
+
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/wow/wow.min.js"></script>
