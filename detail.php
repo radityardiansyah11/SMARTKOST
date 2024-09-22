@@ -13,6 +13,9 @@ if ($result->num_rows > 0) {
     // Output data of the kost
     $row = $result->fetch_assoc();
 
+    // Menghitung harga setelah diskon
+    $harga_setelah_diskon = $row['harga'] - $row['diskon'];
+
     // Fetch spesifikasi kamar
     $spesifikasi_sql = "SELECT spesifikasi FROM spesifikasi_kamar WHERE kost_id = '$kost_id'";
     $spesifikasi_result = $conn->query($spesifikasi_sql);
@@ -383,8 +386,8 @@ $conn->close();
                             <?php echo number_format($row['harga'], 0, ',', '.'); ?></span>
                     </div>
                     <div class="d-flex">
-                        <p class="final-price mt-2 text-dark">Rp.
-                            <?php echo number_format($row['harga'], 0, ',', '.'); ?>
+                        <p class="final-price mt-2 text-dark" id="finalPrice">Rp.
+                            <?php echo number_format($harga_setelah_diskon, 0, ',', '.'); ?>
                         </p>
                         <span class="mt-3 ml-2">/bulan</span>
                     </div>
@@ -394,7 +397,9 @@ $conn->close();
                         <input type="date" class="form-control" value="2024-08-22">
                         <select class="form-select" id="rentPeriod" onchange="calculateTotal()">
                             <option value="" selected>Waktu kost</option>
-                            <option value="month">Per Bulan</option>
+                            <option value="month">1 Bulan</option>
+                            <option value="3months">3 Bulan</option>
+                            <option value="6months">6 Bulan</option>
                             <option value="year">Per Tahun</option>
                         </select>
                     </div>
@@ -486,48 +491,38 @@ $conn->close();
 
         <!-- JavaScript Libraries -->
         <script>
-            const rentPeriod = document.getElementById('rentPeriod');
-            const rentRange = document.getElementById('rentRange');
+           function calculateTotal() {
+            var hargaSetelahDiskon = <?php echo $harga_setelah_diskon; ?>; // Harga setelah diskon dari PHP
+            var rentPeriod = document.getElementById('rentPeriod').value; // Nilai waktu sewa (bulan/tahun)
 
-            rentPeriod.addEventListener('change', function () {
-                if (rentPeriod.value !== "") {
-                    rentRange.classList.remove('hidden');
-                } else {
-                    rentRange.classList.add('hidden');
-                }
-            });
+            var totalAmount = 0;
 
-            document.addEventListener('DOMContentLoaded', function () {
-                function calculateTotal() {
-                    const rentPeriod = document.getElementById('rentPeriod').value;
-                    const finalPriceElement = document.querySelector('.final-price');
-                    const totalPriceElement = document.getElementById('totalPrice');
-                    const totalAmountElement = document.getElementById('totalAmount');
+            // Hitung total berdasarkan periode yang dipilih
+            switch (rentPeriod) {
+                case 'month':
+                    totalAmount = hargaSetelahDiskon;
+                    break;
+                case '3months':
+                    totalAmount = hargaSetelahDiskon * 3;
+                    break;
+                case '6months':
+                    totalAmount = hargaSetelahDiskon * 6;
+                    break;
+                case 'year':
+                    totalAmount = hargaSetelahDiskon * 12;
+                    break;
+            }
 
-                    // Harga dasar per bulan
-                    const pricePerMonth = 1070000; // Rp 1.070.000 per bulan
-                    let totalAmount = 0;
+            // Tampilkan total harga
+            document.getElementById('totalAmount').innerText = 'Rp. ' + totalAmount.toLocaleString();
 
-                    // Kalkulasi harga berdasarkan periode sewa
-                    if (rentPeriod === 'month') {
-                        totalAmount = pricePerMonth; // Untuk 1 bulan
-                    } else if (rentPeriod === 'year') {
-                        totalAmount = pricePerMonth * 12; // Untuk 1 tahun (12 bulan)
-                    }
+            // Tampilkan total price jika ada rent period
+            document.getElementById('totalPrice').style.display = (rentPeriod ? 'block' : 'none');
+        }
 
-                    // Menampilkan total harga jika periode dipilih
-                    if (totalAmount > 0) {
-                        totalPriceElement.style.display = 'block';
-                        totalAmountElement.textContent = `Rp${totalAmount.toLocaleString()}`;
-                    } else {
-                        totalPriceElement.style.display = 'none';
-                    }
-                }
 
-                // Inisialisasi listener untuk dropdown rentPeriod
-                document.getElementById('rentPeriod').addEventListener('change', calculateTotal);
-            });
-
+        // Panggil fungsi ini saat halaman selesai dimuat
+        window.onload = calculateTotal;
         </script>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>

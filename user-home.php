@@ -259,7 +259,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                     </div>
                     <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
-                        <h1 class="mb-4">Welcome to SMARTKOST</h1>
+                        <h1 class="mb-4">Selamat Datang di SMARTKOST</h1>
                         <p class="mb-4">Website SMARTKOST adlah website yang menyediakan berbagai kost untuk pengunjung
                             yang
                             ingin mencari kost dengan mudah hanya dengan website ini<br>

@@ -223,7 +223,6 @@ $conn->close();
                 <!-- card bayar -->
                 <div class="card col-md-4 p-4 card-shadow">
                     <!-- Discount and Price -->
-                    <!-- Discount and Price -->
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="icon-text text-danger mt-3">
@@ -252,10 +251,8 @@ $conn->close();
                             <option value="6months">6 Bulan</option>
                             <option value="year">Per Tahun</option>
                         </select>
-
                     </div>
 
-                    <!-- Total Price -->
                     <!-- Total Price -->
                     <div id="totalPrice" class="mb-3" style="display: none;">
                         <h5>Total Harga: <span id="totalAmount">Rp0</span></h5>
@@ -271,7 +268,7 @@ $conn->close();
                     </div>
 
                     <!-- Apply for Rent Button -->
-                    <a href="pembayaran.html">
+                    <a href="pembayaran.php">
                         <button class="btn btn-primary w-100">Ajukan Sewa</button>
                     </a>
                 </div>
