@@ -188,8 +188,6 @@ $result = $conn->query($query);
                 </div>
             </div>
         </div>
-
-
         <!-- Header End -->
 
 
@@ -204,9 +202,10 @@ $result = $conn->query($query);
                         </div>
                         <div class="col-md-3">
                             <select class="form-select border-0 py-3">
-                                <option selected>Tipe Kost</option>
-                                <option value="1">Standart</option>
-                                <option value="2">Premium</option>
+                                <option selected>Jenis Kost</option>
+                                <option value="1">Laki-laki</option>
+                                <option value="2">Perempuan</option>
+                                <option value="3">Campur</option>
                             </select>
                         </div>
                         <div class="col-md-3">

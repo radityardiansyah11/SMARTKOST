@@ -277,7 +277,7 @@ session_start();
                         <p><i class="fa fa-check text-primary me-3"></i>Pelayanan 24 jam</p>
                         <p><i class="fa fa-check text-primary me-3"></i>Harga kost termurah</p>
                         <p><i class="fa fa-check text-primary me-3"></i>Keamanan terjamin</p>
-                        <a class="btn btn-primary py-3 px-5 mt-3" href="">Selengkapnya</a>
+                        <a class="btn btn-primary py-3 px-5 mt-3" href="about.html">Selengkapnya</a>
                     </div>
                 </div>
             </div>
@@ -649,7 +649,7 @@ session_start();
                                 <img class="img-fluid flex-shrink-0 rounded" src="img/testimonial-2.jpg"
                                     style="width: 45px; height: 45px;">
                                 <div class="ps-3">
-                                    <h6 class="fw-bold mb-1">Pak Mahmud</h6>
+                                    <h6 class="fw-bold mb-1">Pak Bobot</h6>
                                     <small>Client</small>
                                 </div>
                             </div>
@@ -662,7 +662,7 @@ session_start();
                                 <img class="img-fluid flex-shrink-0 rounded" src="img/testimonial-3.jpg"
                                     style="width: 45px; height: 45px;">
                                 <div class="ps-3">
-                                    <h6 class="fw-bold mb-1">Pak Ali</h6>
+                                    <h6 class="fw-bold mb-1">Pak Bibit</h6>
                                     <small>client</small>
                                 </div>
                             </div>

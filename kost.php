@@ -1,6 +1,24 @@
 <?php
 include 'config.php';
 session_start();
+
+$username = $_SESSION['username'];
+
+// Cek apakah ada input pencarian
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+
+// Query untuk mengambil data kost, jika ada pencarian maka tambahkan WHERE clause
+if ($search) {
+    // Escape input pengguna untuk mencegah SQL Injection
+    $search = $conn->real_escape_string($search);
+    $query = "SELECT * FROM kost WHERE nama_kost LIKE '%$search%'";
+} else {
+    // Jika tidak ada pencarian, tampilkan semua kost
+    $query = "SELECT * FROM kost";
+}
+
+// Eksekusi query
+$result = $conn->query($query);
 ?>
 
 <!DOCTYPE html>
@@ -215,33 +233,33 @@ session_start();
         <!-- Search Start -->
         <div class="container-fluid bg-primary mb-5 wow fadeIn" data-wow-delay="0.1s" style="padding: 35px;">
             <div class="container">
-                <div class="row g-2">
-                    <div class="col-md-10">
-                        <div class="row g-2">
-                            <div class="col-md-6">
-                                <input type="text" class="form-control border-0 py-3" placeholder="Cari Kost">
-                            </div>
-                            <div class="col-md-3">
-                                <select class="form-select border-0 py-3">
-                                    <option selected>Tipe Kost</option>
-                                    <option value="1">Standart</option>
-                                    <option value="2">Premium</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <select class="form-select border-0 py-3">
-                                    <option selected>Lokasi</option>
-                                    <option value="1">Location 1</option>
-                                    <option value="2">Location 2</option>
-                                    <option value="3">Location 3</option>
-                                </select>
-                            </div>
+                <form method="GET" action="user-kost.php">
+                    <div class="row g-2">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control border-0 py-3" placeholder="Cari Kost" name="search"
+                                value="<?php echo htmlspecialchars($search); ?>">
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select border-0 py-3">
+                                <option selected>Jenis Kost</option>
+                                <option value="1">Laki-laki</option>
+                                <option value="2">Perempuan</option>
+                                <option value="3">Campur</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select border-0 py-3">
+                                <option selected>Lokasi</option>
+                                <option value="1">Location 1</option>
+                                <option value="2">Location 2</option>
+                                <option value="3">Location 3</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-dark border-0 w-100 py-3">Cari</button>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-dark border-0 w-100 py-3">Cari</button>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
         <!-- Search End -->
@@ -278,7 +296,6 @@ session_start();
 
                             <?php
                             // Fetch Kost listings from the database
-                            $result = $conn->query("SELECT * FROM kost");
                             while ($row = $result->fetch_assoc()) {
                                 ?>
                                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
