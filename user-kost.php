@@ -2,29 +2,33 @@
 include 'config.php';
 session_start();
 
-// Periksa apakah pengguna sudah login
 if (!isset($_SESSION['username'])) {
-    // Jika tidak, arahkan ke halaman login
     header("Location: login.php");
     exit();
 }
 
 $username = $_SESSION['username'];
-
-// Cek apakah ada input pencarian
 $search = isset($_GET['search']) ? $_GET['search'] : '';
+$jenis_kost = isset($_GET['jenis_kost']) ? $_GET['jenis_kost'] : '';
+$jenis_kategori = isset($_GET['jenis_kategori']) ? $_GET['jenis_kategori'] : '';
 
-// Query untuk mengambil data kost, jika ada pencarian maka tambahkan WHERE clause
+$query = "SELECT * FROM kost WHERE 1=1";
+
 if ($search) {
-    // Escape input pengguna untuk mencegah SQL Injection
     $search = $conn->real_escape_string($search);
-    $query = "SELECT * FROM kost WHERE nama_kost LIKE '%$search%'";
-} else {
-    // Jika tidak ada pencarian, tampilkan semua kost
-    $query = "SELECT * FROM kost";
+    $query .= " AND nama_kost LIKE '%$search%'";
 }
 
-// Eksekusi query
+if ($jenis_kost) {
+    $jenis_kost = $conn->real_escape_string($jenis_kost);
+    $query .= " AND jenis_kost = '$jenis_kost'";
+}
+
+if ($jenis_kategori && $jenis_kategori != 'Semua') {
+    $jenis_kategori = $conn->real_escape_string($jenis_kategori);
+    $query .= " AND kategori = '$jenis_kategori'";
+}
+
 $result = $conn->query($query);
 ?>
 
@@ -201,11 +205,11 @@ $result = $conn->query($query);
                                 value="<?php echo htmlspecialchars($search); ?>">
                         </div>
                         <div class="col-md-3">
-                            <select class="form-select border-0 py-3">
-                                <option selected>Jenis Kost</option>
-                                <option value="1">Laki-laki</option>
-                                <option value="2">Perempuan</option>
-                                <option value="3">Campur</option>
+                            <select class="form-select border-0 py-3" name="jenis_kost">
+                                <option value="">Jenis Kost</option>
+                                <option value="Laki-laki">Laki-laki</option>
+                                <option value="Perempuan">Perempuan</option>
+                                <option value="Campur">Campur</option>
                             </select>
                         </div>
                         <div class="col-md-3">
@@ -225,7 +229,6 @@ $result = $conn->query($query);
         </div>
         <!-- Search End -->
 
-
         <!-- Property List Start -->
         <div class="container-xxl py-5">
             <div class="container">
@@ -236,17 +239,20 @@ $result = $conn->query($query);
                         </div>
                     </div>
 
-                    <!-- jenis kost -->
+                    <!-- kategori kost -->
                     <div class="col-lg-6 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
                         <ul class="nav nav-pills d-inline-flex justify-content-end mb-5">
                             <li class="nav-item me-2">
-                                <a class="btn btn-outline-primary active" data-bs-toggle="pill" href="#tab-1">Semua</a>
+                                <a class="btn btn-outline-primary <?php echo $jenis_kategori == '' ? 'active' : ''; ?>"
+                                    href="user-kost.php">Semua</a>
                             </li>
                             <li class="nav-item me-2">
-                                <a class="btn btn-outline-primary" data-bs-toggle="pill" href="#tab-2">Premium</a>
+                                <a class="btn btn-outline-primary <?php echo $jenis_kategori == 'Premium' ? 'active' : ''; ?>"
+                                    href="user-kost.php?jenis_kategori=Premium">Premium</a>
                             </li>
                             <li class="nav-item me-0">
-                                <a class="btn btn-outline-primary" data-bs-toggle="pill" href="#tab-3">Standart</a>
+                                <a class="btn btn-outline-primary <?php echo $jenis_kategori == 'Standart' ? 'active' : ''; ?>"
+                                    href="user-kost.php?jenis_kategori=Standart">Standart</a>
                             </li>
                         </ul>
                     </div>
@@ -258,7 +264,6 @@ $result = $conn->query($query);
                         <div class="row g-4">
 
                             <?php
-                            // Fetch Kost listings from the database
                             while ($row = $result->fetch_assoc()) {
                                 ?>
                                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
