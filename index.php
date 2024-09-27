@@ -228,33 +228,33 @@ session_start();
         <!-- Search Start -->
         <div class="container-fluid bg-primary mb-5 wow fadeIn" data-wow-delay="0.1s" style="padding: 35px;">
             <div class="container">
-                <div class="row g-2">
-                    <div class="col-md-10">
-                        <div class="row g-2">
-                            <div class="col-md-6">
-                                <input type="text" class="form-control border-0 py-3" placeholder="Cari Kost">
-                            </div>
-                            <div class="col-md-3">
-                                <select class="form-select border-0 py-3">
-                                    <option selected>Tipe Kost</option>
-                                    <option value="1">Standart</option>
-                                    <option value="2">Premium</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <select class="form-select border-0 py-3">
-                                    <option selected>Lokasi</option>
-                                    <option value="1">Location 1</option>
-                                    <option value="2">Location 2</option>
-                                    <option value="3">Location 3</option>
-                                </select>
-                            </div>
+                <form method="GET" action="kost.php">
+                    <div class="row g-2">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control border-0 py-3" placeholder="Cari Kost" name="search"
+                                value="">
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select border-0 py-3">
+                                <option selected>Jenis Kost</option>
+                                <option value="1">Laki-laki</option>
+                                <option value="2">Perempuan</option>
+                                <option value="3">Campur</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select border-0 py-3">
+                                <option selected>Lokasi</option>
+                                <option value="1">Location 1</option>
+                                <option value="2">Location 2</option>
+                                <option value="3">Location 3</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-dark border-0 w-100 py-3">Cari</button>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-dark border-0 w-100 py-3">Cari</button>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
         <!-- Search End -->
