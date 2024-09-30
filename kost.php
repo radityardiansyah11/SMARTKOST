@@ -313,7 +313,7 @@ if ($result->num_rows === 0) {
                         <div class="row g-4">
                             <?php
                             if ($kost_tidak_ada) { // Cek apakah tidak ada kost
-                                echo '<div class="col-12 text-center"><h4>Kost tidak ada <i class="bi bi-emoji-frown me-3"></i> </h4></div>';
+                                echo '<div class="col-12 text-center"><h4 style="color: #99A3A3;">Kost tidak ada <i class="bi bi-emoji-frown me-3"></i> </h4></div>';
                             } else {
                                 while ($row = $result->fetch_assoc()) {
                                     ?>
