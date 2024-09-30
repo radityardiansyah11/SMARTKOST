@@ -31,8 +31,6 @@ if ($result->num_rows > 0) {
 } else {
     echo "No kost found";
 }
-
-$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -424,12 +422,95 @@ $conn->close();
                     </a>
                 </div>
 
+                <!-- Card Lokasi -->
+                <div class="card col-md-4 p-4 card-shadow mt-4 offset-md-8 ">
+                    <h5>Lokasi</h5>
+                    <div class="icon-text">
+                        <i class="fa fa-map-marker-alt text-primary me-2"></i>
+                        <span><?php echo $row['alamat']; ?></span>
+                    </div>
+                    <div>
+                        <iframe
+                            src="https://maps.google.com/maps?q=<?php echo urlencode($row['alamat']); ?>&output=embed"
+                            width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+
+                <hr class="mt-5">
+
+                <!-- Kost List Start -->
+                <div class="container-xxl py-5">
+                    <div class="container">
+                        <div class="row g-0 gx-5 align-items-end">
+                            <div class="mt-1">
+                                <div class="text-center mx-auto mb-5 wow slideInLeft" data-wow-delay="0.1s">
+                                    <h2 class="mb-3">Rekomendasi Lainnya</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-content">
+                            <div id="tab-1" class="tab-pane fade show p-0 active">
+                                <div class="row g-4">
+                                    <?php
+                                    // Fetch Kost listings from the database
+                                    $result = $conn->query("SELECT * FROM kost ORDER BY RAND() LIMIT 3");
+                                    while ($row = $result->fetch_assoc()) {
+                                        ?>
+                                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                            <div class="property-item rounded overflow-hidden">
+                                                <div class="position-relative overflow-hidden">
+                                                    <a href="user-detail.php?id=<?php echo $row['id']; ?>">
+                                                        <img class="img-fluid" src="<?php echo $row['gambar_1']; ?>" alt="">
+                                                    </a>
+                                                    <div
+                                                        class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
+                                                        <?php echo $row['kategori']; ?>
+                                                    </div>
+                                                    <div class="dropdown position-absolute top-0 end-0 mt-2 me-2">
+                                                        <div
+                                                            class="bg-white text-primary position-absolute end-0 bottom-3 pt-1 px-3 jenis-kost-label">
+                                                            <?php echo $row['jenis_kost']; ?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="p-4 pb-0">
+                                                    <a class="d-block h5 mb-2" href=""><?php echo $row['nama_kost']; ?></a>
+                                                    <h5 class="text-primary mb-1">Rp.
+                                                        <?php echo number_format($row['harga'], 0, ',', '.'); ?>
+                                                    </h5>
+                                                    <p>
+                                                        <i
+                                                            class="fa fa-map-marker-alt text-primary me-2"></i><?php echo $row['alamat']; ?>
+                                                    </p>
+                                                </div>
+                                                <div class="d-flex border-top">
+                                                    <small class="flex-fill text-center border-end py-2"><i
+                                                            class="fa fa-ruler-combined text-primary me-2"></i><?php echo $row['ukuran_kamar']; ?></small>
+                                                    <small class="flex-fill text-center border-end py-2"><i
+                                                            class="fa fa-bed text-primary me-2"></i><?php echo $row['banyak_kasur']; ?>
+                                                        Bed</small>
+                                                    <small class="flex-fill text-center py-2"><i
+                                                            class="fa fa-bath text-primary me-2"></i><?php echo $row['banyak_kamar_mandi']; ?>
+                                                        Bath</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <?php
+                                    }
+                                    ?>
+                                    <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.1s">
+                                        <a class="btn btn-primary py-3 px-5" href="user-kost.php">Lihat Lainnya</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- kost List End -->
+
                 <!-- Back to Top -->
                 <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
             </div>
-
-            <!-- Back to Top -->
-            <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
         </div>
 
         <!-- Footer start -->
@@ -491,38 +572,38 @@ $conn->close();
 
         <!-- JavaScript Libraries -->
         <script>
-           function calculateTotal() {
-            var hargaSetelahDiskon = <?php echo $harga_setelah_diskon; ?>; // Harga setelah diskon dari PHP
-            var rentPeriod = document.getElementById('rentPeriod').value; // Nilai waktu sewa (bulan/tahun)
+            function calculateTotal() {
+                var hargaSetelahDiskon = <?php echo $harga_setelah_diskon; ?>; // Harga setelah diskon dari PHP
+                var rentPeriod = document.getElementById('rentPeriod').value; // Nilai waktu sewa (bulan/tahun)
 
-            var totalAmount = 0;
+                var totalAmount = 0;
 
-            // Hitung total berdasarkan periode yang dipilih
-            switch (rentPeriod) {
-                case 'month':
-                    totalAmount = hargaSetelahDiskon;
-                    break;
-                case '3months':
-                    totalAmount = hargaSetelahDiskon * 3;
-                    break;
-                case '6months':
-                    totalAmount = hargaSetelahDiskon * 6;
-                    break;
-                case 'year':
-                    totalAmount = hargaSetelahDiskon * 12;
-                    break;
+                // Hitung total berdasarkan periode yang dipilih
+                switch (rentPeriod) {
+                    case 'month':
+                        totalAmount = hargaSetelahDiskon;
+                        break;
+                    case '3months':
+                        totalAmount = hargaSetelahDiskon * 3;
+                        break;
+                    case '6months':
+                        totalAmount = hargaSetelahDiskon * 6;
+                        break;
+                    case 'year':
+                        totalAmount = hargaSetelahDiskon * 12;
+                        break;
+                }
+
+                // Tampilkan total harga
+                document.getElementById('totalAmount').innerText = 'Rp. ' + totalAmount.toLocaleString();
+
+                // Tampilkan total price jika ada rent period
+                document.getElementById('totalPrice').style.display = (rentPeriod ? 'block' : 'none');
             }
 
-            // Tampilkan total harga
-            document.getElementById('totalAmount').innerText = 'Rp. ' + totalAmount.toLocaleString();
 
-            // Tampilkan total price jika ada rent period
-            document.getElementById('totalPrice').style.display = (rentPeriod ? 'block' : 'none');
-        }
-
-
-        // Panggil fungsi ini saat halaman selesai dimuat
-        window.onload = calculateTotal;
+            // Panggil fungsi ini saat halaman selesai dimuat
+            window.onload = calculateTotal;
         </script>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>

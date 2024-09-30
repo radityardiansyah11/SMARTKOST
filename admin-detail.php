@@ -211,6 +211,20 @@ $conn->close();
                     </a>
                 </div>
 
+                 <!-- Card Lokasi -->
+                 <div class="card col-md-4 p-4 card-shadow mt-4 offset-md-8 ">
+                    <h5>Lokasi</h5>
+                    <div class="icon-text">
+                        <i class="fa fa-map-marker-alt text-primary me-2"></i>
+                        <span><?php echo $row['alamat']; ?></span>
+                    </div>
+                    <div>
+                        <iframe
+                            src="https://maps.google.com/maps?q=<?php echo urlencode($row['alamat']); ?>&output=embed"
+                            width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+
             <!-- Back to Top -->
             <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
         </div>

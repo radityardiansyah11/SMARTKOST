@@ -10,8 +10,6 @@ if (!isset($_SESSION['username'])) {
 }
 
 $username = $_SESSION['username'];
-
-$username = $_SESSION['username'];
 $message_status = "";  // Variabel untuk menyimpan status pesan
 
 // Periksa apakah formulir telah dikirim
@@ -340,8 +338,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <h1 class="mb-3">Kost Terlaris</h1>
                             <p>Berikut ini kami menampilkan beberapa kost yang sedang laris saat ini</p>
                         </div>
-                    </div>
-                    <div class="col-lg-6 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
                     </div>
                 </div>
                 <div class="tab-content">

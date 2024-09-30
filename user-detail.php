@@ -2,39 +2,27 @@
 include 'config.php';
 session_start();
 
-// Periksa apakah pengguna sudah login
 if (!isset($_SESSION['username'])) {
-    // Jika tidak, arahkan ke halaman login
     header("Location: login.php");
     exit();
 }
 
-// Fetch the username from the session
 $username = $_SESSION['username'];
+$kost_id = $_GET['id'];
 
-// Fetch kost details from the database based on a specific ID or parameter
-$kost_id = $_GET['id']; // Assuming you pass the ID in the URL as a query string
-
-// Fetch kost details
 $sql = "SELECT * FROM kost WHERE id = '$kost_id'";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
-    // Output data of the kost
     $row = $result->fetch_assoc();
-
-    // Menghitung harga setelah diskon
     $harga_setelah_diskon = $row['harga'] - $row['diskon'];
 
-    // Fetch spesifikasi kamar
     $spesifikasi_sql = "SELECT spesifikasi FROM spesifikasi_kamar WHERE kost_id = '$kost_id'";
     $spesifikasi_result = $conn->query($spesifikasi_sql);
 
-    // Fetch fasilitas kamar
     $fasilitas_sql = "SELECT fasilitas FROM fasilitas_kamar WHERE kost_id = '$kost_id'";
     $fasilitas_result = $conn->query($fasilitas_sql);
 
-    // Fetch fasilitas kamar mandi
     $fasilitas_mandi_sql = "SELECT fasilitas FROM fasilitas_kamar_mandi WHERE kost_id = '$kost_id'";
     $fasilitas_mandi_result = $conn->query($fasilitas_mandi_sql);
 
@@ -42,7 +30,6 @@ if ($result->num_rows > 0) {
     echo "No kost found";
 }
 
-$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -100,7 +87,6 @@ $conn->close();
         </div>
         <!-- Spinner End -->
 
-
         <!-- Navbar Start -->
         <div class="container-fluid nav-bar bg-transparent">
             <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
@@ -116,7 +102,6 @@ $conn->close();
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto">
                         <a href="user-home.php" class="nav-item nav-link">Beranda</a>
-
                         <a href="user-kost.php" class="nav-item nav-link">Kost</a>
                         <a href="user-kontak.php" class="nav-item nav-link">Kontak</a>
                         <a href="#" class="nav-item nav-link active">Detail</a>
@@ -222,7 +207,6 @@ $conn->close();
 
                 <!-- card bayar -->
                 <div class="card col-md-4 p-4 card-shadow">
-                    <!-- Discount and Price -->
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="icon-text text-danger mt-3">
@@ -241,7 +225,7 @@ $conn->close();
                         <span class="mt-3 ml-2">/bulan</span>
                     </div>
 
-                    <!-- Date Picker and Rent Period -->
+                    <!-- Tanggal dan Periode Sewa -->
                     <div class="input-group mb-3">
                         <input type="date" class="form-control" value="2024-08-22">
                         <select class="form-select" id="rentPeriod" onchange="calculateTotal()">
@@ -253,12 +237,12 @@ $conn->close();
                         </select>
                     </div>
 
-                    <!-- Total Price -->
+                    <!-- Total Harga -->
                     <div id="totalPrice" class="mb-3" style="display: none;">
                         <h5>Total Harga: <span id="totalAmount">Rp0</span></h5>
                     </div>
 
-                    <!-- Rent Time Range (Initially Hidden) -->
+                    <!-- Rent Time Range (Awalnya Tersembunyi) -->
                     <div id="rentRange" class="hidden">
                         <label for="startDate">Tanggal Mulai:</label>
                         <input type="date" id="startDate" class="form-control mb-2">
@@ -267,28 +251,112 @@ $conn->close();
                         <input type="date" id="endDate" class="form-control mb-2">
                     </div>
 
-                    <!-- Apply for Rent Button -->
+                    <!-- Tombol Ajukan Sewa -->
                     <a href="pembayaran.php">
                         <button class="btn btn-primary w-100">Ajukan Sewa</button>
                     </a>
                 </div>
+
+                <!-- Card Lokasi -->
+                <div class="card col-md-4 p-4 card-shadow mt-4 offset-md-8 ">
+                    <h5>Lokasi</h5>
+                    <div class="icon-text">
+                        <i class="fa fa-map-marker-alt text-primary me-2"></i>
+                        <span><?php echo $row['alamat']; ?></span>
+                    </div>
+                    <div>
+                        <iframe
+                            src="https://maps.google.com/maps?q=<?php echo urlencode($row['alamat']); ?>&output=embed"
+                            width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+
+                <hr class="mt-5">
+
+                <!-- Kost List Start -->
+                <div class="container-xxl py-5">
+                    <div class="container">
+                        <div class="row g-0 gx-5 align-items-end">
+                            <div class="mt-1">
+                                <div class="text-center mx-auto mb-5 wow slideInLeft" data-wow-delay="0.1s">
+                                    <h2 class="mb-3">Rekomendasi Lainnya</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-content">
+                            <div id="tab-1" class="tab-pane fade show p-0 active">
+                                <div class="row g-4">
+                                    <?php
+                                    // Fetch Kost listings from the database
+                                    $result = $conn->query("SELECT * FROM kost ORDER BY RAND() LIMIT 3");
+                                    while ($row = $result->fetch_assoc()) {
+                                        ?>
+                                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                            <div class="property-item rounded overflow-hidden">
+                                                <div class="position-relative overflow-hidden">
+                                                    <a href="user-detail.php?id=<?php echo $row['id']; ?>">
+                                                        <img class="img-fluid" src="<?php echo $row['gambar_1']; ?>" alt="">
+                                                    </a>
+                                                    <div
+                                                        class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
+                                                        <?php echo $row['kategori']; ?>
+                                                    </div>
+                                                    <div class="dropdown position-absolute top-0 end-0 mt-2 me-2">
+                                                        <div
+                                                            class="bg-white text-primary position-absolute end-0 bottom-3 pt-1 px-3 jenis-kost-label">
+                                                            <?php echo $row['jenis_kost']; ?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="p-4 pb-0">
+                                                    <a class="d-block h5 mb-2" href=""><?php echo $row['nama_kost']; ?></a>
+                                                    <h5 class="text-primary mb-1">Rp.
+                                                        <?php echo number_format($row['harga'], 0, ',', '.'); ?>
+                                                    </h5>
+                                                    <p>
+                                                        <i
+                                                            class="fa fa-map-marker-alt text-primary me-2"></i><?php echo $row['alamat']; ?>
+                                                    </p>
+                                                </div>
+                                                <div class="d-flex border-top">
+                                                    <small class="flex-fill text-center border-end py-2"><i
+                                                            class="fa fa-ruler-combined text-primary me-2"></i><?php echo $row['ukuran_kamar']; ?></small>
+                                                    <small class="flex-fill text-center border-end py-2"><i
+                                                            class="fa fa-bed text-primary me-2"></i><?php echo $row['banyak_kasur']; ?>
+                                                        Bed</small>
+                                                    <small class="flex-fill text-center py-2"><i
+                                                            class="fa fa-bath text-primary me-2"></i><?php echo $row['banyak_kamar_mandi']; ?>
+                                                        Bath</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <?php
+                                    }
+                                    ?>
+                                    <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.1s">
+                                        <a class="btn btn-primary py-3 px-5" href="user-kost.php">Lihat Lainnya</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- kost List End -->
 
                 <!-- Back to Top -->
                 <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
             </div>
         </div>
 
-
-
-        <!-- Footer Start -->
-        <div class="container-fluid bg-dark text-white-50 footer pt-5 mt-2 wow fadeIn" data-wow-delay="0.1s">
+        <!-- Footer start -->
+        <div class="container-fluid bg-dark text-white-50 footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
             <div class="container py-5">
                 <div class="row g-5">
                     <div class="col-lg-3 col-md-6">
                         <h5 class="text-white mb-4">Get In Touch</h5>
                         <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>comboran</p>
                         <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
-                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@smartkost.com</p>
                         <div class="d-flex pt-2">
                             <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
                             <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
@@ -298,15 +366,13 @@ $conn->close();
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <h5 class="text-white mb-4">link</h5>
-                        <a class="btn btn-link text-white-50" href="">About Us</a>
-                        <a class="btn btn-link text-white-50" href="">Contact Us</a>
-                        <a class="btn btn-link text-white-50" href="">Our Services</a>
-                        <a class="btn btn-link text-white-50" href="">Privacy Policy</a>
-                        <a class="btn btn-link text-white-50" href="">Terms & Condition</a>
+                        <a class="btn btn-link text-white-50" href="index.php">Home</a>
+                        <a class="btn btn-link text-white-50" href="kost.html">Kost</a>
+                        <a class="btn btn-link text-white-50" href="kost.html">Kontak</a>
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <h5 class="text-white mb-4">Newsletter</h5>
-                        <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
+                        <p></p>
                         <div class="position-relative mx-auto" style="max-width: 400px;">
                             <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text"
                                 placeholder="Your email">
@@ -337,64 +403,58 @@ $conn->close();
                 </div>
             </div>
         </div>
-        <!-- Footer End -->
 
+        <!-- JavaScript Libraries -->
+        <script>
+            function calculateTotal() {
+                var hargaSetelahDiskon = <?php echo $harga_setelah_diskon; ?>; // Harga setelah diskon dari PHP
+                var rentPeriod = document.getElementById('rentPeriod').value; // Nilai waktu sewa (bulan/tahun)
 
-        <!-- Back to Top -->
-        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
-    </div>
+                var totalAmount = 0;
 
-    <!-- JavaScript Libraries -->
-    <script>
-        function calculateTotal() {
-            var hargaSetelahDiskon = <?php echo $harga_setelah_diskon; ?>; // Harga setelah diskon dari PHP
-            var rentPeriod = document.getElementById('rentPeriod').value; // Nilai waktu sewa (bulan/tahun)
+                // Hitung total berdasarkan periode yang dipilih
+                switch (rentPeriod) {
+                    case 'month':
+                        totalAmount = hargaSetelahDiskon;
+                        break;
+                    case '3months':
+                        totalAmount = hargaSetelahDiskon * 3;
+                        break;
+                    case '6months':
+                        totalAmount = hargaSetelahDiskon * 6;
+                        break;
+                    case 'year':
+                        totalAmount = hargaSetelahDiskon * 12;
+                        break;
+                }
 
-            var totalAmount = 0;
+                // Tampilkan total harga
+                document.getElementById('totalAmount').innerText = 'Rp. ' + totalAmount.toLocaleString();
 
-            // Hitung total berdasarkan periode yang dipilih
-            switch (rentPeriod) {
-                case 'month':
-                    totalAmount = hargaSetelahDiskon;
-                    break;
-                case '3months':
-                    totalAmount = hargaSetelahDiskon * 3;
-                    break;
-                case '6months':
-                    totalAmount = hargaSetelahDiskon * 6;
-                    break;
-                case 'year':
-                    totalAmount = hargaSetelahDiskon * 12;
-                    break;
+                // Tampilkan total price jika ada rent period
+                document.getElementById('totalPrice').style.display = (rentPeriod ? 'block' : 'none');
             }
 
-            // Tampilkan total harga
-            document.getElementById('totalAmount').innerText = 'Rp. ' + totalAmount.toLocaleString();
 
-            // Tampilkan total price jika ada rent period
-            document.getElementById('totalPrice').style.display = (rentPeriod ? 'block' : 'none');
-        }
+            // Panggil fungsi ini saat halaman selesai dimuat
+            window.onload = calculateTotal;
 
-
-        // Panggil fungsi ini saat halaman selesai dimuat
-        window.onload = calculateTotal;
-
-        function confirmLogout() {
-            if (confirm("Anda yakin ingin logout?")) {
-                // Jika konfirmasi diterima, arahkan ke logout.php
-                window.location.href = "logout.php";
+            function confirmLogout() {
+                if (confirm("Anda yakin ingin logout?")) {
+                    // Jika konfirmasi diterima, arahkan ke logout.php
+                    window.location.href = "logout.php";
+                }
             }
-        }
-    </script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/wow/wow.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+        </script>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="lib/wow/wow.min.js"></script>
+        <script src="lib/easing/easing.min.js"></script>
+        <script src="lib/waypoints/waypoints.min.js"></script>
+        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+        <!-- Template Javascript -->
+        <script src="js/main.js"></script>
 </body>
 
 </html>
