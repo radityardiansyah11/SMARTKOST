@@ -30,6 +30,14 @@ if ($jenis_kategori && $jenis_kategori != 'Semua') {
 }
 
 $result = $conn->query($query);
+
+// Cek apakah hasil query kosong
+if ($result->num_rows === 0) {
+    $kost_tidak_ada = true; // Menandakan bahwa tidak ada kost ditemukan
+} else {
+    $kost_tidak_ada = false; // Menandakan bahwa ada kost ditemukan
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -207,9 +215,15 @@ $result = $conn->query($query);
                         <div class="col-md-3">
                             <select class="form-select border-0 py-3" name="jenis_kost">
                                 <option value="">Jenis Kost</option>
-                                <option value="Laki-laki">Laki-laki</option>
-                                <option value="Perempuan">Perempuan</option>
-                                <option value="Campur">Campur</option>
+                                <option value="Laki-laki" <?php if ($jenis_kost == 'Laki-laki')
+                                    echo 'selected'; ?>>
+                                    Laki-laki</option>
+                                <option value="Perempuan" <?php if ($jenis_kost == 'Perempuan')
+                                    echo 'selected'; ?>>
+                                    Perempuan</option>
+                                <option value="Campur" <?php if ($jenis_kost == 'Campur')
+                                    echo 'selected'; ?>>Campur
+                                </option>
                             </select>
                         </div>
                         <div class="col-md-3">
@@ -244,69 +258,71 @@ $result = $conn->query($query);
                         <ul class="nav nav-pills d-inline-flex justify-content-end mb-5">
                             <li class="nav-item me-2">
                                 <a class="btn btn-outline-primary <?php echo $jenis_kategori == '' ? 'active' : ''; ?>"
-                                    href="user-kost.php">Semua</a>
+                                    href="user-kost.php?search=<?php echo urlencode($search); ?>&jenis_kost=<?php echo urlencode($jenis_kost); ?>">Semua</a>
                             </li>
                             <li class="nav-item me-2">
                                 <a class="btn btn-outline-primary <?php echo $jenis_kategori == 'Premium' ? 'active' : ''; ?>"
-                                    href="user-kost.php?jenis_kategori=Premium">Premium</a>
+                                    href="user-kost.php?search=<?php echo urlencode($search); ?>&jenis_kost=<?php echo urlencode($jenis_kost); ?>&jenis_kategori=Premium">Premium</a>
                             </li>
                             <li class="nav-item me-0">
                                 <a class="btn btn-outline-primary <?php echo $jenis_kategori == 'Standart' ? 'active' : ''; ?>"
-                                    href="user-kost.php?jenis_kategori=Standart">Standart</a>
+                                    href="user-kost.php?search=<?php echo urlencode($search); ?>&jenis_kost=<?php echo urlencode($jenis_kost); ?>&jenis_kategori=Standart">Standart</a>
                             </li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- property -->
+                <!-- kost -->
                 <div class="tab-content">
                     <div id="tab-1" class="tab-pane fade show p-0 active">
                         <div class="row g-4">
-
                             <?php
-                            while ($row = $result->fetch_assoc()) {
-                                ?>
-                                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                                    <div class="property-item rounded overflow-hidden">
-                                        <div class="position-relative overflow-hidden">
-                                            <a href="user-detail.php?id=<?php echo $row['id']; ?>"><img class="img-fluid"
-                                                    src="<?php echo $row['gambar_1']; ?>" alt=""></a>
-                                            <div
-                                                class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                                <?php echo $row['kategori']; ?>
-                                            </div>
-                                            <div class="dropdown position-absolute top-0 end-0 mt-2 me-2">
+                            if ($kost_tidak_ada) { // Cek apakah tidak ada kost
+                                echo '<div class="col-12 text-center"><h4>Kost tidak ada <i class="bi bi-emoji-frown me-3"></i> </h4></div>';
+                            } else {
+                                while ($row = $result->fetch_assoc()) {
+                                    ?>
+                                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                        <div class="property-item rounded overflow-hidden">
+                                            <div class="position-relative overflow-hidden">
+                                                <a href="user-detail.php?id=<?php echo $row['id']; ?>"><img class="img-fluid"
+                                                        src="<?php echo $row['gambar_1']; ?>" alt=""></a>
                                                 <div
-                                                    class="bg-white text-primary position-absolute end-0 bottom-3 pt-1 px-3 jenis-kost-label">
-                                                    <?php echo $row['jenis_kost']; ?>
+                                                    class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
+                                                    <?php echo $row['kategori']; ?>
+                                                </div>
+                                                <div class="dropdown position-absolute top-0 end-0 mt-2 me-2">
+                                                    <div
+                                                        class="bg-white text-primary position-absolute end-0 bottom-3 pt-1 px-3 jenis-kost-label">
+                                                        <?php echo $row['jenis_kost']; ?>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="p-4 pb-0">
-                                            <a class="d-block h5 mb-2" href=""><?php echo $row['nama_kost']; ?></a>
-                                            <h5 class="text-primary mb-1">Rp.
-                                                <?php echo number_format($row['harga'], 0, ',', '.'); ?>
-                                            </h5>
-                                            <p><i
-                                                    class="fa fa-map-marker-alt text-primary me-2"></i><?php echo $row['alamat']; ?>
-                                            </p>
-                                        </div>
-                                        <div class="d-flex border-top">
-                                            <small class="flex-fill text-center border-end py-2"><i
-                                                    class="fa fa-ruler-combined text-primary me-2"></i><?php echo $row['ukuran_kamar']; ?></small>
-                                            <small class="flex-fill text-center border-end py-2"><i
-                                                    class="fa fa-bed text-primary me-2"></i><?php echo $row['banyak_kasur']; ?>
-                                                Bed</small>
-                                            <small class="flex-fill text-center py-2"><i
-                                                    class="fa fa-bath text-primary me-2"></i><?php echo $row['banyak_kamar_mandi']; ?>
-                                                Bath</small>
+                                            <div class="p-4 pb-0">
+                                                <a class="d-block h5 mb-2" href=""><?php echo $row['nama_kost']; ?></a>
+                                                <h5 class="text-primary mb-1">Rp.
+                                                    <?php echo number_format($row['harga'], 0, ',', '.'); ?>
+                                                </h5>
+                                                <p><i
+                                                        class="fa fa-map-marker-alt text-primary me-2"></i><?php echo $row['alamat']; ?>
+                                                </p>
+                                            </div>
+                                            <div class="d-flex border-top">
+                                                <small class="flex-fill text-center border-end py-2"><i
+                                                        class="fa fa-ruler-combined text-primary me-2"></i><?php echo $row['ukuran_kamar']; ?></small>
+                                                <small class="flex-fill text-center border-end py-2"><i
+                                                        class="fa fa-bed text-primary me-2"></i><?php echo $row['banyak_kasur']; ?>
+                                                    Bed</small>
+                                                <small class="flex-fill text-center py-2"><i
+                                                        class="fa fa-bath text-primary me-2"></i><?php echo $row['banyak_kamar_mandi']; ?>
+                                                    Bath</small>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <?php
+                                    <?php
+                                }
                             }
                             ?>
-
                         </div>
                     </div>
                 </div>
