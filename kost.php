@@ -293,15 +293,15 @@ if ($result->num_rows === 0) {
                         <ul class="nav nav-pills d-inline-flex justify-content-end mb-5">
                             <li class="nav-item me-2">
                                 <a class="btn btn-outline-primary <?php echo $jenis_kategori == '' ? 'active' : ''; ?>"
-                                    href="user-kost.php?search=<?php echo urlencode($search); ?>&jenis_kost=<?php echo urlencode($jenis_kost); ?>">Semua</a>
+                                    href="kost.php?search=<?php echo urlencode($search); ?>&jenis_kost=<?php echo urlencode($jenis_kost); ?>">Semua</a>
                             </li>
                             <li class="nav-item me-2">
                                 <a class="btn btn-outline-primary <?php echo $jenis_kategori == 'Premium' ? 'active' : ''; ?>"
-                                    href="user-kost.php?search=<?php echo urlencode($search); ?>&jenis_kost=<?php echo urlencode($jenis_kost); ?>&jenis_kategori=Premium">Premium</a>
+                                    href="kost.php?search=<?php echo urlencode($search); ?>&jenis_kost=<?php echo urlencode($jenis_kost); ?>&jenis_kategori=Premium">Premium</a>
                             </li>
                             <li class="nav-item me-0">
                                 <a class="btn btn-outline-primary <?php echo $jenis_kategori == 'Standart' ? 'active' : ''; ?>"
-                                    href="user-kost.php?search=<?php echo urlencode($search); ?>&jenis_kost=<?php echo urlencode($jenis_kost); ?>&jenis_kategori=Standart">Standart</a>
+                                    href="kost.php?search=<?php echo urlencode($search); ?>&jenis_kost=<?php echo urlencode($jenis_kost); ?>&jenis_kategori=Standart">Standart</a>
                             </li>
                         </ul>
                     </div>
