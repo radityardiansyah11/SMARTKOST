@@ -216,7 +216,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                         <div class="col-md-3">
                             <select class="form-select border-0 py-3">
-                                <option selected>Jenis Kost</option>
+                                <option selected>Kategori Kost</option>
                                 <option value="1">Laki-laki</option>
                                 <option value="2">Perempuan</option>
                                 <option value="3">Campur</option>

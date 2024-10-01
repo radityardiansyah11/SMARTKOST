@@ -218,7 +218,7 @@ if ($result->num_rows === 0) {
                         </div>
                         <div class="col-md-3">
                             <select class="form-select border-0 py-3" name="jenis_kost">
-                                <option value="">Jenis Kost</option>
+                                <option value="">Kategori Kost</option>
                                 <option value="Laki-laki" <?php if ($jenis_kost == 'Laki-laki')
                                     echo 'selected'; ?>>
                                     Laki-laki</option>

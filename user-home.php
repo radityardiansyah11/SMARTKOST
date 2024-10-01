@@ -226,7 +226,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                         <div class="col-md-3">
                             <select class="form-select border-0 py-3">
-                                <option selected>Jenis Kost</option>
+                                <option selected>Kategori Kost</option>
                                 <option value="1">Laki-laki</option>
                                 <option value="2">Perempuan</option>
                                 <option value="3">Campur</option>
@@ -348,7 +348,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                             <?php
                             // Fetch Kost listings from the database
-                            $result = $conn->query("SELECT * FROM kost LIMIT 9");
+                            $result = $conn->query("SELECT * FROM kost ORDER BY RAND() LIMIT 9");
                             while ($row = $result->fetch_assoc()) {
                                 ?>
                                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
