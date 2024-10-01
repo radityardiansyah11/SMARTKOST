@@ -109,13 +109,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             z-index: 2;
         }
 
-        .btn-custom-logout {
-            font-size: 12px;
-            padding: 2px 8px;
-            line-height: 1.5;
-            border-radius: 4px;
-        }
-
         .profile-image {
             width: 50px;
             height: 50px;
@@ -174,11 +167,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <div class="d-flex">
                         <div class="me-3 text-end">
-                            <h6 class="mt-2">Halo, <?php echo htmlspecialchars($username); ?></h6>
-                            <form action="logout.php" method="POST">
-                                <button type="submit" class="btn btn-outline-danger btn-custom-logout"
-                                    onclick="confirmLogout()">Log out</button>
-                            </form>
+                            <h6 class="mt-2">Halo, <br> <?php echo htmlspecialchars($username); ?></h6>
+                         
                         </div>
                         <a href="user-profile.php">
                             <img src="<?php echo isset($_SESSION['profile_image']) ? $_SESSION['profile_image'] : 'img2/Bulat.png'; ?>"

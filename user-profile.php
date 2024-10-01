@@ -1,6 +1,6 @@
 <?php
-include 'config.php';
 session_start();
+include 'config.php';
 
 // Periksa apakah pengguna sudah login
 if (!isset($_SESSION['username'])) {
@@ -177,10 +177,16 @@ $conn->close();
 
         .button-group {
             display: flex;
-            margin-top: 40px;
+            margin-top: 20px;
         }
 
         .btn-primary {
+            border-radius: 30px;
+            padding: 10px 20px;
+            margin-left: 10px;
+        }
+
+        .btn-danger {
             border-radius: 30px;
             padding: 10px 20px;
         }
@@ -238,8 +244,10 @@ $conn->close();
 
                     <!-- Tombol Save Changes dan Back to Home -->
                     <div class="button-group">
-                        <button type="submit" class="btn btn-primary text-white">Simpan Perubahan</button>
+                        <button type="button" class="btn btn-danger" onclick="confirmLogout()">Log out</button>
                         <a href="user-home.php" class="btn btn-secondary text-white">Kembali</a>
+                        <button type="submit" id="save_changes_button" class="btn btn-primary text-white"
+                            style="display: none;">Simpan Perubahan</button>
                     </div>
                 </form>
             </div>
@@ -248,19 +256,42 @@ $conn->close();
 
     <!-- Bootstrap Scripts -->
     <script>
-        // JavaScript to preview the image immediately after choosing a file
+        // JavaScript untuk menampilkan tombol simpan saat ada perubahan
+        const saveChangesButton = document.getElementById('save_changes_button');
+
+        // Function untuk memunculkan tombol simpan jika ada perubahan
+        function showSaveButton() {
+            saveChangesButton.style.display = 'block'; // Tampilkan tombol
+        }
+
+        // Tambahkan event listener untuk input gambar
+        document.getElementById('profile_image_input').addEventListener('change', showSaveButton);
+
+        // Tambahkan event listener untuk username dan email
+        document.getElementById('username').addEventListener('input', showSaveButton);
+        document.getElementById('email').addEventListener('input', showSaveButton);
+
+        // JavaScript untuk preview gambar setelah memilih file
         document.getElementById('profile_image_input').addEventListener('change', function (event) {
-            const file = event.target.files[0]; // Get the selected file
+            const file = event.target.files[0]; // Dapatkan file yang dipilih
             if (file) {
-                const reader = new FileReader(); // Create a new FileReader to read the file
+                const reader = new FileReader(); // Buat FileReader baru
                 reader.onload = function (e) {
-                    // Set the src of the preview image to the loaded file data
+                    // Set src dari gambar preview ke data file yang diunggah
                     document.getElementById('profile_image_preview').src = e.target.result;
                 }
-                reader.readAsDataURL(file); // Read the file as a data URL
+                reader.readAsDataURL(file); // Baca file sebagai data URL
             }
         });
+
+        function confirmLogout() {
+            if (confirm("Anda yakin ingin logout?")) {
+                // Jika konfirmasi diterima, arahkan ke logout.php
+                window.location.href = "logout.php";
+            }
+        }
     </script>
+
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>

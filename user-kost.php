@@ -106,13 +106,6 @@ if ($result->num_rows === 0) {
             z-index: 2;
         }
 
-        .btn-custom-logout {
-            font-size: 12px;
-            padding: 2px 8px;
-            line-height: 1.5;
-            border-radius: 4px;
-        }
-
         .profile-image {
             width: 50px;
             height: 50px;
@@ -177,11 +170,7 @@ if ($result->num_rows === 0) {
                     </div>
                     <div class="d-flex">
                         <div class="me-3 text-end">
-                            <h6 class="mt-2">Halo, <?php echo htmlspecialchars($username); ?></h6>
-                            <form action="logout.php" method="POST">
-                                <button type="submit" class="btn btn-outline-danger btn-custom-logout"
-                                    onclick="confirmLogout()">Log out</button>
-                            </form>
+                            <h6 class="mt-2">Halo, <br> <?php echo htmlspecialchars($username); ?></h6>
                         </div>
                         <a href="user-profile.php">
                             <img src="<?php echo isset($_SESSION['profile_image']) ? $_SESSION['profile_image'] : 'img2/Bulat.png'; ?>"
@@ -458,14 +447,6 @@ if ($result->num_rows === 0) {
     </div>
 
     <!-- JavaScript Libraries -->
-    <script>
-        function confirmLogout() {
-            if (confirm("Anda yakin ingin logout?")) {
-                // Jika konfirmasi diterima, arahkan ke logout.php
-                window.location.href = "logout.php";
-            }
-        }
-    </script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/wow/wow.min.js"></script>
