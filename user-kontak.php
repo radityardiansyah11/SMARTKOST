@@ -222,7 +222,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="row g-2">
                         <div class="col-md-4">
                             <input type="text" class="form-control border-0 py-3" placeholder="Cari Kost" name="search"
-                                value="<?php echo htmlspecialchars($search); ?>">
+                                value="">
                         </div>
                         <div class="col-md-3">
                             <select class="form-select border-0 py-3">

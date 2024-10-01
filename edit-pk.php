@@ -62,17 +62,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
             background-color: #fff;
             border-radius: 30px;
+            max-width: 650px;
+            margin: 0 auto;
         }
 
         .form-control {
             box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
             border: none;
-            border-radius: 20px;
+            border-radius: 10px;
         }
 
         .btn {
             border-radius: 10px;
             box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        }
+
+        #togglePassword {
+            position: absolute;
+            right: 10px;
+            top: 75%;
+            transform: translateY(-50%);
+            cursor: pointer;
         }
     </style>
 </head>
@@ -82,7 +92,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h2 class="mb-4 text-center">Edit Pemilik Kost</h2>
         <form method="post" action="" class="form p-4 rounded">
             <input type="hidden" name="id" value="<?php echo htmlspecialchars($pemilik['id']); ?>">
-
             <div class="mb-3">
                 <label for="name" class="form-label">Nama</label>
                 <input type="text" id="name" name="pkname" class="form-control"
@@ -101,19 +110,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     value="<?php echo htmlspecialchars($pemilik['nomor_hp']); ?>" required>
             </div>
 
-            <div class="mb-3">
+            <div class="mb-3 position-relative">
                 <label for="password" class="form-label">Password</label>
                 <input type="password" id="password" name="password" class="form-control"
                     value="<?php echo htmlspecialchars($pemilik['password']); ?>" required>
+                <i class="bi bi-eye-slash position-absolute" id="togglePassword"></i>
             </div>
 
-
-            <button type="submit" class="btn btn-primary">Update</button>
-            <a href="admin-dahsboard-pk.php" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+            <a href="admin-dahsboard-pk.php" class="btn btn-secondary">Kembali</a>
         </form>
     </div>
 
     <!-- JavaScript Libraries -->
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+
+        togglePassword.addEventListener('click', function (e) {
+            // Toggle the type attribute between password and text
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+
+            // Toggle the icon between eye and eye-slash
+            this.classList.toggle('bi-eye');
+            this.classList.toggle('bi-eye-slash');
+        });
+    </script>
+
+
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/wow/wow.min.js"></script>

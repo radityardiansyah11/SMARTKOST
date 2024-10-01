@@ -215,6 +215,13 @@ if ($result->num_rows > 0) {
         .hidden {
             display: none;
         }
+
+        .jenis-kost-label {
+            width: auto;
+            padding: 5px;
+            white-space: nowrap;
+            border-radius: 5px;
+        }
     </style>
 </head>
 

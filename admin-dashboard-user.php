@@ -131,6 +131,16 @@ $total_email = $email_data['total_email'];
             padding: 0;
         }
 
+        .btn-edit {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 31px;
+            height: 31px;
+            border-radius: 3px;
+            padding: 0;
+        }
+
         .carousel-item {
             padding: 0 15px;
         }
@@ -143,6 +153,7 @@ $total_email = $email_data['total_email'];
         .row {
             overflow: visible;
         }
+        
     </style>
 </head>
 
@@ -304,6 +315,7 @@ $total_email = $email_data['total_email'];
                             </div>
                         </div>
 
+                        <!-- MODAL -->
                         <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel"
                             aria-hidden="true">
                             <div class="modal-dialog">
@@ -333,7 +345,7 @@ $total_email = $email_data['total_email'];
                                             <div class="mt-2">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-bs-dismiss="modal">Batal</button>
-                                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                                <button type="submit" class="btn btn-primary">Tambah</button>
                                             </div>
                                         </form>
                                     </div>
@@ -368,12 +380,19 @@ $total_email = $email_data['total_email'];
                                         <td class="align-middle"><strong><?php echo $row['username']; ?></strong></td>
                                         <td class="align-middle"><?php echo $row['email']; ?></td>
                                         <td class="align-middle">
-                                            <?php echo substr($row['password'], 0, 20) . '...'; ?>
+                                            <?php
+                                            $password_length = strlen($row['password']);
+                                            $max_length = 10;
+                                            $masked_password = str_repeat('*', min($password_length, $max_length));
+                                            echo $masked_password;
+                                            ?>
                                         </td>
                                         <td class="align-middle"><?php echo $row['created_at']; ?></td>
                                         <td class="mt-3">
                                             <a href="edit-user.php?id=<?php echo $row['id']; ?>"
-                                                class="btn btn-sm btn-primary mt-2" style="width:57px;">Edit</a>
+                                                class="btn btn-sm btn-primary mt-2 btn-edit"><img src="img2/edit.png"
+                                                    class="w-75"> </a>
+
                                             <a href="?delete=<?php echo $row['id']; ?>"
                                                 class="btn btn-sm btn-danger mt-2 btn-trash"
                                                 onclick="return confirm('Apa kamu yakin akan menghapus?');">

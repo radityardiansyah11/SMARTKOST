@@ -117,6 +117,21 @@ session_start();
             white-space: nowrap;
             border-radius: 5px;
         }
+
+        .property-item {
+            width: 100%;
+            max-height: 400px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s;
+        }
+
+        .property-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            object-position: center;
+        }
     </style>
 </head>
 
@@ -407,7 +422,7 @@ session_start();
                             ?>
 
                             <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.1s">
-                                <a class="btn btn-primary py-3 px-5" href="user-kost.php">Lihat Lainnya</a>
+                                <a class="btn btn-primary py-3 px-5" href="kost.php">Lihat Lainnya</a>
                             </div>
                         </div>
                     </div>

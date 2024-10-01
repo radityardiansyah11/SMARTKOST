@@ -126,6 +126,21 @@ if ($result->num_rows === 0) {
             white-space: nowrap;
             border-radius: 5px;
         }
+
+        .property-item {
+            width: 100%;
+            max-height: 400px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s;
+        }
+
+        .property-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            object-position: center;
+        }
     </style>
 </head>
 
@@ -285,8 +300,9 @@ if ($result->num_rows === 0) {
                                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                                         <div class="property-item rounded overflow-hidden">
                                             <div class="position-relative overflow-hidden">
-                                                <a href="user-detail.php?id=<?php echo $row['id']; ?>"><img class="img-fluid"
-                                                        src="<?php echo $row['gambar_1']; ?>" alt=""></a>
+                                                <a href="user-detail.php?id=<?php echo $row['id']; ?>">
+                                                    <img class="img-fluid" src="<?php echo $row['gambar_1']; ?>" alt="">
+                                                </a>
                                                 <div
                                                     class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
                                                     <?php echo $row['kategori']; ?>

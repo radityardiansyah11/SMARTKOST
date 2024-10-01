@@ -129,6 +129,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             white-space: nowrap;
             border-radius: 5px;
         }
+
+        .property-item {
+            width: 100%;
+            max-height: 400px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s;
+        }
+
+        .property-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            object-position: center;
+        }
     </style>
 </head>
 
@@ -178,9 +193,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </nav>
         </div>
-
         <!-- Navbar End -->
-
 
         <!-- Header Start -->
         <div class="container-fluid header bg-white p-0">
@@ -193,7 +206,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <h1 class="display-5 text-white animated fadeIn mb-1 mt-5">Temukan <span
                                         class="text-light">Kost Impian</span> Hanya di Sini</h1>
                                 <p class="text-white animated fadeIn mb-4 pb-2">Daftarkan kost anda di sini.</p>
-                                <a href="" class="btn btn-primary py-3 px-5 me-3 animated fadeIn">Daftarkan Kost</a>
+                                <a href="register-pk.php" class="btn btn-primary py-3 px-5 me-3 animated fadeIn">Daftarkan Kost</a>
                             </div>
                         </div>
                         <div class="owl-carousel-item position-relative">
@@ -220,7 +233,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="row g-2">
                         <div class="col-md-4">
                             <input type="text" class="form-control border-0 py-3" placeholder="Cari Kost" name="search"
-                                value="<?php echo htmlspecialchars($search); ?>">
+                                value="">
                         </div>
                         <div class="col-md-3">
                             <select class="form-select border-0 py-3">

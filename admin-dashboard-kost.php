@@ -177,6 +177,21 @@ $total_email = $email_data['total_email'];
         .row {
             overflow: visible;
         }
+
+        .property-item {
+            width: 100%;
+            max-height: 400px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s;
+        }
+
+        .property-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            object-position: center;
+        }
     </style>
 </head>
 
