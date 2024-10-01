@@ -375,7 +375,7 @@ session_start();
 
                             <?php
                             // Fetch Kost listings from the database
-                            $result = $conn->query("SELECT * FROM kost LIMIT 9");
+                            $result = $conn->query("SELECT * FROM kost ORDER BY RAND() LIMIT 9");
                             while ($row = $result->fetch_assoc()) {
                                 ?>
                                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
