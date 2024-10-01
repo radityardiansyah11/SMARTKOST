@@ -274,8 +274,8 @@ $conn->close();
                                     <div class="col-md-4">
                                         <div class="card" style="height: 160px; margin: 10px 0;">
                                             <div class="card-body">
-                                                <h5 class="card-title">Promosi</h5>
-                                                <h3 class="card-text">Rp. 0</h3>
+                                                <h5 class="card-title">Kost</h5>
+                                                <h3 class="card-text"><?php echo $total_kost; ?></h3>
                                             </div>
                                         </div>
                                     </div>
@@ -287,16 +287,24 @@ $conn->close();
                                     <div class="col-md-4">
                                         <div class="card" style="height: 160px; margin: 10px 0;">
                                             <div class="card-body">
-                                                <h5 class="card-title">Kost</h5>
-                                                <h3 class="card-text"><?php echo $total_kost; ?></h3>
+                                                <h5 class="card-title">Email</h5>
+                                                <h3 class="card-text"><?php echo $total_email; ?></h3>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="card" style="height: 160px; margin: 10px 0;">
                                             <div class="card-body">
-                                                <h5 class="card-title">Email</h5>
-                                                <h3 class="card-text"><?php echo $total_email; ?></h3>
+                                                <h5 class="card-title">Promosi</h5>
+                                                <h3 class="card-text">Rp. 0</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card" style="height: 160px; margin: 10px 0;">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Pendapatan</h5>
+                                                <h3 class="card-text">Rp. 0</h3>
                                             </div>
                                         </div>
                                     </div>
