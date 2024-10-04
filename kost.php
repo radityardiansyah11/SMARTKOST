@@ -398,36 +398,36 @@ if ($result->num_rows === 0) {
                         <div class="position-relative border border-primary pt-5 pb-4 px-4">
                             <div class="d-inline-flex align-items-center justify-content-center bg-primary rounded-circle position-absolute top-0 start-50 translate-middle shadow"
                                 style="width: 100px; height: 100px;">
-                                <i class="fa fa-globe fa-3x text-white"></i>
+                                <i class="fa fa-search fa-3x text-white"></i>
                             </div>
-                            <h5 class="mt-4">Pilih kost</h5>
+                            <h5 class="mt-4">Cari Kost kost</h5>
                             <hr class="w-25 mx-auto bg-primary mb-1">
                             <hr class="w-50 mx-auto bg-primary mt-0">
-                            <p class="mb-0">Pilih kost yang anda inginkan sesuai dengan yang anda butuhkan</p>
+                            <p class="mb-0">Cari kost yang anda inginkan sesuai dengan yang anda butuhkan</p>
                         </div>
                     </div>
                     <div class="col-lg-4 col-sm-6 text-center pt-4 wow fadeInUp" data-wow-delay="0.3s">
                         <div class="position-relative border border-primary pt-5 pb-4 px-4">
                             <div class="d-inline-flex align-items-center justify-content-center bg-primary rounded-circle position-absolute top-0 start-50 translate-middle shadow"
                                 style="width: 100px; height: 100px;">
-                                <i class="fa fa-dollar-sign fa-3x text-white"></i>
+                                <i class="fa fa-bed fa-3x text-white"></i>
                             </div>
-                            <h5 class="mt-4">Pembayaran</h5>
+                            <h5 class="mt-4">Pilih Kost</h5>
                             <hr class="w-25 mx-auto bg-primary mb-1">
                             <hr class="w-50 mx-auto bg-primary mt-0">
-                            <p class="mb-0">Anda dapat melakukan pembayaran pada website maupun cod</p>
+                            <p class="mb-0">Pastikan pilihna kost sesuai dengan kebtuhan</p>
                         </div>
                     </div>
                     <div class="col-lg-4 col-sm-6 text-center pt-4 wow fadeInUp" data-wow-delay="0.5s">
                         <div class="position-relative border border-primary pt-5 pb-4 px-4">
                             <div class="d-inline-flex align-items-center justify-content-center bg-primary rounded-circle position-absolute top-0 start-50 translate-middle shadow"
                                 style="width: 100px; height: 100px;">
-                                <i class="fa fa-plane fa-3x text-white"></i>
+                                <i class="fa fa-dollar-sign fa-3x text-white"></i>
                             </div>
-                            <h5 class="mt-4">Kunjungi</h5>
+                            <h5 class="mt-4">Booking</h5>
                             <hr class="w-25 mx-auto bg-primary mb-1">
                             <hr class="w-50 mx-auto bg-primary mt-0">
-                            <p class="mb-0">tempati kostimpianmu</p>
+                            <p class="mb-0">Anda dapat melakukan pembayaran pada website maupun cod</p>
                         </div>
                     </div>
                 </div>
