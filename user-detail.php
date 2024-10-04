@@ -112,8 +112,11 @@ if ($result->num_rows > 0) {
             border-top: 1.5px solid #000;
         }
 
+        .sticky-container {
+            position: relative;
+        }
+
         .sticky {
-            position: -webkit-sticky;
             position: sticky;
             top: 20px;
             z-index: 1000;
@@ -412,65 +415,68 @@ if ($result->num_rows > 0) {
                     </div>
                 </div>
 
-                <div class="col-md-4 sticky">
-                    <!-- Card Bayar -->
-                    <div class="card p-4 card-shadow mb-4 ">
-                        <div class="d-flex justify-content-between align-items-center">
+                <div class="col-md-4">
+                    <div class="sticky-container sticky">
+                        <!-- Card Bayar -->
+                        <div class="card p-4 card-shadow mb-4">
                             <div class="d-flex justify-content-between align-items-center">
-                                <div class="icon-text text-danger mt-3">
-                                    <i class="fas fa-bolt"></i>
-                                    <span><strong>Diskon Rp.
-                                            <?php echo number_format($row['diskon'], 0, ',', '.'); ?></strong></span>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="icon-text text-danger mt-3">
+                                        <i class="fas fa-bolt"></i>
+                                        <span><strong>Diskon Rp.
+                                                <?php echo number_format($row['diskon'], 0, ',', '.'); ?></strong></span>
+                                    </div>
                                 </div>
+                                <span class="text-decoration-line-through text-muted">Rp.
+                                    <?php echo number_format($row['harga'], 0, ',', '.'); ?></span>
                             </div>
-                            <span class="text-decoration-line-through text-muted">Rp.
-                                <?php echo number_format($row['harga'], 0, ',', '.'); ?></span>
+                            <div class="d-flex">
+                                <p class="final-price mt-2 text-dark" id="finalPrice">Rp.
+                                    <?php echo number_format($harga_setelah_diskon, 0, ',', '.'); ?>
+                                </p>
+                                <span class="mt-3 ml-2">/bulan</span>
+                            </div>
+                            <!-- Tanggal dan Periode Sewa -->
+                            <div class="input-group mb-3">
+                                <input type="date" class="form-control" value="2024-08-22">
+                                <select class="form-select" id="rentPeriod" onchange="calculateTotal()">
+                                    <option value="" selected>Waktu kost</option>
+                                    <option value="month">1 Bulan</option>
+                                    <option value="3months">3 Bulan</option>
+                                    <option value="6months">6 Bulan</option>
+                                    <option value="year">Per Tahun</option>
+                                </select>
+                            </div>
+                            <!-- Total Harga -->
+                            <div id="totalPrice" class="mb-3" style="display: none;">
+                                <h5>Total Harga: <span id="totalAmount">Rp0</span></h5>
+                            </div>
+                            <!-- Rent Time Range (Awalnya Tersembunyi) -->
+                            <div id="rentRange" class="hidden">
+                                <label for="startDate">Tanggal Mulai:</label>
+                                <input type="date" id="startDate" class="form-control mb-2">
+                                <label for="endDate">Tanggal Selesai:</label>
+                                <input type="date" id="endDate" class="form-control mb-2">
+                            </div>
+                            <!-- Tombol Ajukan Sewa -->
+                            <a href="pembayaran.php">
+                                <button class="btn btn-primary w-100">Ajukan Sewa</button>
+                            </a>
                         </div>
-                        <div class="d-flex">
-                            <p class="final-price mt-2 text-dark" id="finalPrice">Rp.
-                                <?php echo number_format($harga_setelah_diskon, 0, ',', '.'); ?>
-                            </p>
-                            <span class="mt-3 ml-2">/bulan</span>
-                        </div>
-                        <!-- Tanggal dan Periode Sewa -->
-                        <div class="input-group mb-3">
-                            <input type="date" class="form-control" value="2024-08-22">
-                            <select class="form-select" id="rentPeriod" onchange="calculateTotal()">
-                                <option value="" selected>Waktu kost</option>
-                                <option value="month">1 Bulan</option>
-                                <option value="3months">3 Bulan</option>
-                                <option value="6months">6 Bulan</option>
-                                <option value="year">Per Tahun</option>
-                            </select>
-                        </div>
-                        <!-- Total Harga -->
-                        <div id="totalPrice" class="mb-3" style="display: none;">
-                            <h5>Total Harga: <span id="totalAmount">Rp0</span></h5>
-                        </div>
-                        <!-- Rent Time Range (Awalnya Tersembunyi) -->
-                        <div id="rentRange" class="hidden">
-                            <label for="startDate">Tanggal Mulai:</label>
-                            <input type="date" id="startDate" class="form-control mb-2">
-                            <label for="endDate">Tanggal Selesai:</label>
-                            <input type="date" id="endDate" class="form-control mb-2">
-                        </div>
-                        <!-- Tombol Ajukan Sewa -->
-                        <a href="pembayaran.php">
-                            <button class="btn btn-primary w-100">Ajukan Sewa</button>
-                        </a>
-                    </div>
 
-                    <!-- Card Lokasi -->
-                    <div class="card p-4 card-shadow ">
-                        <h5>Lokasi</h5>
-                        <div class="icon-text">
-                            <i class="fa fa-map-marker-alt text-primary me-2"></i>
-                            <span><?php echo $row['alamat']; ?></span>
-                        </div>
-                        <div>
-                            <iframe
-                                src="https://maps.google.com/maps?q=<?php echo urlencode($row['alamat']); ?>&output=embed"
-                                width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                        <!-- Card Lokasi -->
+                        <div class="card p-4 card-shadow">
+                            <h5>Lokasi</h5>
+                            <div class="icon-text">
+                                <i class="fa fa-map-marker-alt text-primary me-2"></i>
+                                <span><?php echo $row['alamat']; ?></span>
+                            </div>
+                            <div>
+                                <iframe
+                                    src="https://maps.google.com/maps?q=<?php echo urlencode($row['alamat']); ?>&output=embed"
+                                    width="100%" height="200" style="border:0;" allowfullscreen=""
+                                    loading="lazy"></iframe>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -607,6 +613,27 @@ if ($result->num_rows > 0) {
 
         <!-- JavaScript Libraries -->
         <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const stickyContainer = document.querySelector('.sticky-container');
+                const kostListStart = document.querySelector('.container-xxl.py-5');
+
+                // Get the offset position of the kost list start
+                const kostListStartOffset = kostListStart.getBoundingClientRect().top + window.scrollY;
+
+                window.addEventListener('scroll', function () {
+                    const scrollPosition = window.scrollY;
+
+                    // Check if we have scrolled to the start of the kost list section
+                    if (scrollPosition >= kostListStartOffset) {
+                        // Remove sticky class to allow cards to scroll away
+                        stickyContainer.classList.remove('sticky');
+                    } else {
+                        // Add sticky class to keep cards in place if we have not reached the kost list
+                        stickyContainer.classList.add('sticky');
+                    }
+                });
+            });
+
             document.getElementById('show-more-reviews').addEventListener('click', function () {
                 document.getElementById('all-reviews').style.display = 'block';
                 this.style.display = 'none'; // Sembunyikan tombol setelah diklik
