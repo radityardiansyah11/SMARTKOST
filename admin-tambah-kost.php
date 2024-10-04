@@ -254,6 +254,7 @@ $conn->close();
 
                         <!-- Facsilitas -->
                         <h5>Fasilitas</h5>
+
                         <div id="specificationContainer">
                             <div class="row mb-3">
                                 <div class="col-md-4">
@@ -303,7 +304,6 @@ $conn->close();
 
                         <!-- Fasilitas Umum -->
                         <div id="generalFacilitiesContainer">
-                            <h5>Fasilitas Umum</h5>
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <label for="fasilitasUmum1" class="form-label"><strong>Fasilitas
@@ -320,7 +320,6 @@ $conn->close();
 
                         <!-- Peraturan Kost -->
                         <div id="rulesContainer">
-                            <h5>Peraturan Kost</h5>
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <label for="peraturanKost1" class="form-label"><strong>Peraturan

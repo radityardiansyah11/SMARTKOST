@@ -24,6 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $spesifikasiKamar = $_POST['spesifikasiKamar'];
     $fasilitasKamar = $_POST['fasilitasKamar'];
     $fasilitasKamarMandi = $_POST['fasilitasKamarMandi'];
+    $fasilitasUmum = $_POST['fasilitasUmum'];
+    $peraturanKost = $_POST['peraturanKost'];
 
     // Handle file uploads
     $uploadDir = 'uploads/';
@@ -97,6 +99,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
+        // Update fasilitas_umum
+        $conn->query("DELETE FROM fasilitas_umum WHERE kost_id = '$id'");
+        foreach ($fasilitasUmum as $fasilitas_umum) {
+            if (!empty(trim($fasilitas_umum))) {
+                $conn->query("INSERT INTO fasilitas_umum (kost_id, fasilitas) VALUES ('$id', '$fasilitas_umum')");
+            }
+        }
+
+        // Update peraturan_kost
+        $conn->query("DELETE FROM peraturan_kost WHERE kost_id = '$id'");
+        foreach ($peraturanKost as $peraturan) {
+            if (!empty(trim($peraturan))) {
+                $conn->query("INSERT INTO peraturan_kost (kost_id, peraturan) VALUES ('$id', '$peraturan')");
+            }
+        }
+
+
         // Redirect to the dashboard page
         header("Location: admin-dashboard-kost.php"); // Update this URL to match your dashboard URL
         exit(); // Make sure to exit to stop further script execution
@@ -125,13 +144,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Ambil data fasilitas kamar mandi
     $sqlFasilitasMandi = "SELECT fasilitas FROM fasilitas_kamar_mandi WHERE kost_id = $kost_id";
     $fasilitasMandiResult = $conn->query($sqlFasilitasMandi);
+
+    // Ambil data fasilitas umum
+    $sqlFasilitasUmum = "SELECT fasilitas FROM fasilitas_umum WHERE kost_id = $kost_id";
+    $fasilitasUmumResult = $conn->query($sqlFasilitasUmum);
+
+    // Ambil data peraturan kost
+    $sqlPeraturan = "SELECT peraturan FROM peraturan_kost WHERE kost_id = $kost_id";
+    $peraturanResult = $conn->query($sqlPeraturan);
+
 }
 $conn->close();
 ?>
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -413,6 +437,65 @@ $conn->close();
                             </div>
                         </div>
 
+                        <!-- Fasilitas Umum -->
+                        <div id="generalFacilitiesContainer">
+                            <h5>Fasilitas Umum</h5>
+                            <?php if ($fasilitasUmumResult && $fasilitasUmumResult->num_rows > 0): ?>
+                                <?php while ($fasilitasUmum = $fasilitasUmumResult->fetch_assoc()): ?>
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" name="fasilitasUmum[]"
+                                                placeholder="Fasilitas Umum"
+                                                value="<?php echo htmlspecialchars($fasilitasUmum['fasilitas']); ?>">
+                                        </div>
+                                        <div class="col-md-2 d-flex align-items-center">
+                                            <button type="button" class="btn btn-danger removeSpecBtn">Hapus</button>
+                                        </div>
+                                    </div>
+                                <?php endwhile; ?>
+                            <?php endif; ?>
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" name="fasilitasUmum[]"
+                                        placeholder="Fasilitas Umum">
+                                </div>
+                                <div class="col-md-2 d-flex align-items-center">
+                                    <button type="button" class="btn btn-primary addSpecBtn"
+                                        data-target="#generalFacilitiesContainer">Tambah</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Peraturan Kost -->
+                        <div id="rulesContainer">
+                            <h5>Peraturan Kost</h5>
+                            <?php if ($peraturanResult && $peraturanResult->num_rows > 0): ?>
+                                <?php while ($peraturan = $peraturanResult->fetch_assoc()): ?>
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" name="peraturanKost[]"
+                                                placeholder="Peraturan Kost"
+                                                value="<?php echo htmlspecialchars($peraturan['peraturan']); ?>">
+                                        </div>
+                                        <div class="col-md-2 d-flex align-items-center">
+                                            <button type="button" class="btn btn-danger removeSpecBtn">Hapus</button>
+                                        </div>
+                                    </div>
+                                <?php endwhile; ?>
+                            <?php endif; ?>
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" name="peraturanKost[]"
+                                        placeholder="Peraturan Kost">
+                                </div>
+                                <div class="col-md-2 d-flex align-items-center">
+                                    <button type="button" class="btn btn-primary addSpecBtn"
+                                        data-target="#rulesContainer">Tambah</button>
+                                </div>
+                            </div>
+                        </div>
+
+
                         <!-- Submit Button -->
                         <div class="col-md-12 d-flex justify-content-center mt-4">
                             <button type="submit" class="btn btn-primary btn-submit"><strong>Simpan
@@ -444,7 +527,6 @@ $conn->close();
     <!-- Template JavaScript -->
     <script src="js/main.js"></script>
     <script>
-        // Function to dynamically add input fields
         document.querySelectorAll('.addSpecBtn').forEach(button => {
             button.addEventListener('click', function () {
                 var target = document.querySelector(this.getAttribute('data-target'));
@@ -453,13 +535,13 @@ $conn->close();
                 var newInputGroup = document.createElement('div');
                 newInputGroup.className = 'row mb-3';
                 newInputGroup.innerHTML = `
-                    <div class="col-md-4">
-                        <input type="text" class="form-control" name="${target.id === 'specificationContainer' ? 'spesifikasiKamar[]' : target.id === 'roomFacilitiesContainer' ? 'fasilitasKamar[]' : 'fasilitasKamarMandi[]'}" placeholder="spesifikasi">
-                    </div>
-                    <div class="col-md-2 d-flex align-items-center">
-                        <button type="button" class="btn btn-danger removeSpecBtn">Hapus</button>
-                    </div>
-                `;
+            <div class="col-md-4">
+                <input type="text" class="form-control" name="${target.id === 'generalFacilitiesContainer' ? 'fasilitasUmum[]' : 'peraturanKost[]'}" placeholder="spesifikasi">
+            </div>
+            <div class="col-md-2 d-flex align-items-center">
+                <button type="button" class="btn btn-danger removeSpecBtn">Hapus</button>
+            </div>
+        `;
 
                 target.appendChild(newInputGroup);
 
