@@ -19,6 +19,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $spesifikasi_kamar = $_POST['spesifikasiKamar'] ?? [];
     $fasilitas_kamar = $_POST['fasilitasKamar'] ?? [];
     $fasilitas_kamar_mandi = $_POST['fasilitasKamarMandi'] ?? [];
+    $fasilitas_umum = $_POST['fasilitasUmum'] ?? [];
+    $peraturan_kost = $_POST['peraturanKost'] ?? [];
 
     // Unggah gambar
     $target_dir = "uploads/";
@@ -53,6 +55,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Insert fasilitas kamar mandi
         foreach ($fasilitas_kamar_mandi as $fasilitas_mandi) {
             $conn->query("INSERT INTO fasilitas_kamar_mandi (kost_id, fasilitas) VALUES ('$kost_id', '$fasilitas_mandi')");
+        }
+
+        // Proses menyimpan fasilitas umum ke dalam database
+        foreach ($fasilitas_umum as $fasilitas_umum_item) {
+            $conn->query("INSERT INTO fasilitas_umum (kost_id, fasilitas) VALUES ('$kost_id', '$fasilitas_umum_item')");
+        }
+
+        // Proses menyimpan peraturan kost ke dalam database
+        foreach ($peraturan_kost as $peraturan_item) {
+            $conn->query("INSERT INTO peraturan_kost (kost_id, peraturan) VALUES ('$kost_id', '$peraturan_item')");
         }
 
         // Setelah data berhasil ditambahkan, redirect ke halaman admin-dashboard-kost.php
@@ -161,8 +173,8 @@ $conn->close();
                         </div>
 
                         <label class="form-label">
-                                <h5 class="mt-2">Deskripsi Kost</h5>
-                            </label>
+                            <h5 class="mt-2">Deskripsi Kost</h5>
+                        </label>
                         <!-- Kost Name -->
                         <div class="col-md-6 mb-3">
                             <label for="kostName" class="form-label">Nama Kost</label>
@@ -240,7 +252,7 @@ $conn->close();
                                 placeholder="Masukkan Deskripsi"></textarea>
                         </div>
 
-                        <!-- Facilities -->
+                        <!-- Facsilitas -->
                         <h5>Fasilitas</h5>
                         <div id="specificationContainer">
                             <div class="row mb-3">
@@ -289,6 +301,40 @@ $conn->close();
                             </div>
                         </div>
 
+                        <!-- Fasilitas Umum -->
+                        <div id="generalFacilitiesContainer">
+                            <h5>Fasilitas Umum</h5>
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="fasilitasUmum1" class="form-label"><strong>Fasilitas
+                                            Umum</strong></label>
+                                    <input type="text" class="form-control" name="fasilitasUmum[]"
+                                        placeholder="fasilitas umum">
+                                </div>
+                                <div class="col-md-2 d-flex align-items-center mt-3">
+                                    <button type="button" class="btn btn-primary addSpecBtn"
+                                        data-target="#generalFacilitiesContainer">Tambah</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Peraturan Kost -->
+                        <div id="rulesContainer">
+                            <h5>Peraturan Kost</h5>
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="peraturanKost1" class="form-label"><strong>Peraturan
+                                            Kost</strong></label>
+                                    <input type="text" class="form-control" name="peraturanKost[]"
+                                        placeholder="peraturan kost">
+                                </div>
+                                <div class="col-md-2 d-flex align-items-center mt-3">
+                                    <button type="button" class="btn btn-primary addSpecBtn"
+                                        data-target="#rulesContainer">Tambah</button>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Submit Button -->
                         <div class="col-md-12 d-flex justify-content-center mt-4">
                             <button type="submit" class="btn btn-primary btn-submit"><strong>Tambah
@@ -320,7 +366,7 @@ $conn->close();
     <!-- Template JavaScript -->
     <script src="js/main.js"></script>
     <script>
-        // Function to dynamically add input fields
+        // Function to dynamically add input fields for Fasilitas Umum and Peraturan Kost
         document.querySelectorAll('.addSpecBtn').forEach(button => {
             button.addEventListener('click', function () {
                 var target = document.querySelector(this.getAttribute('data-target'));
@@ -329,13 +375,13 @@ $conn->close();
                 var newInputGroup = document.createElement('div');
                 newInputGroup.className = 'row mb-3';
                 newInputGroup.innerHTML = `
-                    <div class="col-md-4">
-                        <input type="text" class="form-control" name="${target.id === 'specificationContainer' ? 'spesifikasiKamar[]' : target.id === 'roomFacilitiesContainer' ? 'fasilitasKamar[]' : 'fasilitasKamarMandi[]'}" placeholder="spesifikasi">
-                    </div>
-                    <div class="col-md-2 d-flex align-items-center">
-                        <button type="button" class="btn btn-danger removeSpecBtn">Hapus</button>
-                    </div>
-                `;
+            <div class="col-md-4">
+                <input type="text" class="form-control" name="${target.id === 'specificationContainer' ? 'spesifikasiKamar[]' : target.id === 'roomFacilitiesContainer' ? 'fasilitasKamar[]' : target.id === 'bathroomFacilitiesContainer' ? 'fasilitasKamarMandi[]' : target.id === 'generalFacilitiesContainer' ? 'fasilitasUmum[]' : 'peraturanKost[]'}" placeholder="${target.id === 'generalFacilitiesContainer' ? 'fasilitas umum' : 'peraturan kost'}">
+            </div>
+            <div class="col-md-2 d-flex align-items-center">
+                <button type="button" class="btn btn-danger removeSpecBtn">Hapus</button>
+            </div>
+        `;
 
                 target.appendChild(newInputGroup);
 
