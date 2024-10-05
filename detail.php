@@ -307,8 +307,7 @@ if ($result->num_rows > 0) {
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto">
-                        <a href="index.html" class="nav-item nav-link">Beranda</a>
-
+                        <a href="index.php" class="nav-item nav-link">Beranda</a>
                         <a href="kost.php" class="nav-item nav-link">Kost</a>
                         <a href="kontak.php" class="nav-item nav-link">Kontak</a>
                         <a href="detail.php" class="nav-item nav-link active">Detail</a>
@@ -610,7 +609,7 @@ if ($result->num_rows > 0) {
                                 <input type="date" id="endDate" class="form-control mb-2">
                             </div>
                             <!-- Tombol Ajukan Sewa -->
-                            <a href="pembayaran.php">
+                            <a href="login.php">
                                 <button class="btn btn-primary w-100">Ajukan Sewa</button>
                             </a>
                         </div>
