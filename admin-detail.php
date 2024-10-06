@@ -14,6 +14,13 @@ if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $harga_setelah_diskon = $row['harga'] - $row['diskon'];
 
+    $pemilik_sql = "SELECT u.pkname, u.image_profile
+                    FROM logsys_pk u 
+                    JOIN kost k ON k.pkname = u.pkname
+                    WHERE k.id = '$kost_id'";
+    $pemilik_result = $conn->query($pemilik_sql);
+    $pemilik_data = $pemilik_result->fetch_assoc();
+
     // Fetch spesifikasi kamar
     $spesifikasi_sql = "SELECT spesifikasi FROM spesifikasi_kamar WHERE kost_id = '$kost_id'";
     $spesifikasi_result = $conn->query($spesifikasi_sql);
@@ -95,8 +102,11 @@ if ($result->num_rows > 0) {
             border-top: 1.5px solid #000;
         }
 
+        .sticky-container {
+            position: relative;
+        }
+
         .sticky {
-            position: -webkit-sticky;
             position: sticky;
             top: 20px;
             z-index: 1000;
@@ -233,13 +243,20 @@ if ($result->num_rows > 0) {
 
                     <hr class="hr-desk2">
 
-                    <!-- profile pemilik kost -->
+                    <!-- Profil Pemilik Kost -->
                     <div class="d-flex">
                         <div>
-                            <img src="img2/Bulat.png" class="img-fluid rounded-circle" alt="Owner Image">
+                            <?php
+                            $image_path = 'uploads/' . $pemilik_data['image_profile'];
+                            if (file_exists($image_path)) {
+                                echo '<img src="' . $image_path . '" class="img-fluid rounded-circle" alt="Owner Image">';
+                            } else {
+                                echo '<p>Image not found</p>';
+                            }
+                            ?>
                         </div>
                         <div class="mt-1 ms-3">
-                            <h5><strong>Romadon</strong></h5>
+                            <h5><strong><?php echo $pemilik_data['pkname']; ?></strong></h5>
                             <p class="mb-0">Pemilik Kost</p>
                         </div>
                     </div>
@@ -335,65 +352,68 @@ if ($result->num_rows > 0) {
                     </div>
                 </div>
 
-                <div class="col-md-4 sticky">
-                    <!-- Card Bayar -->
-                    <div class="card p-4 card-shadow mb-4 ">
-                        <div class="d-flex justify-content-between align-items-center">
+                <div class="col-md-4">
+                    <div class="sticky-container sticky">
+                        <!-- Card Bayar -->
+                        <div class="card p-4 card-shadow mb-4">
                             <div class="d-flex justify-content-between align-items-center">
-                                <div class="icon-text text-danger mt-3">
-                                    <i class="fas fa-bolt"></i>
-                                    <span><strong>Diskon Rp.
-                                            <?php echo number_format($row['diskon'], 0, ',', '.'); ?></strong></span>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="icon-text text-danger mt-3">
+                                        <i class="fas fa-bolt"></i>
+                                        <span><strong>Diskon Rp.
+                                                <?php echo number_format($row['diskon'], 0, ',', '.'); ?></strong></span>
+                                    </div>
                                 </div>
+                                <span class="text-decoration-line-through text-muted">Rp.
+                                    <?php echo number_format($row['harga'], 0, ',', '.'); ?></span>
                             </div>
-                            <span class="text-decoration-line-through text-muted">Rp.
-                                <?php echo number_format($row['harga'], 0, ',', '.'); ?></span>
+                            <div class="d-flex">
+                                <p class="final-price mt-2 text-dark" id="finalPrice">Rp.
+                                    <?php echo number_format($harga_setelah_diskon, 0, ',', '.'); ?>
+                                </p>
+                                <span class="mt-3 ml-2">/bulan</span>
+                            </div>
+                            <!-- Tanggal dan Periode Sewa -->
+                            <div class="input-group mb-3">
+                                <input type="date" class="form-control" value="2024-08-22">
+                                <select class="form-select" id="rentPeriod" onchange="calculateTotal()">
+                                    <option value="" selected>Waktu kost</option>
+                                    <option value="month">1 Bulan</option>
+                                    <option value="3months">3 Bulan</option>
+                                    <option value="6months">6 Bulan</option>
+                                    <option value="year">Per Tahun</option>
+                                </select>
+                            </div>
+                            <!-- Total Harga -->
+                            <div id="totalPrice" class="mb-3" style="display: none;">
+                                <h5>Total Harga: <span id="totalAmount">Rp0</span></h5>
+                            </div>
+                            <!-- Rent Time Range (Awalnya Tersembunyi) -->
+                            <div id="rentRange" class="hidden">
+                                <label for="startDate">Tanggal Mulai:</label>
+                                <input type="date" id="startDate" class="form-control mb-2">
+                                <label for="endDate">Tanggal Selesai:</label>
+                                <input type="date" id="endDate" class="form-control mb-2">
+                            </div>
+                            <!-- Tombol Ajukan Sewa -->
+                            <a href="pembayaran.php">
+                                <button class="btn btn-primary w-100">Ajukan Sewa</button>
+                            </a>
                         </div>
-                        <div class="d-flex">
-                            <p class="final-price mt-2 text-dark" id="finalPrice">Rp.
-                                <?php echo number_format($harga_setelah_diskon, 0, ',', '.'); ?>
-                            </p>
-                            <span class="mt-3 ml-2">/bulan</span>
-                        </div>
-                        <!-- Tanggal dan Periode Sewa -->
-                        <div class="input-group mb-3">
-                            <input type="date" class="form-control" value="2024-08-22">
-                            <select class="form-select" id="rentPeriod" onchange="calculateTotal()">
-                                <option value="" selected>Waktu kost</option>
-                                <option value="month">1 Bulan</option>
-                                <option value="3months">3 Bulan</option>
-                                <option value="6months">6 Bulan</option>
-                                <option value="year">Per Tahun</option>
-                            </select>
-                        </div>
-                        <!-- Total Harga -->
-                        <div id="totalPrice" class="mb-3" style="display: none;">
-                            <h5>Total Harga: <span id="totalAmount">Rp0</span></h5>
-                        </div>
-                        <!-- Rent Time Range (Awalnya Tersembunyi) -->
-                        <div id="rentRange" class="hidden">
-                            <label for="startDate">Tanggal Mulai:</label>
-                            <input type="date" id="startDate" class="form-control mb-2">
-                            <label for="endDate">Tanggal Selesai:</label>
-                            <input type="date" id="endDate" class="form-control mb-2">
-                        </div>
-                        <!-- Tombol Ajukan Sewa -->
-                        <a href="pembayaran.php">
-                            <button class="btn btn-primary w-100">Ajukan Sewa</button>
-                        </a>
-                    </div>
 
-                    <!-- Card Lokasi -->
-                    <div class="card p-4 card-shadow ">
-                        <h5>Lokasi</h5>
-                        <div class="icon-text">
-                            <i class="fa fa-map-marker-alt text-primary me-2"></i>
-                            <span><?php echo $row['alamat']; ?></span>
-                        </div>
-                        <div>
-                            <iframe
-                                src="https://maps.google.com/maps?q=<?php echo urlencode($row['alamat']); ?>&output=embed"
-                                width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                        <!-- Card Lokasi -->
+                        <div class="card p-4 card-shadow">
+                            <h5>Lokasi</h5>
+                            <div class="icon-text">
+                                <i class="fa fa-map-marker-alt text-primary me-2"></i>
+                                <span><?php echo $row['alamat']; ?></span>
+                            </div>
+                            <div>
+                                <iframe
+                                    src="https://maps.google.com/maps?q=<?php echo urlencode($row['alamat']); ?>&output=embed"
+                                    width="100%" height="200" style="border:0;" allowfullscreen=""
+                                    loading="lazy"></iframe>
+                            </div>
                         </div>
                     </div>
                 </div>
