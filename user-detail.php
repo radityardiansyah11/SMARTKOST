@@ -17,6 +17,14 @@ if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $harga_setelah_diskon = $row['harga'] - $row['diskon'];
 
+    // Query untuk mendapatkan data pemilik kost berdasarkan pkname atau user_id
+    $pemilik_sql = "SELECT u.pkname, u.image_profile
+                    FROM logsys_pk u 
+                    JOIN kost k ON k.pkname = u.pkname
+                    WHERE k.id = '$kost_id'";
+    $pemilik_result = $conn->query($pemilik_sql);
+    $pemilik_data = $pemilik_result->fetch_assoc();
+
     $spesifikasi_sql = "SELECT spesifikasi FROM spesifikasi_kamar WHERE kost_id = '$kost_id'";
     $spesifikasi_result = $conn->query($spesifikasi_sql);
 
@@ -301,30 +309,26 @@ if ($result->num_rows > 0) {
 
                     <hr class="hr-desk2">
 
+                    <!-- Profil Pemilik Kost -->
                     <div class="d-flex">
                         <div>
-                            <img src="img2/Bulat.png" class="img-fluid rounded-circle" alt="Owner Image">
+                            <?php
+                            $image_path = 'uploads/' . $pemilik_data['image_profile'];
+                            if (file_exists($image_path)) {
+                                echo '<img src="' . $image_path . '" class="img-fluid rounded-circle" alt="Owner Image">';
+                            } else {
+                                echo '<p>Image not found</p>';
+                            }
+                            ?>
                         </div>
                         <div class="mt-1 ms-3">
-                            <h5><strong>Romadon</strong></h5>
+                            <h5><strong><?php echo $pemilik_data['pkname']; ?></strong></h5>
                             <p class="mb-0">Pemilik Kost</p>
                         </div>
                     </div>
 
-                    <hr class="hr-desk2">
 
-                    <!--  
-                    <hr>
-                    <div class="row mb-4">
-                        <div class="col-md-3">
-                            <img src="<?php echo $row['gambar_pemilik']; ?>" class="img-fluid rounded-circle"
-                                alt="Owner Image">
-                        </div>
-                        <div class="col-md-9">
-                            <p><?php echo $row['nama_pemilik']; ?></p>
-                        </div>
-                    </div>
-                    <hr>-->
+                    <hr class="hr-desk2">
 
                     <!-- Ulasan -->
                     <div class="mt-4">

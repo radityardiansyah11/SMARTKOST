@@ -9,6 +9,33 @@ if (!isset($_SESSION['pkname'])) {
 }
 
 $pkname = $_SESSION['pkname']; // Ambil username dari sesi
+
+// Handle delete request
+if (isset($_GET['delete'])) {
+    $id = intval($_GET['delete']);
+    $pkname = $_SESSION['pkname']; // Dapatkan pkname dari sesi
+
+    // Cek apakah kost ini milik pkname yang sedang login
+    $check_owner_sql = "SELECT * FROM kost WHERE id = $id AND pkname = '$pkname'";
+    $result = mysqli_query($conn, $check_owner_sql);
+
+    if (mysqli_num_rows($result) > 0) {
+        // Jika kost milik pemilik yang login, lakukan penghapusan
+        $delete_sql = "DELETE FROM kost WHERE id = $id";
+        if (mysqli_query($conn, $delete_sql)) {
+            $_SESSION['status'] = "deleted"; // Tampilkan status berhasil
+        } else {
+            $_SESSION['status'] = "error"; // Tampilkan status gagal
+        }
+    } else {
+        // Jika tidak, tampilkan pesan error
+        $_SESSION['status'] = "unauthorized";
+    }
+    
+    // Redirect kembali ke dashboard setelah penghapusan
+    header('Location: pk-dashboard-kost.php');
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -47,6 +74,64 @@ $pkname = $_SESSION['pkname']; // Ambil username dari sesi
     <style>
         .card {
             box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        }
+
+        .dropdown-menu {
+            border-radius: 10px;
+            padding: 10px 0;
+            transition: 0.3s ease;
+        }
+
+        .dropdown-item {
+            padding: 10px 20px;
+            transition: 0.2s ease-in-out;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .dropdown-toggle::after {
+            display: none;
+        }
+
+        .dropdown-menu .dropdown-divider {
+            margin: 5px 0;
+        }
+
+        .btn-light {
+            background-color: #ffffff;
+            border-radius: 50%;
+            padding: 5px 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-light:focus {
+            outline: none;
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+        }
+
+        .property-item {
+            width: 100%;
+            max-height: 400px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s;
+        }
+
+        .property-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .jenis-kost-label {
+            width: auto;
+            margin-right: 35px;
+            padding-right: 10px;
+            white-space: nowrap;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -101,8 +186,8 @@ $pkname = $_SESSION['pkname']; // Ambil username dari sesi
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center text-light text-decoration-none dropdown-toggle"
                         id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="<?php echo isset($_SESSION['image_profile']) ? htmlspecialchars($_SESSION['image_profile']) : 'https://via.placeholder.com/50'; ?>" alt="Admin" width="32" height="32"
-                            class="rounded-circle me-2">
+                        <img src="<?php echo isset($_SESSION['image_profile']) ? htmlspecialchars($_SESSION['image_profile']) : 'https://via.placeholder.com/50'; ?>"
+                            alt="Admin" width="32" height="32" class="rounded-circle me-2">
                         <strong>Hi,
                             <?php echo htmlspecialchars($pkname); ?>
                         </strong>
@@ -160,46 +245,91 @@ $pkname = $_SESSION['pkname']; // Ambil username dari sesi
                                     Kost</a>
                             </div>
                         </div>
+
+                        <!-- list kost -->
                         <div class="tab-content">
                             <div id="tab-1" class="tab-pane fade show p-0 active">
                                 <div class="row g-4">
 
-                                    <div class="tab-content">
-                                        <div id="tab-1" class="tab-pane fade show p-0 active">
-                                            <div class="row g-4">
-                                                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                                                    <div class="property-item rounded overflow-hidden">
-                                                        <div class="position-relative overflow-hidden">
-                                                            <a href=""><img class="img-fluid" src="img2/gbr-kost1.jpg"
-                                                                    alt=""></a>
-                                                            <div
-                                                                class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                                                Kost</div>
-                                                        </div>
-                                                        <div class="p-4 pb-0">
-                                                            <h5 class="text-primary mb-3">Rp. 500.000</h5>
-                                                            <a class="d-block h5 mb-2" href="">Kost Comboran</a>
-                                                            <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl.
-                                                                Tanimbar</p>
-                                                        </div>
-                                                        <div class="d-flex border-top">
-                                                            <small class="flex-fill text-center border-end py-2"><i
-                                                                    class="fa fa-ruler-combined text-primary me-2"></i>3x3</small>
-                                                            <small class="flex-fill text-center border-end py-2"><i
-                                                                    class="fa fa-bed text-primary me-2"></i>1
-                                                                Bed</small>
-                                                            <small class="flex-fill text-center py-2"><i
-                                                                    class="fa fa-bath text-primary me-2"></i>2
-                                                                Bath</small>
+                                    <?php
+                                    // Fetch Kost listings from the database
+                                    $pkname = $_SESSION['pkname']; // Ambil pkname dari sesi
+                                    $result = $conn->query("SELECT * FROM kost WHERE pkname = '$pkname'");
+                                    while ($row = $result->fetch_assoc()) {
+                                        ?>
+                                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                            <div class="property-item rounded overflow-hidden">
+                                                <div class="position-relative overflow-hidden">
+                                                    <a href="admin-detail.php?id=<?php echo $row['id']; ?>">
+                                                        <img class="img-fluid" src="<?php echo $row['gambar_1']; ?>" alt="">
+                                                    </a>
+
+                                                    <div
+                                                        class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
+                                                        </i><?php echo $row['kategori']; ?>
+                                                    </div>
+
+                                                    <div class="dropdown position-absolute top-0 end-0 mt-2 me-2">
+                                                        <button class="btn btn-sm btn-light dropdown-toggle" type="button"
+                                                            id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                                            aria-expanded="false">
+                                                            <i class="fas fa-ellipsis-v"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-right shadow border-0"
+                                                            aria-labelledby="dropdownMenuButton">
+                                                            <li>
+                                                                <a class="dropdown-item d-flex align-items-center"
+                                                                    href="edit-kost.php?id=<?php echo $row['id']; ?>">
+                                                                    <i class="fas fa-edit me-2 text-primary"></i> Edit
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <hr class="dropdown-divider">
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-item d-flex align-items-center"
+                                                                    href="?delete=<?php echo $row['id']; ?>"
+                                                                    onclick="return confirm('Anda yakin ingin menghapus kost ini?');">
+                                                                    <i class="fas fa-trash-alt me-2 text-danger"></i> Delete
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                        <div
+                                                            class="bg-white text-primary position-absolute end-0 bottom-0 pt-1 px-3 jenis-kost-label">
+                                                            <?php echo $row['jenis_kost']; ?>
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <div class="p-4 pb-0">
+                                                    <a class="d-block h5 mb-2" href=""><?php echo $row['nama_kost']; ?></a>
+                                                    <h5 class="text-primary mb-2">Rp.
+                                                        <?php echo number_format($row['harga'], 0, ',', '.'); ?>
+                                                    </h5>
+                                                    <p>
+                                                        <i
+                                                            class="fa fa-map-marker-alt text-primary me-2"></i><?php echo $row['alamat']; ?>
+                                                    </p>
+                                                </div>
+                                                <div class="d-flex border-top">
+                                                    <small class="flex-fill text-center border-end py-2"><i
+                                                            class="fa fa-ruler-combined text-primary me-2"></i><?php echo $row['ukuran_kamar']; ?></small>
+                                                    <small class="flex-fill text-center border-end py-2"><i
+                                                            class="fa fa-bed text-primary me-2"></i><?php echo $row['banyak_kasur']; ?>
+                                                        Bed</small>
+                                                    <small class="flex-fill text-center py-2"><i
+                                                            class="fa fa-bath text-primary me-2"></i><?php echo $row['banyak_kamar_mandi']; ?>
+                                                        Bath</small>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        <?php
+                                    }
+                                    ?>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>

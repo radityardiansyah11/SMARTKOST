@@ -16,12 +16,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $kategori = $_POST['kategori'];
 
     // Mendapatkan ID pemilik dari sesi yang sedang login
-    $user_id = $_SESSION['user_id'];  // Asumsi kamu menyimpan user_id di session saat login
+    $pkname = $_SESSION['pkname'];  
 
     // Fasilitas
     $spesifikasi_kamar = $_POST['spesifikasiKamar'] ?? [];
     $fasilitas_kamar = $_POST['fasilitasKamar'] ?? [];
     $fasilitas_kamar_mandi = $_POST['fasilitasKamarMandi'] ?? [];
+    $fasilitas_umum = $_POST['fasilitasUmum'] ?? [];
+    $peraturan_kost = $_POST['peraturanKost'] ?? [];
 
     // Unggah gambar
     $target_dir = "uploads/";
@@ -36,9 +38,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Insert data ke dalam database dengan menyimpan user_id (pemilik kost)
-    $sql = "INSERT INTO kost (nama_kost, alamat, ukuran_kamar, harga, diskon, deskripsi, jenis_kost, banyak_kasur, banyak_kamar_mandi, kategori, gambar_1, gambar_2, gambar_3, gambar_4, user_id)
+    $sql = "INSERT INTO kost (nama_kost, alamat, ukuran_kamar, harga, diskon, deskripsi, jenis_kost, banyak_kasur, banyak_kamar_mandi, kategori, gambar_1, gambar_2, gambar_3, gambar_4, pkname)
             VALUES ('$nama_kost', '$alamat', '$ukuran_kamar', '$harga', '$diskon', '$deskripsi', '$jenis_kost', '$banyak_kasur', '$banyak_kamar_mandi', '$kategori',
-            '{$images[0]}', '{$images[1]}', '{$images[2]}', '{$images[3]}', '$user_id')";
+            '{$images[0]}', '{$images[1]}', '{$images[2]}', '{$images[3]}', '$pkname')";
 
     if ($conn->query($sql) === TRUE) {
         $kost_id = $conn->insert_id;
@@ -58,6 +60,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $conn->query("INSERT INTO fasilitas_kamar_mandi (kost_id, fasilitas) VALUES ('$kost_id', '$fasilitas_mandi')");
         }
 
+        // Proses menyimpan fasilitas umum ke dalam database
+        foreach ($fasilitas_umum as $fasilitas_umum_item) {
+            $conn->query("INSERT INTO fasilitas_umum (kost_id, fasilitas) VALUES ('$kost_id', '$fasilitas_umum_item')");
+        }
+
+        // Proses menyimpan peraturan kost ke dalam database
+        foreach ($peraturan_kost as $peraturan_item) {
+            $conn->query("INSERT INTO peraturan_kost (kost_id, peraturan) VALUES ('$kost_id', '$peraturan_item')");
+        }
+
         // Redirect ke halaman dashboard setelah data berhasil ditambahkan
         header("Location: pk-dashboard-kost.php?msg=success");
         exit();  // Pastikan tidak ada kode lain yang dieksekusi setelah redirect
@@ -69,8 +81,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $conn->close();
 
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -121,7 +131,7 @@ $conn->close();
         <div class="container ">
             <div class="form-section">
                 <h2 class="text-center">Tambah Kost</h2>
-                <form method="POST" action="admin-tambah-kost.php" enctype="multipart/form-data">
+                <form method="POST" action="pk-tambah kost.php" enctype="multipart/form-data">
                     <div class="row">
                         <!-- Image Uploads -->
                         <div class="col-md-12 mb-3">
@@ -165,8 +175,8 @@ $conn->close();
                         </div>
 
                         <label class="form-label">
-                                <h5 class="mt-2">Deskripsi Kost</h5>
-                            </label>
+                            <h5 class="mt-2">Deskripsi Kost</h5>
+                        </label>
                         <!-- Kost Name -->
                         <div class="col-md-6 mb-3">
                             <label for="kostName" class="form-label">Nama Kost</label>
@@ -191,7 +201,7 @@ $conn->close();
                         <!-- jenis kost -->
                         <div class="col-md-3 mb-3">
                             <label for="jenisKost" class="form-label">Jenis Kost</label>
-                            <select class="form-select" name="jenisKost" id="jenisKost">
+                            <select class="form-select" name="jenisKost" id="jenisKost" required>
                                 <option selected disabled>Pilih Jenis Kost</option>
                                 <option value="laki-laki">Laki-laki</option>
                                 <option value="perempuan">Perempuan</option>
@@ -230,7 +240,7 @@ $conn->close();
                         <!-- Kategori -->
                         <div class="col-md-3 mb-3">
                             <label for="kategori" class="form-label">Kategori</label>
-                            <select class="form-select" name="kategori" id="kategori">
+                            <select class="form-select" name="kategori" id="kategori" required>
                                 <option selected disabled>Pilih Kategori Kost</option>
                                 <option value="Standart">Standart</option>
                                 <option value="Premium">Premium</option>
@@ -289,6 +299,38 @@ $conn->close();
                                 <div class="col-md-2 d-flex align-items-center mt-3">
                                     <button type="button" class="btn btn-primary addSpecBtn"
                                         data-target="#bathroomFacilitiesContainer">Tambah</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fasilitas Umum -->
+                        <div id="generalFacilitiesContainer">
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="fasilitasUmum1" class="form-label"><strong>Fasilitas
+                                            Umum</strong></label>
+                                    <input type="text" class="form-control" name="fasilitasUmum[]"
+                                        placeholder="fasilitas umum">
+                                </div>
+                                <div class="col-md-2 d-flex align-items-center mt-3">
+                                    <button type="button" class="btn btn-primary addSpecBtn"
+                                        data-target="#generalFacilitiesContainer">Tambah</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Peraturan Kost -->
+                        <div id="rulesContainer">
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="peraturanKost1" class="form-label"><strong>Peraturan
+                                            Kost</strong></label>
+                                    <input type="text" class="form-control" name="peraturanKost[]"
+                                        placeholder="peraturan kost">
+                                </div>
+                                <div class="col-md-2 d-flex align-items-center mt-3">
+                                    <button type="button" class="btn btn-primary addSpecBtn"
+                                        data-target="#rulesContainer">Tambah</button>
                                 </div>
                             </div>
                         </div>
