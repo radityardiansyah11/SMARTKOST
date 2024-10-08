@@ -9,6 +9,12 @@ if (!isset($_SESSION['pkname'])) {
 }
 
 $pkname = $_SESSION['pkname']; // Ambil username dari sesi
+
+// Query untuk menghitung jumlah kost milik pemilik kost yang login
+$query_count_kost = "SELECT COUNT(*) AS total_kost FROM kost WHERE pkname = '$pkname'";
+$result_count_kost = mysqli_query($conn, $query_count_kost);
+$row_count_kost = mysqli_fetch_assoc($result_count_kost);
+$total_kost = $row_count_kost['total_kost'];
 ?>
 
 <!DOCTYPE html>
@@ -102,8 +108,8 @@ $pkname = $_SESSION['pkname']; // Ambil username dari sesi
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center text-light text-decoration-none dropdown-toggle"
                         id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="<?php echo isset($_SESSION['image_profile']) ? htmlspecialchars($_SESSION['image_profile']) : 'https://via.placeholder.com/50'; ?>" alt="Admin" width="32" height="32"
-                            class="rounded-circle me-2">
+                        <img src="<?php echo isset($_SESSION['image_profile']) ? htmlspecialchars($_SESSION['image_profile']) : 'https://via.placeholder.com/50'; ?>"
+                            alt="Admin" width="32" height="32" class="rounded-circle me-2">
                         <strong>Hi,
                             <?php echo htmlspecialchars($pkname); ?>
                         </strong>
@@ -127,7 +133,9 @@ $pkname = $_SESSION['pkname']; // Ambil username dari sesi
                         <div class="card bg-primary" style="height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title text-light">Kost</h5>
-                                <h3 class="card-text text-light">0</h3>
+                                <h3 class="card-text text-light">
+                                    <?php echo $total_kost; ?>
+                                </h3>
                             </div>
                         </div>
                     </div>

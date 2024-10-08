@@ -9,6 +9,12 @@ if (!isset($_SESSION['pkname'])) {
 }
 
 $pkname = $_SESSION['pkname']; // Ambil username dari sesi
+
+// Query untuk menghitung jumlah kost milik pemilik kost yang login
+$query_count_kost = "SELECT COUNT(*) AS total_kost FROM kost WHERE pkname = '$pkname'";
+$result_count_kost = mysqli_query($conn, $query_count_kost);
+$row_count_kost = mysqli_fetch_assoc($result_count_kost);
+$total_kost = $row_count_kost['total_kost'];
 ?>
 
 <!DOCTYPE html>
@@ -94,6 +100,14 @@ $pkname = $_SESSION['pkname']; // Ambil username dari sesi
             outline: none;
             box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
         }
+
+        .jenis-kost-label {
+            width: auto;
+            margin-right: 35px;
+            padding-right: 10px;
+            white-space: nowrap;
+            border-radius: 5px;
+        }
     </style>
 </head>
 
@@ -148,8 +162,8 @@ $pkname = $_SESSION['pkname']; // Ambil username dari sesi
                     <a href="#" class="d-flex align-items-center text-light text-decoration-none dropdown-toggle"
                         id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                         <!-- gambarprofile -->
-                        <img src="<?php echo isset($_SESSION['image_profile']) ? $_SESSION['image_profile'] : 'img2/Bulat.png'; ?>" alt="Admin" width="32" height="32"
-                            class="rounded-circle me-2">
+                        <img src="<?php echo isset($_SESSION['image_profile']) ? $_SESSION['image_profile'] : 'img2/Bulat.png'; ?>"
+                            alt="Admin" width="32" height="32" class="rounded-circle me-2">
                         <strong>Hi,
                             <?php echo htmlspecialchars($pkname); ?>
                         </strong>
@@ -177,7 +191,9 @@ $pkname = $_SESSION['pkname']; // Ambil username dari sesi
                         <div class="card bg-primary" style="height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title text-light">Kost</h5>
-                                <h3 class="card-text text-light">0</h3>
+                                <h3 class="card-text text-light">
+                                    <?php echo $total_kost; ?>
+                                </h3>
                             </div>
                         </div>
                     </div>
@@ -246,67 +262,90 @@ $pkname = $_SESSION['pkname']; // Ambil username dari sesi
                                 </div>
                             </div>
                         </div>
+
                         <div class="tab-content">
                             <div id="tab-1" class="tab-pane fade show p-0 active">
                                 <div class="row g-4">
-                                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                                        <div class="property-item rounded overflow-hidden">
-                                            <div class="position-relative overflow-hidden">
-                                                <a href=""><img class="img-fluid" src="img2/gbr-kost1.jpg" alt=""></a>
-                                                <div
-                                                    class="bg-white rounded-top text-warning position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                                    Premium
+
+                                    <?php
+                                    // Fetch Kost listings from the database
+                                    $pkname = $_SESSION['pkname']; // Ambil pkname dari sesi
+                                    $result = $conn->query("SELECT * FROM kost WHERE pkname = '$pkname' LIMIT 9");
+                                    while ($row = $result->fetch_assoc()) {
+                                        ?>
+                                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                            <div class="property-item rounded overflow-hidden">
+                                                <div class="position-relative overflow-hidden">
+                                                    <a href="admin-detail.php?id=<?php echo $row['id']; ?>">
+                                                        <img class="img-fluid" src="<?php echo $row['gambar_1']; ?>" alt="">
+                                                    </a>
+
+                                                    <div
+                                                        class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
+                                                        </i><?php echo $row['kategori']; ?>
+                                                    </div>
+
+                                                    <div class="dropdown position-absolute top-0 end-0 mt-2 me-2">
+                                                        <button class="btn btn-sm btn-light dropdown-toggle" type="button"
+                                                            id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                                            aria-expanded="false">
+                                                            <i class="fas fa-ellipsis-v"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-right shadow border-0"
+                                                            aria-labelledby="dropdownMenuButton">
+                                                            <li>
+                                                                <a class="dropdown-item d-flex align-items-center"
+                                                                    href="edit-kost.php?id=<?php echo $row['id']; ?>">
+                                                                    <i class="fas fa-edit me-2 text-primary"></i> Edit
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <hr class="dropdown-divider">
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-item d-flex align-items-center"
+                                                                    href="?delete=<?php echo $row['id']; ?>"
+                                                                    onclick="return confirm('Anda yakin ingin menghapus kost ini?');">
+                                                                    <i class="fas fa-trash-alt me-2 text-danger"></i> Delete
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                        <div
+                                                            class="bg-white text-primary position-absolute end-0 bottom-0 pt-1 px-3 jenis-kost-label">
+                                                            <?php echo $row['jenis_kost']; ?>
+                                                        </div>
+                                                    </div>
                                                 </div>
 
-                                                <!-- Dropdown Edit & Delete -->
-                                                <div class="dropdown position-absolute top-0 end-0 mt-2 me-2">
-                                                    <button class="btn btn-sm btn-light dropdown-toggle" type="button"
-                                                        id="dropdownMenuButton" data-bs-toggle="dropdown"
-                                                        aria-expanded="false">
-                                                        <i class="fas fa-ellipsis-v"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu dropdown-menu-right shadow border-0"
-                                                        aria-labelledby="dropdownMenuButton">
-                                                        <li>
-                                                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                                                <i class="fas fa-edit me-2 text-primary"></i> Edit
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <hr class="dropdown-divider">
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                                                <i class="fas fa-trash-alt me-2 text-danger"></i> Delete
-                                                            </a>
-                                                        </li>
-                                                    </ul>
+                                                <div class="p-4 pb-0">
+                                                    <a class="d-block h5 mb-2" href=""><?php echo $row['nama_kost']; ?></a>
+                                                    <h5 class="text-primary mb-2">Rp.
+                                                        <?php echo number_format($row['harga'], 0, ',', '.'); ?>
+                                                    </h5>
+                                                    <p>
+                                                        <i
+                                                            class="fa fa-map-marker-alt text-primary me-2"></i><?php echo $row['alamat']; ?>
+                                                    </p>
                                                 </div>
-                                            </div>
-
-                                            <div class="p-4 pb-0">
-                                                <h5 class="text-primary mb-3">Rp. 500.000</h5>
-                                                <a class="d-block h5 mb-2" href="">Kost Comboran</a>
-                                                <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Jl. Tanimbar
-                                                </p>
-                                            </div>
-                                            <div class="d-flex border-top">
-                                                <small class="flex-fill text-center border-end py-2">
-                                                    <i class="fa fa-ruler-combined text-primary me-2"></i>3x3
-                                                </small>
-                                                <small class="flex-fill text-center border-end py-2">
-                                                    <i class="fa fa-bed text-primary me-2"></i>1 Bed
-                                                </small>
-                                                <small class="flex-fill text-center py-2">
-                                                    <i class="fa fa-bath text-primary me-2"></i>2 Bath
-                                                </small>
+                                                <div class="d-flex border-top">
+                                                    <small class="flex-fill text-center border-end py-2"><i
+                                                            class="fa fa-ruler-combined text-primary me-2"></i><?php echo $row['ukuran_kamar']; ?></small>
+                                                    <small class="flex-fill text-center border-end py-2"><i
+                                                            class="fa fa-bed text-primary me-2"></i><?php echo $row['banyak_kasur']; ?>
+                                                        Bed</small>
+                                                    <small class="flex-fill text-center py-2"><i
+                                                            class="fa fa-bath text-primary me-2"></i><?php echo $row['banyak_kamar_mandi']; ?>
+                                                        Bath</small>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <a href="pk-dashboard-kost.html" class="text-end" style="color: grey;">View More</a>
+                                        <?php
+                                    }
+                                    ?>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>

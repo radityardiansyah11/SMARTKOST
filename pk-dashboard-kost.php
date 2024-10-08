@@ -31,11 +31,17 @@ if (isset($_GET['delete'])) {
         // Jika tidak, tampilkan pesan error
         $_SESSION['status'] = "unauthorized";
     }
-    
+
     // Redirect kembali ke dashboard setelah penghapusan
     header('Location: pk-dashboard-kost.php');
     exit();
 }
+
+// Query untuk menghitung jumlah kost milik pemilik kost yang login
+$query_count_kost = "SELECT COUNT(*) AS total_kost FROM kost WHERE pkname = '$pkname'";
+$result_count_kost = mysqli_query($conn, $query_count_kost);
+$row_count_kost = mysqli_fetch_assoc($result_count_kost);
+$total_kost = $row_count_kost['total_kost'];
 ?>
 
 <!DOCTYPE html>
@@ -211,10 +217,13 @@ if (isset($_GET['delete'])) {
                         <div class="card bg-primary" style="height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title text-light">Kost</h5>
-                                <h3 class="card-text text-light">0</h3>
+                                <h3 class="card-text text-light">
+                                    <?php echo $total_kost;?>
+                                </h3>
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-4">
                         <div class="card" style="height: 150px; background-color: #009774;">
                             <div class="card-body">
