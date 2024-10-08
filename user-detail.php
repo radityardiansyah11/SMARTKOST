@@ -54,7 +54,6 @@ if ($result->num_rows > 0) {
 } else {
     echo "No kost found";
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -312,9 +311,13 @@ if ($result->num_rows > 0) {
                     <!-- Profil Pemilik Kost -->
                     <div class="d-flex">
                         <div>
-                            <!-- Jika image_profile tidak ada, gunakan gambar default -->
-                            <img src="uploads/<?php echo isset($pemilik_data['image_profile']) ? $pemilik_data['image_profile'] : 'img2/bulat.png'; ?>"
-                                class="img-fluid rounded-circle" alt="Owner Image">
+                            <?php
+                            // Cek apakah gambar profil ada, jika tidak pakai gambar default
+                            $image_path = isset($pemilik_data['image_profile']) && !empty($pemilik_data['image_profile'])
+                                ? $pemilik_data['image_profile']
+                                : 'img2/bulat.png';
+                            ?>
+                            <img src="<?php echo $image_path; ?>" class="img-fluid rounded-circle" alt="Owner Image">
                         </div>
                         <div class="mt-1 ms-3">
                             <h5><strong><?php echo !empty($pemilik_data['pkname']) ? $pemilik_data['pkname'] : 'admin smarkost'; ?></strong>

@@ -18,13 +18,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($result->num_rows > 0) {
             $pk = $result->fetch_assoc();
-            
+
             // Verifikasi password
             if (password_verify($password, $pk['password'])) {
                 // Password benar, login berhasil
-                $_SESSION['user_id'] = $pk['id']; 
+                $_SESSION['user_id'] = $pk['id'];
                 $_SESSION['pkname'] = $pk['pkname']; // Simpan pkname dalam sesi
-                
+
+                // Ambil gambar profil dari database
+                $sql_image_profile = "SELECT image_profile FROM logsys_pk WHERE pkname = ?";
+                $stmt_profile = $conn->prepare($sql_image_profile);
+                $stmt_profile->bind_param("s", $pk['pkname']); // Changed $user to $pk
+                $stmt_profile->execute();
+                $result_profile = $stmt_profile->get_result();
+
+                if ($result_profile->num_rows > 0) {
+                    $row_profile = $result_profile->fetch_assoc();
+                    $_SESSION['image_profile'] = $row_profile['image_profile']; // Set gambar profil ke session
+                }
+
                 // Arahkan ke dashboard
                 header("Location: pk-dashboard.php");
                 exit();
@@ -197,12 +209,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <h5 class="text-center fw-normal mb-1 pb-3 text-muted">Login Pemilik Kost</h5>
 
                     <form method="POST" action="login-pk.php">
-                        <input type="email" name="email" placeholder="Email" class="form-control form-control-lg" required>
-                        <input type="password" name="password" placeholder="Password" class="form-control form-control-lg" required>
+                        <input type="email" name="email" placeholder="Email" class="form-control form-control-lg"
+                            required>
+                        <input type="password" name="password" placeholder="Password"
+                            class="form-control form-control-lg" required>
                         <div class="d-flex justify-content-center">
                             <button type="submit" class="btn btn-dark btn-lg btn-block mt-4">Masuk</button>
                         </div>
-                        <p class="register" style="color: #8d8d8d;">Tidak punya akun? <a href="register-pk.php"><strong>Daftar di sini</strong></a></p>
+                        <p class="register" style="color: #8d8d8d;">Tidak punya akun? <a
+                                href="register-pk.php"><strong>Daftar di sini</strong></a></p>
                     </form>
 
                 </div>
@@ -224,7 +239,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Script untuk menampilkan alert jika ada pesan kesalahan -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             var errorMessage = "<?php echo $error_message; ?>";
             if (errorMessage) {
                 alert(errorMessage);

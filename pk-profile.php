@@ -3,7 +3,7 @@ include 'config.php';
 session_start();
 
 // Periksa apakah pengguna sudah login
-if (!isset($_SESSION['pkname']))  {
+if (!isset($_SESSION['pkname'])) {
     header("Location: login-pk.php");
     exit();
 }
