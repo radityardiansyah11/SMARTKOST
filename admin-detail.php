@@ -246,17 +246,13 @@ if ($result->num_rows > 0) {
                     <!-- Profil Pemilik Kost -->
                     <div class="d-flex">
                         <div>
-                            <?php
-                            $image_path = 'uploads/' . $pemilik_data['image_profile'];
-                            if (file_exists($image_path)) {
-                                echo '<img src="' . $image_path . '" class="img-fluid rounded-circle" alt="Owner Image">';
-                            } else {
-                                echo '<p>Image not found</p>';
-                            }
-                            ?>
+                            <!-- Jika image_profile tidak ada, gunakan gambar default -->
+                            <img src="uploads/<?php echo isset($pemilik_data['image_profile']) ? $pemilik_data['image_profile'] : 'img2/bulat.png'; ?>"
+                                class="img-fluid rounded-circle" alt="Owner Image">
                         </div>
                         <div class="mt-1 ms-3">
-                            <h5><strong><?php echo $pemilik_data['pkname']; ?></strong></h5>
+                            <h5><strong><?php echo !empty($pemilik_data['pkname']) ? $pemilik_data['pkname'] : 'admin smarkost'; ?></strong>
+                            </h5>
                             <p class="mb-0">Pemilik Kost</p>
                         </div>
                     </div>
