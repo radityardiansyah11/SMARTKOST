@@ -1,3 +1,34 @@
+<?php
+// Mulai session dan pastikan user sudah login
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Ambil data dari POST
+$nama_kost = $_POST['nama_kost'];
+$alamat_kost = $_POST['alamat_kost'];
+$harga_kost = $_POST['harga_kost'];
+$diskon_kost = $_POST['diskon_kost'];
+$total_harga = $_POST['total_harga'];
+$waktu_kost = $_POST['waktu_kost'];
+$mulai_sewa = $_POST['mulai_sewa'];
+$selesai_sewa = $_POST['selesai_sewa'];
+
+// Fungsi untuk mengubah format tanggal
+function formatTanggal($tanggal)
+{
+    // Ubah format dari yyyy-mm-dd ke dd-mm-yyyy
+    return date("d-m-Y", strtotime($tanggal));
+}
+
+// Mengubah format tanggal
+$mulai_sewa = formatTanggal($mulai_sewa);
+$selesai_sewa = formatTanggal($selesai_sewa);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -70,7 +101,7 @@
     </style>
 </head>
 
-<body>
+<body class="bg-white">
     <div class="container-xxl bg-white p-0">
         <!-- Spinner Start -->
         <div id="spinner"
@@ -81,7 +112,7 @@
         </div>
         <!-- Spinner End -->
 
-        <!-- Navbar Start -->
+        <!-- Navbar Start 
         <div class="container-fluid nav-bar bg-transparent">
             <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
                 <a href="#" class="navbar-brand d-flex align-items-center text-center">
@@ -99,17 +130,14 @@
                     </div>
                     <div class="d-flex">
                         <div class="me-3 text-end">
-                            <h6 class="mt-2">Halo,
-                                
-                            </h6>
-
+                            <h6 class="mt-2">Halo, <br> <?php echo htmlspecialchars($username); ?></h6>
                         </div>
                         <img src="img2/Bulat.png" alt="profile" style="width: 50px; height: 50px;">
                     </div>
                 </div>
             </nav>
         </div>
-        <!-- Navbar End -->
+        Navbar End -->
 
         <!-- Pembayaran Start -->
         <div class="container mt-5">
@@ -121,16 +149,18 @@
                             <h4 class="mb-2 mt-2 text-light">Rincian Pembayaran</h4>
                         </div>
                         <div class="card-body">
-                            <h5 class="mb-2">Pembayaran: Kost Comboran</h5>
-                            <p><strong>Alamat:</strong> Jl. Tanimbar No. 10 Kec. Klojen Kota Malang</p>
+                            <h5 class="mb-2">Pembayaran: <?php echo htmlspecialchars($nama_kost); ?></h5>
+                            <p><strong>Alamat:</strong> <?php echo htmlspecialchars($alamat_kost); ?></p>
+
                             <div class="d-flex justify-content-between mb-3">
                                 <div class="date-box">
-                                    <strong>Mulai:</strong> 1 September 2024
+                                    <strong>Mulai:</strong> <?php echo htmlspecialchars($mulai_sewa); ?>
                                 </div>
                                 <div class="date-box">
-                                    <strong>Selesai:</strong> 30 September 2024
+                                    <strong>Selesai:</strong> <?php echo htmlspecialchars($selesai_sewa); ?>
                                 </div>
                             </div>
+
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -139,13 +169,23 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+
                                     <tr>
                                         <td>Sewa Kost</td>
-                                        <td>Rp 500.000</td>
+                                        <td>Rp <?php echo number_format($harga_kost, 0, ',', '.'); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Diskon</td>
+                                        <td>Rp <?php echo number_format($diskon_kost, 0, ',', '.'); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Waktu Kost</td>
+                                        <td><?php echo htmlspecialchars($waktu_kost); ?></td>
                                     </tr>
                                     <tr>
                                         <td><strong>Total</strong></td>
-                                        <td><strong>Rp 500.000</strong></td>
+                                        <td><strong>Rp <?php echo number_format($total_harga, 0, ',', '.'); ?></strong>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -169,13 +209,15 @@
                                     <label for="emailPenyewa" class="form-label">Email</label>
                                     <input type="email" class="form-control" id="emailPenyewa" placeholder="email anda">
                                 </div>
-                                <div class="mb-3">
-                                    <label for="metodePembayaran" class="form-label">Metode Pembayaran</label>
-                                    <select class="form-select" id="metodePembayaran">
-                                        <option value="transfer">Transfer Bank</option>
-                                        <option value="ewallet">E-Wallet (OVO, GoPay, DANA)</option>
-                                    </select>
-                                </div>
+
+                                <label for="metodePembayaran" class="form-label">Metode Pembayaran</label>
+                                <select class="form-select mb-3" id="metodePembayaran">
+                                    <option value="transfer">Transfer Bank</option>
+                                    <option value="ewallet">E-Wallet (OVO, GoPay, DANA)</option>
+                                    <option value="cod">Cash on Delivery</option> 
+                                </select>
+
+
                                 <button type="submit" class="btn btn-primary w-100" data-bs-toggle="modal"
                                     data-bs-target="#paymentModal">Bayar Sekarang</button>
                             </form>
@@ -202,40 +244,40 @@
         </div>
         <!-- Pembayaran End -->
 
-        <!-- Footer Start -->
+        <!-- Footer Start  
         <footer class="mt-5">
             <div
                 class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-dark">
-                <!-- Copyright -->
                 <div class="text-white mb-3 mb-md-0">
                     SMARTKOST © 2024. All rights reserved.
                 </div>
-                <!-- Copyright -->
             </div>
-        </footer>
-        <!-- Footer End -->
+        </footer> -->
 
         <!-- Back to Top -->
-        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i
-                class="bi bi-arrow-up"></i></a>
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
 
     <!-- JavaScript Libraries -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-    const paymentForm = document.querySelector('form');
-    const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
-    const modalBody = document.getElementById('modalBody');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const paymentForm = document.querySelector('form');
+            const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+            const modalBody = document.getElementById('modalBody');
 
-    paymentForm.addEventListener('submit', function (event) {
-    event.preventDefault(); // Prevent default form submission
+            paymentForm.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent default form submission
 
-    const method = document.getElementById('metodePembayaran').value;
+                // Ambil nilai dari input
+                const namaPenyewa = document.getElementById('nama').value;
+                const emailPenyewa = document.getElementById('emailPenyewa').value;
+                const method = document.getElementById('metodePembayaran').value;
+                const totalPrice = <?php echo json_encode($total_harga); ?>;
 
-    let modalContent = '';
+                let modalContent = '';
 
-    if (method === 'transfer') {
-    modalContent = `
+                if (method === 'transfer') {
+                    modalContent = `
     <h5>Detail Transfer Bank</h5>
     <form id="transferForm">
         <div class="row">
@@ -243,20 +285,20 @@
             <div class="col-md-6">
                 <div class="mb-3">
                     <label for="senderName" class="form-label">Nama Pengirim</label>
-                    <input type="text" class="form-control" id="senderName" placeholder="Nama Lengkap Pengirim">
+                    <input type="text" class="form-control" id="senderName" placeholder="${namaPenyewa}">
                 </div>
                 <div class="mb-3">
                     <label for="senderEmail" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="senderName" placeholder="Email Pengirim">
+                    <input type="email" class="form-control" id="senderName" placeholder="${emailPenyewa}">
                 </div>
                 <div class="mb-3">
                     <label for="transferDate" class="form-label">Lama Sewa</label>
                     <div class="d-flex justify-content-between mb-3">
                         <div class="date-box">
-                            <strong>Mulai:</strong> 1 September 2024
+                            <strong>Mulai:</strong> ${<?php echo json_encode($mulai_sewa); ?>}
                         </div>
                         <div class="date-box">
-                            <strong>Selesai:</strong> 30 September 2024
+                            <strong>Selesai:</strong> ${<?php echo json_encode($selesai_sewa); ?>}
                         </div>
                     </div>
                 </div>
@@ -267,9 +309,9 @@
                 <div class="mb-3">
                     <label for="bankName" class="form-label">Bank</label>
                     <select class="form-select" id="bankName">
-                        <option value="bankABC">Bank ABC</option>
-                        <option value="bankXYZ">Bank XYZ</option>
-                        <option value="bank123">Bank 123</option>
+                        <option value="BCA">BCA</option>
+                        <option value="Mandiri">Mandiri</option>
+                        <option value="BRI">BRI</option>
                     </select>
                 </div>
                 <div class="mb-3">
@@ -290,8 +332,8 @@
 
     `;
 
-    } else if (method === 'ewallet') {
-    modalContent = `
+                } else if (method === 'ewallet') {
+                    modalContent = `
     <h5>Detail E-Wallet</h5>
     <form id="ewalletForm">
         <div class="row">
@@ -299,20 +341,20 @@
             <div class="col-md-6">
                 <div class="mb-3">
                     <label for="ewalletSenderName" class="form-label">Nama Pengirim</label>
-                    <input type="text" class="form-control" id="ewalletSenderName" placeholder="Nama Lengkap Pengirim">
+                    <input type="text" class="form-control" id="ewalletSenderName" placeholder="${namaPenyewa}">
                 </div>
                 <div class="mb-3">
                     <label for="senderEmail" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="senderName" placeholder="Email Pengirim">
+                    <input type="email" class="form-control" id="senderName" placeholder="${emailPenyewa}">
                 </div>
                 <div class="mb-3">
                     <label for="ewalletPaymentDate" class="form-label">Lama Sewa</label>
                     <div class="d-flex justify-content-between mb-3">
                         <div class="date-box">
-                            <strong>Mulai:</strong> 1 September 2024
+                            <strong>Mulai:</strong> ${<?php echo json_encode($mulai_sewa); ?>}
                         </div>
                         <div class="date-box">
-                            <strong>Selesai:</strong> 30 September 2024
+                            <strong>Selesai:</strong> ${<?php echo json_encode($selesai_sewa); ?>}
                         </div>
                     </div>
                 </div>
@@ -343,12 +385,64 @@
             </div>
     </form>
     `;
-    }
+                } else if (method === 'cod') {
+                    modalContent = `
+    <h5>Detail COD</h5>
+    <form id="codForm">
+        <div class="row">
+            <!-- Kolom Kiri -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="ewalletSenderName" class="form-label">Nama Pengirim</label>
+                    <input type="text" class="form-control" id="ewalletSenderName" placeholder="${namaPenyewa}">
+                </div>
+                <div class="mb-3">
+                    <label for="senderEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="senderName" placeholder="${emailPenyewa}">
+                </div>
+                <div class="mb-3">
+                    <label for="ewalletPaymentDate" class="form-label">Lama Sewa</label>
+                    <div class="d-flex justify-content-between mb-3">
+                        <div class="date-box">
+                            <strong>Mulai:</strong> ${<?php echo json_encode($mulai_sewa); ?>}
+                        </div>
+                        <div class="date-box">
+                            <strong>Selesai:</strong> ${<?php echo json_encode($selesai_sewa); ?>}
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    modalBody.innerHTML = modalContent;
-    paymentModal.show();
-    });
-    });
+            <!-- Kolom Kanan -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="Platform" class="form-label">Platform</label>
+                    <select class="form-select" id="Platform">
+                        <option value="ovo" data-icon="fas fa-wallet">OVO</option>
+                        <option value="gopay" data-icon="fab fa-google-wallet">GoPay</option>
+                        <option value="dana" data-icon="fas fa-mobile-alt">Dana</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="accountNumber" class="form-label">Nomor</label>
+                    <input type="text" class="form-control" id="accountNumber" placeholder="Masukkan Nomor Rekening">
+                </div>
+                <div class="mb-3">
+                    <label for="transferAmount" class="form-label">Jumlah Transfer</label>
+                    <input type="text" class="form-control" id="transferAmount" value="Rp 500.000"
+                        style="background-color: white;">
+                </div>
+            </div>
+            <div class="d-flex justify-content-end mt-3">
+                <button type="submit" class="btn btn-primary w-50">Konfirmasi Transfer</button>
+            </div>
+    </form>
+    `; }
+
+                modalBody.innerHTML = modalContent;
+                paymentModal.show();
+            });
+        });
 
     </script>
 
