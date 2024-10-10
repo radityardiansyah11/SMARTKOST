@@ -27,6 +27,25 @@ function formatTanggal($tanggal)
 // Mengubah format tanggal
 $mulai_sewa = formatTanggal($mulai_sewa);
 $selesai_sewa = formatTanggal($selesai_sewa);
+
+// Ubah format waktu_kost menjadi format yang diinginkan
+switch ($waktu_kost) {
+    case 'month':
+        $waktu_kost = '1 Bulan';
+        break;
+    case '3months':
+        $waktu_kost = '3 Bulan';
+        break;
+    case '6months':
+        $waktu_kost = '6 Bulan';
+        break;
+    case 'year':
+        $waktu_kost = 'Per Tahun';
+        break;
+    default:
+        $waktu_kost = 'Tidak Diketahui';
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -214,7 +233,7 @@ $selesai_sewa = formatTanggal($selesai_sewa);
                                 <select class="form-select mb-3" id="metodePembayaran">
                                     <option value="transfer">Transfer Bank</option>
                                     <option value="ewallet">E-Wallet (OVO, GoPay, DANA)</option>
-                                    <option value="cod">Cash on Delivery</option> 
+                                    <option value="cod">Cash on Delivery</option>
                                 </select>
 
 
@@ -272,7 +291,13 @@ $selesai_sewa = formatTanggal($selesai_sewa);
                 const namaPenyewa = document.getElementById('nama').value;
                 const emailPenyewa = document.getElementById('emailPenyewa').value;
                 const method = document.getElementById('metodePembayaran').value;
-                const totalPrice = <?php echo json_encode($total_harga); ?>;
+
+
+                // Validasi nama dan email
+                if (namaPenyewa === '' || emailPenyewa === '') {
+                    alert('Silakan isi nama dan email terlebih dahulu sebelum melanjutkan pembayaran.');
+                    return; // Hentikan eksekusi jika validasi gagal
+                }
 
                 let modalContent = '';
 
@@ -320,7 +345,7 @@ $selesai_sewa = formatTanggal($selesai_sewa);
                 </div>
                 <div class="mb-3">
                     <label for="transferAmount" class="form-label">Jumlah Transfer</label>
-                    <input type="text" class="form-control" id="transferAmount" value="Rp 500.000"
+                    <input type="text" class="form-control" id="transferAmount" value="Rp <?php echo number_format($total_harga, 0, ',', '.'); ?>"
                         style="background-color: white;">
                 </div>
             </div>
@@ -376,7 +401,7 @@ $selesai_sewa = formatTanggal($selesai_sewa);
                 </div>
                 <div class="mb-3">
                     <label for="transferAmount" class="form-label">Jumlah Transfer</label>
-                    <input type="text" class="form-control" id="transferAmount" value="Rp 500.000"
+                    <input type="text" class="form-control" id="transferAmount" value="Rp <?php echo number_format($total_harga, 0, ',', '.'); ?>"
                         style="background-color: white;">
                 </div>
             </div>
@@ -418,18 +443,12 @@ $selesai_sewa = formatTanggal($selesai_sewa);
                 <div class="mb-3">
                     <label for="Platform" class="form-label">Platform</label>
                     <select class="form-select" id="Platform">
-                        <option value="ovo" data-icon="fas fa-wallet">OVO</option>
-                        <option value="gopay" data-icon="fab fa-google-wallet">GoPay</option>
-                        <option value="dana" data-icon="fas fa-mobile-alt">Dana</option>
+                        <option value="ovo" data-icon="fas fa-wallet">COD</option>
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="accountNumber" class="form-label">Nomor</label>
-                    <input type="text" class="form-control" id="accountNumber" placeholder="Masukkan Nomor Rekening">
-                </div>
-                <div class="mb-3">
-                    <label for="transferAmount" class="form-label">Jumlah Transfer</label>
-                    <input type="text" class="form-control" id="transferAmount" value="Rp 500.000"
+                    <label for="transferAmount" class="form-label">Jumlah yang harus dibayarkan</label>
+                    <input type="text" class="form-control" id="transferAmount" value="Rp <?php echo number_format($total_harga, 0, ',', '.'); ?>"
                         style="background-color: white;">
                 </div>
             </div>
@@ -437,7 +456,8 @@ $selesai_sewa = formatTanggal($selesai_sewa);
                 <button type="submit" class="btn btn-primary w-50">Konfirmasi Transfer</button>
             </div>
     </form>
-    `; }
+    `;
+                }
 
                 modalBody.innerHTML = modalContent;
                 paymentModal.show();

@@ -442,10 +442,13 @@ if ($result->num_rows > 0) {
                                 </p>
                                 <span class="mt-3 ml-2">/bulan</span>
                             </div>
+
                             <!-- Tanggal dan Periode Sewa -->
                             <div class="input-group mb-3">
-                                <input type="date" class="form-control" id="paymentDate"> <!-- Added id -->
-                                <select class="form-select" id="rentPeriod" onchange="calculateTotal()">
+                                <!-- Tanggal Mulai -->
+                                <input type="date" id="startDate" class="form-control">
+                                <!-- Pilihan Waktu Sewa -->
+                                <select class="form-select" id="rentPeriod">
                                     <option value="" selected>Waktu kost</option>
                                     <option value="month">1 Bulan</option>
                                     <option value="3months">3 Bulan</option>
@@ -453,18 +456,19 @@ if ($result->num_rows > 0) {
                                     <option value="year">Per Tahun</option>
                                 </select>
                             </div>
+
+                            <!-- Tanggal Selesai -->
+                            <div class="input-group mb-3" style="display: none;">
+                                <label for="endDate">Tanggal Selesai:</label>
+                                <input type="date" id="endDate" class="form-control" readonly>
+                            </div>
+
                             <!-- Total Harga -->
                             <div id="totalPrice" class="mb-3" style="display: none;">
                                 <h5>Total Harga: <span id="totalAmount">Rp0</span></h5>
                             </div>
-                            <!-- Rent Time Range (Awalnya Tersembunyi) -->
-                            <div id="rentRange" class="hidden">
-                                <label for="startDate">Tanggal Mulai:</label>
-                                <input type="date" id="startDate" class="form-control mb-2" disabled>
-                                <label for="endDate">Tanggal Selesai:</label>
-                                <input type="date" id="endDate" class="form-control mb-2" disabled>
-                            </div>
-                            <!-- Tombol Ajukan Sewa -->
+
+                            <!-- Form untuk mengirim data ke pembayaran.php -->
                             <form action="pembayaran.php" method="POST">
                                 <!-- Input tersembunyi untuk mengirim nama kost, alamat, harga, dan lainnya -->
                                 <input type="hidden" name="nama_kost" value="<?php echo $row['nama_kost']; ?>">
@@ -637,18 +641,14 @@ if ($result->num_rows > 0) {
                 const stickyContainer = document.querySelector('.sticky-container');
                 const kostListStart = document.querySelector('.container-xxl.py-5');
 
-                // Get the offset position of the kost list start
                 const kostListStartOffset = kostListStart.getBoundingClientRect().top + window.scrollY;
 
                 window.addEventListener('scroll', function () {
                     const scrollPosition = window.scrollY;
 
-                    // Check if we have scrolled to the start of the kost list section
                     if (scrollPosition >= kostListStartOffset) {
-                        // Remove sticky class to allow cards to scroll away
                         stickyContainer.classList.remove('sticky');
                     } else {
-                        // Add sticky class to keep cards in place if we have not reached the kost list
                         stickyContainer.classList.add('sticky');
                     }
                 });
@@ -664,79 +664,162 @@ if ($result->num_rows > 0) {
                 document.getElementById('show-more-reviews').style.display = 'inline'; // Tampilkan kembali tombol "Lihat Semua Ulasan"
             });
 
+            // Fungsi untuk menghitung total harga berdasarkan pilihan waktu sewa
             function calculateTotal() {
                 var hargaSetelahDiskon = <?php echo $harga_setelah_diskon; ?>; // Harga setelah diskon dari PHP
                 var rentPeriod = document.getElementById('rentPeriod').value; // Nilai waktu sewa (bulan/tahun)
                 var totalAmount = 0;
+                var waktuSewa = ''; // Waktu sewa yang dipilih (1 Bulan, 3 Bulan, dst)
 
-                // Kalkulasi total harga berdasarkan periode sewa
+                // Hitung total berdasarkan periode yang dipilih
                 switch (rentPeriod) {
                     case 'month':
                         totalAmount = hargaSetelahDiskon;
+                        waktuSewa = '1 Bulan';
                         break;
                     case '3months':
                         totalAmount = hargaSetelahDiskon * 3;
+                        waktuSewa = '3 Bulan';
                         break;
                     case '6months':
                         totalAmount = hargaSetelahDiskon * 6;
+                        waktuSewa = '6 Bulan';
                         break;
                     case 'year':
                         totalAmount = hargaSetelahDiskon * 12;
+                        waktuSewa = 'Per Tahun';
                         break;
+                    default:
+                        totalAmount = 0;
+                        waktuSewa = '';
                 }
 
-                // Tampilkan total harga
-                document.getElementById('totalAmount').innerText = 'Rp. ' + totalAmount.toLocaleString();
-                document.getElementById('totalPrice').style.display = (rentPeriod ? 'block' : 'none');
-
-                // Set value untuk input tersembunyi
+                // Update nilai total harga dan waktu sewa di elemen tersembunyi
                 document.getElementById('totalHarga').value = totalAmount;
-                document.getElementById('waktuKost').value = rentPeriod;
+                document.getElementById('waktuKost').value = waktuSewa;
 
-                // Set tanggal mulai dan selesai
-                var startDate = document.getElementById('paymentDate').value;
-                document.getElementById('startDateHidden').value = startDate;
+                // Simpan nilai ke localStorage agar tidak hilang saat reload
+                localStorage.setItem('rentPeriod', rentPeriod);
+                localStorage.setItem('totalAmount', totalAmount);
+                localStorage.setItem('waktuSewa', waktuSewa);
 
-                if (startDate) {
-                    var endDate = calculateEndDate(startDate, rentPeriod);
-                    document.getElementById('endDateHidden').value = endDate;
-                    document.getElementById('endDate').value = endDate; // Update UI
-                }
+                // Tampilkan total harga di halaman
+                document.getElementById('totalAmount').innerText = 'Rp. ' + totalAmount.toLocaleString();
+
+                // Tampilkan total price jika ada rent period
+                document.getElementById('totalPrice').style.display = (rentPeriod ? 'block' : 'none');
             }
 
-            // Fungsi untuk menghitung tanggal selesai sewa berdasarkan periode sewa
-            function calculateEndDate(startDate, rentPeriod) {
+            // Fungsi untuk mengatur tanggal mulai dan selesai sewa
+            function updateSewaDates() {
+                var startDate = document.getElementById('startDate').value;
+                var rentPeriod = document.getElementById('rentPeriod').value;
+
+                // Tanggal akhir default sebagai tanggal mulai
+                var endDate = startDate;
+
+                // Tambah rent period ke tanggal akhir
                 var start = new Date(startDate);
-                switch (rentPeriod) {
-                    case 'month':
-                        start.setMonth(start.getMonth() + 1);
-                        break;
-                    case '3months':
-                        start.setMonth(start.getMonth() + 3);
-                        break;
-                    case '6months':
-                        start.setMonth(start.getMonth() + 6);
-                        break;
-                    case 'year':
-                        start.setFullYear(start.getFullYear() + 1);
-                        break;
+
+                if (rentPeriod === 'month') {
+                    start.setMonth(start.getMonth() + 1);
+                } else if (rentPeriod === '3months') {
+                    start.setMonth(start.getMonth() + 3);
+                } else if (rentPeriod === '6months') {
+                    start.setMonth(start.getMonth() + 6);
+                } else if (rentPeriod === 'year') {
+                    start.setFullYear(start.getFullYear() + 1);
                 }
-                return start.toISOString().split('T')[0]; 
+
+                // Update tanggal selesai
+                endDate = start.toISOString().split('T')[0];
+
+                // Simpan tanggal mulai dan selesai ke localStorage
+                localStorage.setItem('startDate', startDate);
+                localStorage.setItem('endDate', endDate);
+
+                // Update input tersembunyi untuk tanggal mulai dan selesai
+                document.getElementById('startDateHidden').value = startDate;
+                document.getElementById('endDateHidden').value = endDate;
+
+                // Update field tanggal selesai yang terlihat di form
+                document.getElementById('endDate').value = endDate;
             }
 
+            // Fungsi untuk menyimpan pilihan rent period dan kalkulasi harga
+            function saveFormState() {
+                const rentPeriod = document.getElementById('rentPeriod').value;
+                const totalAmount = document.getElementById('totalHarga').value;
+
+                localStorage.setItem('rentPeriod', rentPeriod);
+                localStorage.setItem('totalAmount', totalAmount);
+            }
+
+            // Fungsi untuk memuat data dari localStorage saat halaman di-load
+            function loadFormState() {
+                const rentPeriod = localStorage.getItem('rentPeriod');
+                const totalAmount = localStorage.getItem('totalAmount');
+                const startDate = localStorage.getItem('startDate');
+                const endDate = localStorage.getItem('endDate');
+                const waktuSewa = localStorage.getItem('waktuSewa');
+
+                // Set rent period dan harga jika ada di localStorage
+                if (rentPeriod) {
+                    document.getElementById('rentPeriod').value = rentPeriod;
+                }
+                if (totalAmount) {
+                    document.getElementById('totalAmount').innerText = 'Rp. ' + parseInt(totalAmount).toLocaleString();
+                    document.getElementById('totalPrice').style.display = 'block';
+                }
+
+                // Set tanggal mulai dan selesai sewa jika ada di localStorage
+                if (startDate) {
+                    document.getElementById('startDate').value = startDate;
+                    document.getElementById('startDateHidden').value = startDate;
+                }
+                if (endDate) {
+                    document.getElementById('endDate').value = endDate;
+                    document.getElementById('endDateHidden').value = endDate;
+                }
+
+                if (waktuSewa) {
+                    document.getElementById('waktuKost').value = waktuSewa;
+                }
+            }
+
+            function initializeRentForm() {
+                const today = new Date();
+                const formattedToday = today.toISOString().split('T')[0];
+                document.getElementById('startDate').value = formattedToday;
+
+                loadFormState();
+
+                document.getElementById('rentPeriod').addEventListener('change', function () {
+                    calculateTotal();
+                    updateSewaDates();
+                });
+                document.getElementById('startDate').addEventListener('change', function () {
+                    updateSewaDates();
+                    calculateTotal(); // Hitung total juga saat tanggal diubah
+                });
+            }
+
+            // Initialize the form when the page loads
+            document.addEventListener('DOMContentLoaded', initializeRentForm);
+
+            // Fungsi untuk menangani pengiriman form
             function submitForm() {
-                calculateTotal(); // Pastikan total dihitung dan input tersembunyi diisi
-            }
+                // Simpan state form sebelum submit
+                saveFormState();
 
-            // Atur tanggal default ke hari ini ketika halaman dimuat
-            document.addEventListener("DOMContentLoaded", function () {
-                var today = new Date().toISOString().split('T')[0];
-                document.getElementById("paymentDate").value = today; // Set tanggal mulai
-                calculateTotal(); // Kalkulasi total saat halaman dimuat
-            });
+                // Copy start date and end date to hidden inputs before submitting the form
+                document.getElementById('startDateHidden').value = document.getElementById('startDate').value;
+                document.getElementById('endDateHidden').value = document.getElementById('endDate').value;
+            }
 
             function confirmLogout() {
                 if (confirm("Anda yakin ingin logout?")) {
+                    // Jika konfirmasi diterima, arahkan ke logout.php
                     window.location.href = "logout.php";
                 }
             }
