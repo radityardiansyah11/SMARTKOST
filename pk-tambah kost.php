@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $kategori = $_POST['kategori'];
 
     // Mendapatkan ID pemilik dari sesi yang sedang login
-    $pkname = $_SESSION['pkname'];  
+    $pkname = $_SESSION['pkname'];
 
     // Fasilitas
     $spesifikasi_kamar = $_POST['spesifikasiKamar'] ?? [];
@@ -375,13 +375,13 @@ $conn->close();
                 var newInputGroup = document.createElement('div');
                 newInputGroup.className = 'row mb-3';
                 newInputGroup.innerHTML = `
-                    <div class="col-md-4">
-                        <input type="text" class="form-control" name="${target.id === 'specificationContainer' ? 'spesifikasiKamar[]' : target.id === 'roomFacilitiesContainer' ? 'fasilitasKamar[]' : 'fasilitasKamarMandi[]'}" placeholder="spesifikasi">
-                    </div>
-                    <div class="col-md-2 d-flex align-items-center">
-                        <button type="button" class="btn btn-danger removeSpecBtn">Hapus</button>
-                    </div>
-                `;
+            <div class="col-md-4">
+                <input type="text" class="form-control" name="${target.id === 'specificationContainer' ? 'spesifikasiKamar[]' : target.id === 'roomFacilitiesContainer' ? 'fasilitasKamar[]' : target.id === 'bathroomFacilitiesContainer' ? 'fasilitasKamarMandi[]' : target.id === 'generalFacilitiesContainer' ? 'fasilitasUmum[]' : 'peraturanKost[]'}" placeholder="${target.id === 'generalFacilitiesContainer' ? 'fasilitas umum' : 'peraturan kost'}">
+            </div>
+            <div class="col-md-2 d-flex align-items-center">
+                <button type="button" class="btn btn-danger removeSpecBtn">Hapus</button>
+            </div>
+        `;
 
                 target.appendChild(newInputGroup);
 
