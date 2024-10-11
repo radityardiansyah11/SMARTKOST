@@ -288,7 +288,7 @@ $total_kost = $row_count_kost['total_kost'];
                                                             aria-labelledby="dropdownMenuButton">
                                                             <li>
                                                                 <a class="dropdown-item d-flex align-items-center"
-                                                                    href="edit-kost.php?id=<?php echo $row['id']; ?>">
+                                                                    href="pk-edit-kost.php?id=<?php echo $row['id']; ?>">
                                                                     <i class="fas fa-edit me-2 text-primary"></i> Edit
                                                                 </a>
                                                             </li>
