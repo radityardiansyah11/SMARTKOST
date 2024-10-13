@@ -77,7 +77,6 @@ $email_data = mysqli_fetch_assoc($count_email_result);
 $total_email = $email_data['total_email'];
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -153,7 +152,6 @@ $total_email = $email_data['total_email'];
         .row {
             overflow: visible;
         }
-        
     </style>
 </head>
 
@@ -312,9 +310,16 @@ $total_email = $email_data['total_email'];
                 <div class="row mt-5">
                     <div class="col-md-12">
                         <div class="row mt-2 g-0 gx-5">
+
                             <div class="col-lg-6 d-flex align-items-center">
-                                <h4 class="mb-3">User</h4>
+                                <h4 class="mb-3 me-3">User</h4>
+                                <form class="d-flex mb-3" action="" method="GET">
+                                    <input class="form-control me-2" type="search" name="search" placeholder="Cari User"
+                                        aria-label="Search">
+                                    <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
+                                </form>
                             </div>
+
                             <div class="col-lg-6 d-flex mb-3 justify-content-end">
                                 <button type="button" class="btn btn-primary px-3" data-bs-toggle="modal"
                                     data-bs-target="#addUserModal">

@@ -30,6 +30,16 @@ if ($result->num_rows === 0) {
 } else {
     $kost_tidak_ada = false; // Menandakan bahwa ada kost ditemukan
 }
+
+// Fungsi untuk membatasi jumlah karakter
+function limit_characters($string, $char_limit)
+{
+    if (strlen($string) > $char_limit) {
+        return substr($string, 0, $char_limit) . '...';
+    }
+    return $string;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -153,7 +163,7 @@ if ($result->num_rows === 0) {
 
         .property-item img {
             width: 100%;
-            height: 250px;
+            height: 170px;
             object-fit: cover;
             object-position: center;
         }
@@ -332,18 +342,16 @@ if ($result->num_rows === 0) {
                             } else {
                                 while ($row = $result->fetch_assoc()) {
                                     ?>
-                                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                    <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                                         <div class="property-item rounded overflow-hidden">
                                             <div class="position-relative overflow-hidden">
-                                                <a href="detail.php?id=<?php echo $row['id']; ?>"><img class="img-fluid"
-                                                        src="<?php echo $row['gambar_1']; ?>" alt="">
+                                                <a href="user-detail.php?id=<?php echo $row['id']; ?>">
+                                                    <img class="img-fluid" src="<?php echo $row['gambar_1']; ?>" alt="">
                                                 </a>
-
                                                 <div
                                                     class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                                    </i><?php echo $row['kategori']; ?>
+                                                    <?php echo $row['kategori']; ?>
                                                 </div>
-
                                                 <div class="dropdown position-absolute top-0 end-0 mt-2 me-2">
                                                     <div
                                                         class="bg-white text-primary position-absolute end-0 bottom-3 pt-1 px-3 jenis-kost-label">
@@ -351,15 +359,14 @@ if ($result->num_rows === 0) {
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div class="p-4 pb-0">
-                                                <a class="d-block h5 mb-2" href=""><?php echo $row['nama_kost']; ?></a>
+                                                <a class="d-block h5 mb-2"
+                                                    href=""><?php echo limit_characters($row['nama_kost'], 17); ?></a>
                                                 <h5 class="text-primary mb-1">Rp.
                                                     <?php echo number_format($row['harga'], 0, ',', '.'); ?>
                                                 </h5>
-                                                <p>
-                                                    <i
-                                                        class="fa fa-map-marker-alt text-primary me-2"></i><?php echo $row['alamat']; ?>
+                                                <p><i
+                                                        class="fa fa-map-marker-alt text-primary me-2"></i><?php echo limit_characters($row['alamat'], 48); ?>
                                                 </p>
                                             </div>
                                             <div class="d-flex border-top">

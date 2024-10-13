@@ -352,6 +352,11 @@ $total_email = $email_data['total_email'];
                         <div class="row mt-2 g-0 gx-5">
                             <div class="col-lg-6 d-flex align-items-center">
                                 <h4 class="mb-3">Kost</h4>
+                                <form class="d-flex mb-3 ms-3" action="" method="GET">
+                                    <input class="form-control me-2" type="search" name="search" placeholder="Cari kost"
+                                        aria-label="Search">
+                                    <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
+                                </form>
                             </div>
                             <div class="col-lg-6 d-flex mb-3 justify-content-end">
                                 <a href="admin-tambah-kost.php" class="btn btn-primary px-3">

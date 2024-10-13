@@ -38,6 +38,15 @@ if ($result->num_rows === 0) {
     $kost_tidak_ada = false; // Menandakan bahwa ada kost ditemukan
 }
 
+// Fungsi untuk membatasi jumlah karakter
+function limit_characters($string, $char_limit)
+{
+    if (strlen($string) > $char_limit) {
+        return substr($string, 0, $char_limit) . '...';
+    }
+    return $string;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -130,7 +139,7 @@ if ($result->num_rows === 0) {
 
         .property-item img {
             width: 100%;
-            height: 250px;
+            height: 170px;
             object-fit: cover;
             object-position: center;
         }
@@ -286,7 +295,7 @@ if ($result->num_rows === 0) {
                             } else {
                                 while ($row = $result->fetch_assoc()) {
                                     ?>
-                                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                    <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                                         <div class="property-item rounded overflow-hidden">
                                             <div class="position-relative overflow-hidden">
                                                 <a href="user-detail.php?id=<?php echo $row['id']; ?>">
@@ -304,12 +313,13 @@ if ($result->num_rows === 0) {
                                                 </div>
                                             </div>
                                             <div class="p-4 pb-0">
-                                                <a class="d-block h5 mb-2" href=""><?php echo $row['nama_kost']; ?></a>
+                                                <a class="d-block h5 mb-2"
+                                                    href=""><?php echo limit_characters($row['nama_kost'], 17); ?></a>
                                                 <h5 class="text-primary mb-1">Rp.
                                                     <?php echo number_format($row['harga'], 0, ',', '.'); ?>
                                                 </h5>
                                                 <p><i
-                                                        class="fa fa-map-marker-alt text-primary me-2"></i><?php echo $row['alamat']; ?>
+                                                        class="fa fa-map-marker-alt text-primary me-2"></i><?php echo limit_characters($row['alamat'], 48); ?>
                                                 </p>
                                             </div>
                                             <div class="d-flex border-top">

@@ -39,6 +39,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $message_status = "incomplete";  // Kolom tidak lengkap
     }
 }
+
+// Fungsi untuk membatasi jumlah karakter
+function limit_characters($string, $char_limit)
+{
+    if (strlen($string) > $char_limit) {
+        return substr($string, 0, $char_limit) . '...';
+    }
+    return $string;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -133,7 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         .property-item img {
             width: 100%;
-            height: 250px;
+            height: 170px;
             object-fit: cover;
             object-position: center;
         }
@@ -195,7 +205,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <h1 class="display-5 text-white animated fadeIn mb-1 mt-5">Temukan <span
                                         class="text-light">Kost Impian</span> Hanya di Sini</h1>
                                 <p class="text-white animated fadeIn mb-4 pb-2">Daftarkan kost anda di sini.</p>
-                                <a href="register-pk.php" class="btn btn-primary py-3 px-5 me-3 animated fadeIn">Daftarkan Kost</a>
+                                <a href="register-pk.php"
+                                    class="btn btn-primary py-3 px-5 me-3 animated fadeIn">Daftarkan Kost</a>
                             </div>
                         </div>
                         <div class="owl-carousel-item position-relative">
@@ -218,7 +229,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!-- Search Start -->
         <div class="container-fluid bg-primary mb-5 wow fadeIn" data-wow-delay="0.1s" style="padding: 35px;">
             <div class="container">
-            <form method="GET" action="user-kost.php">
+                <form method="GET" action="user-kost.php">
                     <div class="row g-2">
                         <div class="col-md-4">
                             <input type="text" class="form-control border-0 py-3" placeholder="Cari Kost" name="search"
@@ -348,10 +359,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                             <?php
                             // Fetch Kost listings from the database
-                            $result = $conn->query("SELECT * FROM kost ORDER BY RAND() LIMIT 9");
+                            $result = $conn->query("SELECT * FROM kost ORDER BY RAND() LIMIT 12");
                             while ($row = $result->fetch_assoc()) {
                                 ?>
-                                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                                     <div class="property-item rounded overflow-hidden">
                                         <div class="position-relative overflow-hidden">
                                             <a href="user-detail.php?id=<?php echo $row['id']; ?>">
@@ -369,13 +380,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             </div>
                                         </div>
                                         <div class="p-4 pb-0">
-                                            <a class="d-block h5 mb-2" href=""><?php echo $row['nama_kost']; ?></a>
+                                            <a class="d-block h5 mb-2"
+                                                href=""><?php echo limit_characters($row['nama_kost'], 17); ?></a>
                                             <h5 class="text-primary mb-1">Rp.
                                                 <?php echo number_format($row['harga'], 0, ',', '.'); ?>
                                             </h5>
-                                            <p>
-                                                <i
-                                                    class="fa fa-map-marker-alt text-primary me-2"></i><?php echo $row['alamat']; ?>
+                                            <p><i
+                                                    class="fa fa-map-marker-alt text-primary me-2"></i><?php echo limit_characters($row['alamat'], 48); ?>
                                             </p>
                                         </div>
                                         <div class="d-flex border-top">

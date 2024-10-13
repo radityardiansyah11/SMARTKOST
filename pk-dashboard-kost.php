@@ -77,6 +77,9 @@ $total_kost = $row_count_kost['total_kost'];
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
 
+    <!-- Sweet Alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         .card {
             box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
@@ -218,7 +221,7 @@ $total_kost = $row_count_kost['total_kost'];
                             <div class="card-body">
                                 <h5 class="card-title text-light">Kost</h5>
                                 <h3 class="card-text text-light">
-                                    <?php echo $total_kost;?>
+                                    <?php echo $total_kost; ?>
                                 </h3>
                             </div>
                         </div>
@@ -356,6 +359,45 @@ $total_kost = $row_count_kost['total_kost'];
     </div>
 
     <!-- JavaScript Libraries -->
+     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            <?php if (isset($_SESSION['status'])): ?>
+                var status = "<?php echo $_SESSION['status']; ?>";
+
+                if (status === "deleted") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Kost Berhasil Dihapus!',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#00B98E',
+                        background: '#f4f4f9',
+                        width: '350px',
+                        customClass: {
+                            title: 'custom-title',
+                            content: 'custom-content'
+                        }
+                    });
+                } else if (status === "error") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal Menghapus Pengguna!',
+                        text: 'Terjadi kesalahan saat menghapus pengguna. Silakan coba lagi.',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#00765a',
+                        background: '#f4f4f9',
+                        width: '350px',
+                        customClass: {
+                            title: 'custom-title',
+                            content: 'custom-content'
+                        }
+                    });
+                }
+
+                // Clear session status after displaying the message
+                <?php unset($_SESSION['status']); ?>
+            <?php endif; ?>
+        });
+     </script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/wow/wow.min.js"></script>
