@@ -393,6 +393,9 @@ if ($result->num_rows > 0) {
                         <i class="fa fa-map-marker-alt text-primary me-2"></i>
                         <span><?php echo $row['alamat']; ?></span>
                     </div>
+
+                    <hr class="hr-desk">
+                    
                     <h5 class="text-muted mt-3"><strong> Deskripsi Kost </strong></h5>
                     <p><?php echo $row['deskripsi']; ?></p>
 

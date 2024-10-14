@@ -5,6 +5,7 @@ session_start();
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 $jenis_kost = isset($_GET['jenis_kost']) ? $_GET['jenis_kost'] : '';
 $jenis_kategori = isset($_GET['jenis_kategori']) ? $_GET['jenis_kategori'] : '';
+$search_alamat = isset($_GET['Alamat']) ? $_GET['Alamat'] : '';
 
 $query = "SELECT * FROM kost WHERE 1=1";
 
@@ -21,6 +22,11 @@ if ($jenis_kost) {
 if ($jenis_kategori && $jenis_kategori != 'Semua') {
     $jenis_kategori = $conn->real_escape_string($jenis_kategori);
     $query .= " AND kategori = '$jenis_kategori'";
+}
+
+if ($search_alamat) {
+    $search_alamat = $conn->real_escape_string($search_alamat);
+    $query .= " AND alamat LIKE '%$search_alamat%'";
 }
 
 $result = $conn->query($query);
@@ -286,12 +292,8 @@ function limit_characters($string, $char_limit)
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <select class="form-select border-0 py-3">
-                                <option selected>Lokasi</option>
-                                <option value="1">Location 1</option>
-                                <option value="2">Location 2</option>
-                                <option value="3">Location 3</option>
-                            </select>
+                            <input type="text" class="form-control border-0 py-3" placeholder="Alamat" name="Alamat"
+                                value="<?php echo htmlspecialchars($search_alamat); ?>">
                         </div>
                         <div class="col-md-2">
                             <button type="submit" class="btn btn-dark border-0 w-100 py-3">Cari</button>

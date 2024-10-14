@@ -204,7 +204,7 @@
         <!-- Search Start -->
         <div class="container-fluid bg-primary mb-5 wow fadeIn" data-wow-delay="0.1s" style="padding: 35px;">
             <div class="container">
-            <form method="GET" action="kost.php">
+                <form method="GET" action="kost.php">
                     <div class="row g-2">
                         <div class="col-md-4">
                             <input type="text" class="form-control border-0 py-3" placeholder="Cari Kost" name="search"
@@ -219,12 +219,8 @@
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <select class="form-select border-0 py-3">
-                                <option selected>Lokasi</option>
-                                <option value="1">Location 1</option>
-                                <option value="2">Location 2</option>
-                                <option value="3">Location 3</option>
-                            </select>
+                            <input type="text" class="form-control border-0 py-3" placeholder="Alamat" name="Alamat"
+                                value="">
                         </div>
                         <div class="col-md-2">
                             <button type="submit" class="btn btn-dark border-0 w-100 py-3">Cari</button>

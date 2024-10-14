@@ -67,6 +67,15 @@ $count_email_sql = "SELECT COUNT(*) AS total_email FROM kontak";
 $count_email_result = mysqli_query($conn, $count_email_sql);
 $email_data = mysqli_fetch_assoc($count_email_result);
 $total_email = $email_data['total_email'];
+
+function limit_characters($string, $char_limit)
+{
+    if (strlen($string) > $char_limit) {
+        return substr($string, 0, $char_limit) . '...';
+    }
+    return $string;
+}
+
 ?>
 
 
@@ -188,7 +197,7 @@ $total_email = $email_data['total_email'];
 
         .property-item img {
             width: 100%;
-            height: 250px;
+            height: 150px;
             object-fit: cover;
             object-position: center;
         }
@@ -355,7 +364,8 @@ $total_email = $email_data['total_email'];
                                 <form class="d-flex mb-3 ms-3" action="" method="GET">
                                     <input class="form-control me-2" type="search" name="search" placeholder="Cari kost"
                                         aria-label="Search">
-                                    <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
+                                    <button class="btn btn-outline-success" type="submit"><i
+                                            class="bi bi-search"></i></button>
                                 </form>
                             </div>
                             <div class="col-lg-6 d-flex mb-3 justify-content-end">
@@ -374,7 +384,7 @@ $total_email = $email_data['total_email'];
                                     $result = $conn->query("SELECT * FROM kost");
                                     while ($row = $result->fetch_assoc()) {
                                         ?>
-                                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                        <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                                             <div class="property-item rounded overflow-hidden">
                                                 <div class="position-relative overflow-hidden">
                                                     <a href="admin-detail.php?id=<?php echo $row['id']; ?>">
@@ -419,13 +429,14 @@ $total_email = $email_data['total_email'];
                                                 </div>
 
                                                 <div class="p-4 pb-0">
-                                                    <a class="d-block h5 mb-2" href=""><?php echo $row['nama_kost']; ?></a>
+                                                    <a class="d-block h5 mb-2"
+                                                        href=""><?php echo limit_characters($row['nama_kost'], 14); ?></a>
                                                     <h5 class="text-primary mb-2">Rp.
                                                         <?php echo number_format($row['harga'], 0, ',', '.'); ?>
                                                     </h5>
                                                     <p>
                                                         <i
-                                                            class="fa fa-map-marker-alt text-primary me-2"></i><?php echo $row['alamat']; ?>
+                                                            class="fa fa-map-marker-alt text-primary me-2"></i><?php echo limit_characters($row['alamat'], 33); ?>
                                                     </p>
                                                 </div>
                                                 <div class="d-flex border-top">
