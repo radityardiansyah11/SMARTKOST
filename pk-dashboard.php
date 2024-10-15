@@ -15,6 +15,15 @@ $query_count_kost = "SELECT COUNT(*) AS total_kost FROM kost WHERE pkname = '$pk
 $result_count_kost = mysqli_query($conn, $query_count_kost);
 $row_count_kost = mysqli_fetch_assoc($result_count_kost);
 $total_kost = $row_count_kost['total_kost'];
+
+function limit_characters($string, $char_limit)
+{
+    if (strlen($string) > $char_limit) {
+        return substr($string, 0, $char_limit) . '...';
+    }
+    return $string;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -107,6 +116,13 @@ $total_kost = $row_count_kost['total_kost'];
             padding-right: 10px;
             white-space: nowrap;
             border-radius: 5px;
+        }
+
+        .property-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            object-position: center;
         }
     </style>
 </head>
@@ -224,26 +240,27 @@ $total_kost = $row_count_kost['total_kost'];
                                     <th scope="col">ID</th>
                                     <th scope="col">Nama</th>
                                     <th scope="col">Kost</th>
+                                    <th scope="col">Metode</th>
                                     <th scope="col">Bayar</th>
-                                    <th scope="col">Tanggal</th>
+                                    <th scope="col">Tanggal Mulai</th>
+                                    <th scope="col">Tanggal Selesai</th>
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <th scope="row" class="align-middle">1</th>
-                                    <td class="align-middle">User 1</td>
-                                    <td class="align-middle">Kost Malang</td>
-                                    <td class="align-middle">Rp. 500.000</td>
-                                    <td class="align-middle">2024-08-09</td>
-                                    <td class="">
-                                        <a href="edit-user.php?id=<?php echo $row['id']; ?>"
-                                            class="btn btn-sm btn-primary" style="width:57px;">Edit</a>
-                                        <a href="?delete=<?php echo $row['id']; ?>"
-                                            class="btn btn-sm btn-danger btn-trash"
-                                            onclick="return confirm('Apa kamu yakin akan menghapus?');"><img
-                                                src="img2/sampah.png" class="w-75"></a>
+                                    <th scope="row">1</th>
+                                    <td>Tutik Handayani</td>
+                                    <td>Kost Malang</td>
+                                    <td>Trasnfer Bank</td>
+                                    <td>Rp. 500.000</td>
+                                    <td>2024-08-09</td>
+                                    <td>2024-08-09</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary">Edit</button>
+                                        <button class="btn btn-sm btn-danger">Delete</button>
                                     </td>
+                                </tr>
                                 </tr>
                                 <!-- More rows as needed -->
                             </tbody>
@@ -258,7 +275,7 @@ $total_kost = $row_count_kost['total_kost'];
                         <div class="row mt-2 g-0 gx-5">
                             <div class="col-lg-6">
                                 <div class="text-start mx-auto mb-5 wow slideInLeft" data-wow-delay="0.1s">
-                                    <h4 class="mb-2">List Kost Anda</h4>
+                                    <h4 class="mb-1">List Kost Anda</h4>
                                 </div>
                             </div>
                         </div>
@@ -266,14 +283,14 @@ $total_kost = $row_count_kost['total_kost'];
                         <div class="tab-content">
                             <div id="tab-1" class="tab-pane fade show p-0 active">
                                 <div class="row g-4">
-
+                                    
                                     <?php
                                     // Fetch Kost listings from the database
                                     $pkname = $_SESSION['pkname']; // Ambil pkname dari sesi
                                     $result = $conn->query("SELECT * FROM kost WHERE pkname = '$pkname' LIMIT 9");
                                     while ($row = $result->fetch_assoc()) {
                                         ?>
-                                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                        <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                                             <div class="property-item rounded overflow-hidden">
                                                 <div class="position-relative overflow-hidden">
                                                     <a href="admin-detail.php?id=<?php echo $row['id']; ?>">
@@ -318,13 +335,13 @@ $total_kost = $row_count_kost['total_kost'];
                                                 </div>
 
                                                 <div class="p-4 pb-0">
-                                                    <a class="d-block h5 mb-2" href=""><?php echo $row['nama_kost']; ?></a>
+                                                    <a class="d-block h5 mb-2" href=""><?php echo limit_characters($row['nama_kost'], 14); ?></a>
                                                     <h5 class="text-primary mb-2">Rp.
                                                         <?php echo number_format($row['harga'], 0, ',', '.'); ?>
                                                     </h5>
                                                     <p>
                                                         <i
-                                                            class="fa fa-map-marker-alt text-primary me-2"></i><?php echo $row['alamat']; ?>
+                                                            class="fa fa-map-marker-alt text-primary me-2"></i><?php echo limit_characters($row['alamat'], 33); ?>
                                                     </p>
                                                 </div>
                                                 <div class="d-flex border-top">

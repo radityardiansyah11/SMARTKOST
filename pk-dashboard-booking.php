@@ -167,17 +167,35 @@ $total_kost = $row_count_kost['total_kost'];
                                     <th scope="col">ID</th>
                                     <th scope="col">Nama</th>
                                     <th scope="col">Kost</th>
+                                    <th scope="col">Metode</th>
                                     <th scope="col">Bayar</th>
-                                    <th scope="col">Tanggal</th>
+                                    <th scope="col">Tanggal Mulai</th>
+                                    <th scope="col">Tanggal Selesai</th>
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <th scope="row">1</th>
-                                    <td>User 1</td>
+                                    <td>1</td>
+                                    <td>Tutik Handayani</td>
                                     <td>Kost Malang</td>
+                                    <td>Trasnfer Bank</td>
                                     <td>Rp. 500.000</td>
+                                    <td>2024-08-09</td>
+                                    <td>2024-08-09</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary">Edit</button>
+                                        <button class="btn btn-sm btn-danger">Delete</button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>2</td>
+                                    <td>Titik Hindiyini</td>
+                                    <td>Kost Malang</td>
+                                    <td>Trasnfer Bank</td>
+                                    <td>Rp. 500.000</td>
+                                    <td>2024-08-09</td>
                                     <td>2024-08-09</td>
                                     <td>
                                         <button class="btn btn-sm btn-primary">Edit</button>

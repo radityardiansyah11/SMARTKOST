@@ -75,6 +75,19 @@ $count_email_sql = "SELECT COUNT(*) AS total_email FROM kontak";
 $count_email_result = mysqli_query($conn, $count_email_sql);
 $email_data = mysqli_fetch_assoc($count_email_result);
 $total_email = $email_data['total_email'];
+
+// Tangkap input pencarian
+$search = isset($_GET['search']) ? trim($_GET['search']) : ''; // Bersihkan input dari spasi
+
+$sql = "SELECT id, username, email, password, created_at, profile_image FROM login_system WHERE 1=1";
+
+// Tambahkan kondisi pencarian berdasarkan username atau email
+if ($search) {
+    $search = $conn->real_escape_string($search); // Mencegah SQL injection
+    $sql .= " AND (username LIKE '%$search%' OR email LIKE '%$search%')";
+}
+
+$result = mysqli_query($conn, $sql);
 ?>
 
 <!DOCTYPE html>
@@ -315,7 +328,7 @@ $total_email = $email_data['total_email'];
                                 <h4 class="mb-3 me-3">User</h4>
                                 <form class="d-flex mb-3" action="" method="GET">
                                     <input class="form-control me-2" type="search" name="search" placeholder="Cari User"
-                                        aria-label="Search">
+                                        aria-label="Search" value="<?php echo htmlspecialchars($search); ?>">
                                     <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
                                 </form>
                             </div>

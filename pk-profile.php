@@ -151,7 +151,7 @@ $conn->close();
             padding: 1.5rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             border-radius: 12px;
-            height: 350px;
+            height: 280px;
         }
 
         .profile-card img {
@@ -269,29 +269,26 @@ $conn->close();
 
                     <div class="col-md-8 mt-3">
                         <h2 class="h4 mb-3">Profile Pemilik Kost</h2>
-                        <form action="pk-profile.php" method="POST" enctype="multipart/form-data">
+                        <form id="profileForm" action="pk-profile.php" method="POST" enctype="multipart/form-data">
                             <input type="file" name="image_profile" id="image_profile_input" class="form-control"
                                 accept="image/*">
-
                             <div class="mb-3">
                                 <label for="ownerName" class="form-label">Nama Pemilik</label>
                                 <input type="text" class="form-control" id="ownerName" name="pkname"
                                     placeholder="Enter Owner Name" value="<?php echo htmlspecialchars($pkname); ?>">
                             </div>
-
                             <div class="mb-3">
                                 <label for="ownerEmail" class="form-label">Email</label>
                                 <input type="email" class="form-control" id="ownerEmail" name="email"
                                     placeholder="Enter Email" value="<?php echo htmlspecialchars($email); ?>">
                             </div>
-
                             <div class="mb-3">
                                 <label for="ownerPhone" class="form-label">No. Telepon</label>
                                 <input type="tel" class="form-control" id="ownerPhone" name="nomor_hp"
                                     placeholder="Enter Phone Number" value="<?php echo htmlspecialchars($nomor_hp); ?>">
                             </div>
-
-                            <button type="submit" class="btn btn-success">Simpan Perubahan</button>
+                            <button type="submit" id="saveButton" class="btn btn-success" style="display:none;">Simpan
+                                Perubahan</button>
                         </form>
                     </div>
                 </div>
@@ -321,6 +318,46 @@ $conn->close();
                 reader.readAsDataURL(file); // Read the file as a data URL
             }
         });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('profileForm');
+            const saveButton = document.getElementById('saveButton');
+
+            // Simpan nilai awal untuk perbandingan
+            const initialData = {
+                pkname: document.getElementById('ownerName').value,
+                email: document.getElementById('ownerEmail').value,
+                nomor_hp: document.getElementById('ownerPhone').value,
+                image: document.getElementById('image_profile_input').value
+            };
+
+            // Fungsi untuk memeriksa apakah ada perubahan
+            function checkChanges() {
+                const currentData = {
+                    pkname: document.getElementById('ownerName').value,
+                    email: document.getElementById('ownerEmail').value,
+                    nomor_hp: document.getElementById('ownerPhone').value,
+                    image: document.getElementById('image_profile_input').value
+                };
+
+                // Bandingkan data awal dengan data saat ini
+                if (initialData.pkname !== currentData.pkname ||
+                    initialData.email !== currentData.email ||
+                    initialData.nomor_hp !== currentData.nomor_hp ||
+                    initialData.image !== currentData.image) {
+                    // Jika ada perubahan, tampilkan tombol
+                    saveButton.style.display = 'block';
+                } else {
+                    // Jika tidak ada perubahan, sembunyikan tombol
+                    saveButton.style.display = 'none';
+                }
+            }
+
+            // Event listener untuk setiap input yang mungkin berubah
+            form.addEventListener('input', checkChanges);
+            document.getElementById('image_profile_input').addEventListener('change', checkChanges);
+        });
+
 
         function confirmLogout() {
             if (confirm("Anda yakin ingin logout?")) {

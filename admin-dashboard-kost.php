@@ -68,6 +68,26 @@ $count_email_result = mysqli_query($conn, $count_email_sql);
 $email_data = mysqli_fetch_assoc($count_email_result);
 $total_email = $email_data['total_email'];
 
+// Tangkap input pencarian
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+$sql_kost = "SELECT * FROM kost";
+
+if ($search) {
+    $search = $conn->real_escape_string($search);
+    $sql_kost .= " WHERE nama_kost LIKE '%$search%'";
+}
+
+$sql_kost .= " ORDER BY id ASC"; 
+$result_kost = mysqli_query($conn, $sql_kost);
+
+$count_kost_sql = "SELECT COUNT(*) AS total_kost FROM kost";
+if ($search) {
+    $count_kost_sql .= " WHERE nama_kost LIKE '%$search%'";
+}
+$count_kost_result = mysqli_query($conn, $count_kost_sql);
+$kost_data = mysqli_fetch_assoc($count_kost_result);
+$total_kost = $kost_data['total_kost'];
+
 function limit_characters($string, $char_limit)
 {
     if (strlen($string) > $char_limit) {
@@ -362,8 +382,8 @@ function limit_characters($string, $char_limit)
                             <div class="col-lg-6 d-flex align-items-center">
                                 <h4 class="mb-3">Kost</h4>
                                 <form class="d-flex mb-3 ms-3" action="" method="GET">
-                                    <input class="form-control me-2" type="search" name="search" placeholder="Cari kost"
-                                        aria-label="Search">
+                                    <input class="form-control me-2" type="search" name="search" placeholder="Cari Kost"
+                                        aria-label="Search" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
                                     <button class="btn btn-outline-success" type="submit"><i
                                             class="bi bi-search"></i></button>
                                 </form>
@@ -378,80 +398,82 @@ function limit_characters($string, $char_limit)
                         <div class="tab-content">
                             <div id="tab-1" class="tab-pane fade show p-0 active">
                                 <div class="row g-4">
-
                                     <?php
-                                    // Fetch Kost listings from the database
-                                    $result = $conn->query("SELECT * FROM kost");
-                                    while ($row = $result->fetch_assoc()) {
-                                        ?>
-                                        <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                                            <div class="property-item rounded overflow-hidden">
-                                                <div class="position-relative overflow-hidden">
-                                                    <a href="admin-detail.php?id=<?php echo $row['id']; ?>">
-                                                        <img class="img-fluid" src="<?php echo $row['gambar_1']; ?>" alt="">
-                                                    </a>
+                                    if ($result_kost->num_rows > 0) {
+                                        // Jika ada hasil pencarian atau data kost tersedia
+                                        while ($row = $result_kost->fetch_assoc()) {
+                                            ?>
+                                            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                                <div class="property-item rounded overflow-hidden">
+                                                    <div class="position-relative overflow-hidden">
+                                                        <a href="admin-detail.php?id=<?php echo $row['id']; ?>">
+                                                            <img class="img-fluid" src="<?php echo $row['gambar_1']; ?>" alt="">
+                                                        </a>
 
-                                                    <div
-                                                        class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
-                                                        </i><?php echo $row['kategori']; ?>
-                                                    </div>
-
-                                                    <div class="dropdown position-absolute top-0 end-0 mt-2 me-2">
-                                                        <button class="btn btn-sm btn-light dropdown-toggle" type="button"
-                                                            id="dropdownMenuButton" data-bs-toggle="dropdown"
-                                                            aria-expanded="false">
-                                                            <i class="fas fa-ellipsis-v"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu dropdown-menu-right shadow border-0"
-                                                            aria-labelledby="dropdownMenuButton">
-                                                            <li>
-                                                                <a class="dropdown-item d-flex align-items-center"
-                                                                    href="edit-kost.php?id=<?php echo $row['id']; ?>">
-                                                                    <i class="fas fa-edit me-2 text-primary"></i> Edit
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <hr class="dropdown-divider">
-                                                            </li>
-                                                            <li>
-                                                                <a class="dropdown-item d-flex align-items-center"
-                                                                    href="?delete=<?php echo $row['id']; ?>"
-                                                                    onclick="return confirm('Anda yakin ingin menghapus kost ini?');">
-                                                                    <i class="fas fa-trash-alt me-2 text-danger"></i> Delete
-                                                                </a>
-                                                            </li>
-                                                        </ul>
                                                         <div
-                                                            class="bg-white text-primary position-absolute end-0 bottom-0 pt-1 px-3 jenis-kost-label">
-                                                            <?php echo $row['jenis_kost']; ?>
+                                                            class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
+                                                            <?php echo $row['kategori']; ?>
+                                                        </div>
+
+                                                        <div class="dropdown position-absolute top-0 end-0 mt-2 me-2">
+                                                            <button class="btn btn-sm btn-light dropdown-toggle" type="button"
+                                                                id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                                                aria-expanded="false">
+                                                                <i class="fas fa-ellipsis-v"></i>
+                                                            </button>
+                                                            <ul class="dropdown-menu dropdown-menu-right shadow border-0"
+                                                                aria-labelledby="dropdownMenuButton">
+                                                                <li>
+                                                                    <a class="dropdown-item d-flex align-items-center"
+                                                                        href="edit-kost.php?id=<?php echo $row['id']; ?>">
+                                                                        <i class="fas fa-edit me-2 text-primary"></i> Edit
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <hr class="dropdown-divider">
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item d-flex align-items-center"
+                                                                        href="?delete=<?php echo $row['id']; ?>"
+                                                                        onclick="return confirm('Anda yakin ingin menghapus kost ini?');">
+                                                                        <i class="fas fa-trash-alt me-2 text-danger"></i> Delete
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                            <div
+                                                                class="bg-white text-primary position-absolute end-0 bottom-0 pt-1 px-3 jenis-kost-label">
+                                                                <?php echo $row['jenis_kost']; ?>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="p-4 pb-0">
-                                                    <a class="d-block h5 mb-2"
-                                                        href=""><?php echo limit_characters($row['nama_kost'], 14); ?></a>
-                                                    <h5 class="text-primary mb-2">Rp.
-                                                        <?php echo number_format($row['harga'], 0, ',', '.'); ?>
-                                                    </h5>
-                                                    <p>
-                                                        <i
-                                                            class="fa fa-map-marker-alt text-primary me-2"></i><?php echo limit_characters($row['alamat'], 33); ?>
-                                                    </p>
-                                                </div>
-                                                <div class="d-flex border-top">
-                                                    <small class="flex-fill text-center border-end py-2"><i
-                                                            class="fa fa-ruler-combined text-primary me-2"></i><?php echo $row['ukuran_kamar']; ?></small>
-                                                    <small class="flex-fill text-center border-end py-2"><i
-                                                            class="fa fa-bed text-primary me-2"></i><?php echo $row['banyak_kasur']; ?>
-                                                        Bed</small>
-                                                    <small class="flex-fill text-center py-2"><i
-                                                            class="fa fa-bath text-primary me-2"></i><?php echo $row['banyak_kamar_mandi']; ?>
-                                                        Bath</small>
+                                                    <div class="p-4 pb-0">
+                                                        <a class="d-block h5 mb-2"
+                                                            href=""><?php echo limit_characters($row['nama_kost'], 14); ?></a>
+                                                        <h5 class="text-primary mb-2">Rp.
+                                                            <?php echo number_format($row['harga'], 0, ',', '.'); ?></h5>
+                                                        <p><i
+                                                                class="fa fa-map-marker-alt text-primary me-2"></i><?php echo limit_characters($row['alamat'], 33); ?>
+                                                        </p>
+                                                    </div>
+
+                                                    <div class="d-flex border-top">
+                                                        <small class="flex-fill text-center border-end py-2"><i
+                                                                class="fa fa-ruler-combined text-primary me-2"></i><?php echo $row['ukuran_kamar']; ?></small>
+                                                        <small class="flex-fill text-center border-end py-2"><i
+                                                                class="fa fa-bed text-primary me-2"></i><?php echo $row['banyak_kasur']; ?>
+                                                            Bed</small>
+                                                        <small class="flex-fill text-center py-2"><i
+                                                                class="fa fa-bath text-primary me-2"></i><?php echo $row['banyak_kamar_mandi']; ?>
+                                                            Bath</small>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <?php
+                                            <?php
+                                        }
+                                    } else {
+                                        // Jika tidak ada hasil pencarian
+                                        echo "<p class='text-center'>Tidak ada kost yang ditemukan.</p>";
                                     }
                                     ?>
                                 </div>

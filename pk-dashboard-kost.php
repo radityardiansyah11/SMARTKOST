@@ -42,6 +42,15 @@ $query_count_kost = "SELECT COUNT(*) AS total_kost FROM kost WHERE pkname = '$pk
 $result_count_kost = mysqli_query($conn, $query_count_kost);
 $row_count_kost = mysqli_fetch_assoc($result_count_kost);
 $total_kost = $row_count_kost['total_kost'];
+
+function limit_characters($string, $char_limit)
+{
+    if (strlen($string) > $char_limit) {
+        return substr($string, 0, $char_limit) . '...';
+    }
+    return $string;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -130,7 +139,7 @@ $total_kost = $row_count_kost['total_kost'];
 
         .property-item img {
             width: 100%;
-            height: 250px;
+            height: 150px;
             object-fit: cover;
             object-position: center;
         }
@@ -269,7 +278,7 @@ $total_kost = $row_count_kost['total_kost'];
                                     $result = $conn->query("SELECT * FROM kost WHERE pkname = '$pkname'");
                                     while ($row = $result->fetch_assoc()) {
                                         ?>
-                                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                        <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                                             <div class="property-item rounded overflow-hidden">
                                                 <div class="position-relative overflow-hidden">
                                                     <a href="admin-detail.php?id=<?php echo $row['id']; ?>">
@@ -314,13 +323,13 @@ $total_kost = $row_count_kost['total_kost'];
                                                 </div>
 
                                                 <div class="p-4 pb-0">
-                                                    <a class="d-block h5 mb-2" href=""><?php echo $row['nama_kost']; ?></a>
+                                                    <a class="d-block h5 mb-2" href=""><?php echo limit_characters($row['nama_kost'], 14); ?></a>
                                                     <h5 class="text-primary mb-2">Rp.
                                                         <?php echo number_format($row['harga'], 0, ',', '.'); ?>
                                                     </h5>
                                                     <p>
                                                         <i
-                                                            class="fa fa-map-marker-alt text-primary me-2"></i><?php echo $row['alamat']; ?>
+                                                            class="fa fa-map-marker-alt text-primary me-2"></i><?php echo limit_characters($row['alamat'], 33); ?>
                                                     </p>
                                                 </div>
                                                 <div class="d-flex border-top">

@@ -78,6 +78,19 @@ $count_email_sql = "SELECT COUNT(*) AS total_email FROM kontak";
 $count_email_result = mysqli_query($conn, $count_email_sql);
 $email_data = mysqli_fetch_assoc($count_email_result);
 $total_email = $email_data['total_email'];
+
+// Tangkap input pencarian
+$search = isset($_GET['search']) ? trim($_GET['search']) : ''; // Bersihkan input dari spasi
+
+$sql = "SELECT id, pkname, email, password, nomor_hp, created_at, image_profile FROM logsys_pk WHERE 1=1";
+
+// Tambahkan kondisi pencarian berdasarkan username atau email
+if ($search) {
+    $search = $conn->real_escape_string($search); // Mencegah SQL injection
+    $sql .= " AND (pkname LIKE '%$search%' OR email LIKE '%$search%')";
+}
+
+$result = mysqli_query($conn, $sql);
 ?>
 
 <!DOCTYPE html>
@@ -316,9 +329,10 @@ $total_email = $email_data['total_email'];
                             <div class="col-lg-6 d-flex align-items-center">
                                 <h4 class="mb-3">Pemilik Kost</h4>
                                 <form class="d-flex mb-3 ms-3" action="" method="GET">
-                                    <input class="form-control me-2" type="search" name="search" placeholder="Cari Pemiik Kost"
-                                        aria-label="Search">
-                                    <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
+                                    <input class="form-control me-2" type="search" name="search"
+                                        placeholder="Cari Pemilik Kost" aria-label="Search" value="<?php echo htmlspecialchars($search); ?>">
+                                    <button class="btn btn-outline-success" type="submit"><i
+                                            class="bi bi-search"></i></button>
                                 </form>
                             </div>
 
