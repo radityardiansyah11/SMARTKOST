@@ -147,6 +147,25 @@ function limit_characters($string, $char_limit)
             object-fit: cover;
             object-position: center;
         }
+
+        .hover-animate {
+            overflow: hidden;
+        }
+
+        .hover-animate::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.3s ease;
+        }
+
+        .hover-animate:hover::after {
+            left: 100%;
+        }
     </style>
 </head>
 
@@ -244,7 +263,7 @@ function limit_characters($string, $char_limit)
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <input type="text" class="form-control border-0 py-3" placeholder="Alamat" name="Alamat"
+                            <input type="text" class="form-control border-0 py-3" placeholder="Lokasi" name="Alamat"
                                 value="">
                         </div>
                         <div class="col-md-2">
@@ -503,7 +522,7 @@ function limit_characters($string, $char_limit)
                                             <div class="icon me-3" style="width: 45px; height: 45px;">
                                                 <i class="fa fa-envelope-open text-primary"></i>
                                             </div>
-                                            <span>info@example.com</span>
+                                            <span>info@smartkost.com</span>
                                         </div>
                                     </div>
                                 </div>
@@ -595,7 +614,7 @@ function limit_characters($string, $char_limit)
                             <h5 class="mt-4">Pilih Kost</h5>
                             <hr class="w-25 mx-auto bg-primary mb-1">
                             <hr class="w-50 mx-auto bg-primary mt-0">
-                            <p class="mb-0">Pastikan pilihna kost sesuai dengan kebtuhan</p>
+                            <p class="mb-0">Pastikan pilihan kost sesuai dengan kebtuhan</p>
                         </div>
                     </div>
                     <div class="col-lg-4 col-sm-6 text-center pt-4 wow fadeInUp" data-wow-delay="0.5s">
@@ -642,7 +661,7 @@ function limit_characters($string, $char_limit)
                                 <img class="img-fluid flex-shrink-0 rounded" src="img/testimonial-2.jpg"
                                     style="width: 45px; height: 45px;">
                                 <div class="ps-3">
-                                    <h6 class="fw-bold mb-1">Pak bubut</h6>
+                                    <h6 class="fw-bold mb-1">Pak Bobot</h6>
                                     <small>Client</small>
                                 </div>
                             </div>
@@ -655,7 +674,7 @@ function limit_characters($string, $char_limit)
                                 <img class="img-fluid flex-shrink-0 rounded" src="img/testimonial-3.jpg"
                                     style="width: 45px; height: 45px;">
                                 <div class="ps-3">
-                                    <h6 class="fw-bold mb-1">Pak bebet</h6>
+                                    <h6 class="fw-bold mb-1">Pak Bibit</h6>
                                     <small>client</small>
                                 </div>
                             </div>
@@ -666,6 +685,15 @@ function limit_characters($string, $char_limit)
         </div>
         <!-- Testimonial End -->
 
+        <!-- Kost Book Button Start -->
+        <div class="container-xxl py-5">
+            <div class="container text-end">
+                <a href="user-booking.php" class="btn btn-primary btn-lg px-4 shadow position-relative hover-animate">
+                    Kost yang Anda Booking <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+        <!-- Kost Book Button End -->
 
         <!-- Footer Start -->
         <div class="container-fluid bg-dark text-white-50 footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">

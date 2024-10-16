@@ -292,7 +292,7 @@ function limit_characters($string, $char_limit)
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <input type="text" class="form-control border-0 py-3" placeholder="Alamat" name="Alamat"
+                            <input type="text" class="form-control border-0 py-3" placeholder="lokasi" name="Alamat"
                                 value="<?php echo htmlspecialchars($search_alamat); ?>">
                         </div>
                         <div class="col-md-2">

@@ -219,7 +219,7 @@
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <input type="text" class="form-control border-0 py-3" placeholder="Alamat" name="Alamat"
+                            <input type="text" class="form-control border-0 py-3" placeholder="Lokasi" name="Alamat"
                                 value="">
                         </div>
                         <div class="col-md-2">
