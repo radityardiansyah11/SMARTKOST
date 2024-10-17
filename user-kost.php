@@ -232,6 +232,10 @@ function limit_characters($string, $char_limit)
                                 value="<?php echo htmlspecialchars($search); ?>">
                         </div>
                         <div class="col-md-3">
+                            <input type="text" class="form-control border-0 py-3" placeholder="Lokasi" name="Alamat"
+                                value="<?php echo htmlspecialchars($search_alamat); ?>">
+                        </div>
+                        <div class="col-md-3">
                             <select class="form-select border-0 py-3" name="jenis_kost">
                                 <option value="">Kategori Kost</option>
                                 <option value="Laki-laki" <?php if ($jenis_kost == 'Laki-laki')
@@ -244,10 +248,6 @@ function limit_characters($string, $char_limit)
                                     echo 'selected'; ?>>Campur
                                 </option>
                             </select>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="text" class="form-control border-0 py-3" placeholder="Lokasi" name="Alamat"
-                                value="<?php echo htmlspecialchars($search_alamat); ?>">
                         </div>
                         <div class="col-md-2">
                             <button type="submit" class="btn btn-dark border-0 w-100 py-3">Cari</button>

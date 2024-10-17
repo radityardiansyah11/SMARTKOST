@@ -236,7 +236,7 @@ if ($result->num_rows > 0) {
                     </div>
 
                     <hr class="hr-desk">
-                    
+
                     <h5 class="text-muted mt-3"><strong> Deskripsi Kost </strong></h5>
                     <p><?php echo $row['deskripsi']; ?></p>
 
@@ -445,9 +445,11 @@ if ($result->num_rows > 0) {
                                 </p>
                                 <span class="mt-3 ml-2">/bulan</span>
                             </div>
+                            
                             <!-- Tanggal dan Periode Sewa -->
                             <div class="input-group mb-3">
-                                <input type="date" class="form-control" id="paymentDate"> <!-- Added id -->
+                                <input type="text" class="form-control" id="paymentDate" placeholder="Tanggal Mulai"
+                                    onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'">
                                 <select class="form-select" id="rentPeriod" onchange="calculateTotal()">
                                     <option value="" selected>Waktu kost</option>
                                     <option value="month">1 Bulan</option>
@@ -456,6 +458,7 @@ if ($result->num_rows > 0) {
                                     <option value="year">Per Tahun</option>
                                 </select>
                             </div>
+
                             <!-- Total Harga -->
                             <div id="totalPrice" class="mb-3" style="display: none;">
                                 <h5>Total Harga: <span id="totalAmount">Rp0</span></h5>
@@ -724,7 +727,7 @@ if ($result->num_rows > 0) {
                         start.setFullYear(start.getFullYear() + 1);
                         break;
                 }
-                return start.toISOString().split('T')[0]; 
+                return start.toISOString().split('T')[0];
             }
 
             function submitForm() {

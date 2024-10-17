@@ -278,6 +278,10 @@ function limit_characters($string, $char_limit)
                                 value="<?php echo htmlspecialchars($search); ?>">
                         </div>
                         <div class="col-md-3">
+                            <input type="text" class="form-control border-0 py-3" placeholder="lokasi" name="Alamat"
+                                value="<?php echo htmlspecialchars($search_alamat); ?>">
+                        </div>
+                        <div class="col-md-3">
                             <select class="form-select border-0 py-3" name="jenis_kost">
                                 <option value="">Jenis Kost</option>
                                 <option value="Laki-laki" <?php if ($jenis_kost == 'Laki-laki')
@@ -290,10 +294,6 @@ function limit_characters($string, $char_limit)
                                     echo 'selected'; ?>>Campur
                                 </option>
                             </select>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="text" class="form-control border-0 py-3" placeholder="lokasi" name="Alamat"
-                                value="<?php echo htmlspecialchars($search_alamat); ?>">
                         </div>
                         <div class="col-md-2">
                             <button type="submit" class="btn btn-dark border-0 w-100 py-3">Cari</button>
@@ -347,7 +347,7 @@ function limit_characters($string, $char_limit)
                                     <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                                         <div class="property-item rounded overflow-hidden">
                                             <div class="position-relative overflow-hidden">
-                                                <a href="user-detail.php?id=<?php echo $row['id']; ?>">
+                                                <a href="detail.php?id=<?php echo $row['id']; ?>">
                                                     <img class="img-fluid" src="<?php echo $row['gambar_1']; ?>" alt="">
                                                 </a>
                                                 <div

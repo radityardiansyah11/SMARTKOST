@@ -604,9 +604,11 @@ if ($result->num_rows > 0) {
                                 </p>
                                 <span class="mt-3 ml-2">/bulan</span>
                             </div>
+
                             <!-- Tanggal dan Periode Sewa -->
                             <div class="input-group mb-3">
-                                <input type="date" class="form-control" value="2024-08-22">
+                                <input type="text" class="form-control" id="paymentDate" placeholder="Tanggal Mulai"
+                                    onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'">
                                 <select class="form-select" id="rentPeriod" onchange="calculateTotal()">
                                     <option value="" selected>Waktu kost</option>
                                     <option value="month">1 Bulan</option>
@@ -615,6 +617,7 @@ if ($result->num_rows > 0) {
                                     <option value="year">Per Tahun</option>
                                 </select>
                             </div>
+
                             <!-- Total Harga -->
                             <div id="totalPrice" class="mb-3" style="display: none;">
                                 <h5>Total Harga: <span id="totalAmount">Rp0</span></h5>
@@ -627,7 +630,7 @@ if ($result->num_rows > 0) {
                                 <input type="date" id="endDate" class="form-control mb-2">
                             </div>
                             <!-- Tombol Ajukan Sewa -->
-                            <a href="pembayaran.php">
+                            <a href="login.php">
                                 <button class="btn btn-primary w-100">Ajukan Sewa</button>
                             </a>
                         </div>

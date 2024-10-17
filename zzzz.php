@@ -838,13 +838,6 @@ if ($result->num_rows > 0) {
 </html>
 
 
-        
-        
-        
-        
-        
-
-
         /* Navbar */
         .navbar {
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -889,3 +882,127 @@ if ($result->num_rows > 0) {
             border-top-left-radius: 12px;
             border-bottom-left-radius: 12px;
         }
+
+
+
+
+    <!-- carousel diskon -->
+    @media (max-width: 767px) {
+            .carousel-inner .carousel-item>div {
+                display: none;
+            }
+
+            .carousel-inner .carousel-item>div:first-child {
+                display: block;
+            }
+        }
+
+        /* Menambahkan border-radius ke gambar dan kartu */
+        .card-img img {
+            border-radius: 15px;
+        }
+
+        .card {
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .carousel-inner .carousel-item.active,
+        .carousel-inner .carousel-item-next,
+        .carousel-inner .carousel-item-prev {
+            display: flex;
+            justify-content: center;
+            /* Centering the items */
+            gap: 15px;
+            /* Add gap between items */
+        }
+
+        @media (min-width: 768px) {
+
+            .carousel-inner .carousel-item-end.active,
+            .carousel-inner .carousel-item-next {
+                transform: translateX(50%);
+            }
+
+            .carousel-inner .carousel-item-start.active,
+            .carousel-inner .carousel-item-prev {
+                transform: translateX(-50%);
+            }
+        }
+
+        .carousel-inner .carousel-item-end,
+        .carousel-inner .carousel-item-start {
+            transform: translateX(0);
+        }
+
+        <!-- carousel promo -->
+        <div class="container text-center my-3">
+            <h1 class="font-weight-light">Promo</h1>
+            <div class="row mx-auto my-auto justify-content-center mt-4">
+                <div id="recipeCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner" role="listbox">
+
+                        <div class="carousel-item active">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-img">
+                                        <img src="img2/promo.jpg" class="img-fluid">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-img">
+                                        <img src="img2/promo.jpg" class="img-fluid">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="carousel-item">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-img">
+                                        <img src="img2/promo.jpg" class="img-fluid">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-img">
+                                        <img src="img2/promo.jpg" class="img-fluid">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="carousel-item">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-img">
+                                        <img src="img2/promo.jpg" class="img-fluid">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-img">
+                                        <img src="img2/promo.jpg" class="img-fluid">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <a class="carousel-control-prev bg-transparent w-aut" href="#recipeCarousel" role="button"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    </a>
+                    <a class="carousel-control-next bg-transparent w-aut" href="#recipeCarousel" role="button"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+

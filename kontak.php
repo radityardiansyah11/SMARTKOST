@@ -211,16 +211,16 @@
                                 value="">
                         </div>
                         <div class="col-md-3">
+                            <input type="text" class="form-control border-0 py-3" placeholder="Lokasi" name="Alamat"
+                                value="">
+                        </div>
+                        <div class="col-md-3">
                             <select class="form-select border-0 py-3">
                                 <option selected>Jenis Kost</option>
                                 <option value="1">Laki-laki</option>
                                 <option value="2">Perempuan</option>
                                 <option value="3">Campur</option>
                             </select>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="text" class="form-control border-0 py-3" placeholder="Lokasi" name="Alamat"
-                                value="">
                         </div>
                         <div class="col-md-2">
                             <button type="submit" class="btn btn-dark border-0 w-100 py-3">Cari</button>

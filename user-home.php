@@ -148,7 +148,7 @@ function limit_characters($string, $char_limit)
             object-position: center;
         }
 
-        .hover-animate {
+        /*  .hover-animate {
             overflow: hidden;
         }
 
@@ -165,6 +165,36 @@ function limit_characters($string, $char_limit)
 
         .hover-animate:hover::after {
             left: 100%;
+        } */
+
+        .konten {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+            overflow: hidden;
+            max-width: 1200px;
+            width: 100%;
+            height: 200px;
+            padding: 0px;
+            margin: 0 auto;
+        }
+
+        .text-content {
+            padding: 40px;
+            flex: 1;
+        }
+
+        .image-content img {
+            width: 570px;
+            height: 200px;
+            border-radius: 0 10px 10px 0;
+            object-fit: cover;
+        }
+
+        .image-contentt img {
+            object-fit: cover;
         }
     </style>
 </head>
@@ -255,16 +285,16 @@ function limit_characters($string, $char_limit)
                                 value="">
                         </div>
                         <div class="col-md-3">
+                            <input type="text" class="form-control border-0 py-3" placeholder="Lokasi" name="Alamat"
+                                value="">
+                        </div>
+                        <div class="col-md-3">
                             <select class="form-select border-0 py-3">
                                 <option selected>Kategori Kost</option>
                                 <option value="1">Laki-laki</option>
                                 <option value="2">Perempuan</option>
                                 <option value="3">Campur</option>
                             </select>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="text" class="form-control border-0 py-3" placeholder="Lokasi" name="Alamat"
-                                value="">
                         </div>
                         <div class="col-md-2">
                             <button type="submit" class="btn btn-dark border-0 w-100 py-3">Cari</button>
@@ -357,6 +387,30 @@ function limit_characters($string, $char_limit)
         </div>
         <!-- Category End -->
 
+        <!-- daftar -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="konten wow slideInLeft" data-wow-delay="0.1s">
+                    <div class="text-content">
+                        <h3>
+                            Daftarkan Kos Anda di SMARTKOST
+                        </h3>
+                        <p>
+                            Berbagai fitur dan layanan untuk meningkatkan bisnis kos Anda
+                        </p>
+                        <a class="btn btn-primary" href="login-pk.php">
+                            Daftarkan Kost Anda
+                        </a>
+                    </div>
+                    <div class="image-content">
+                        <img alt="Two people looking at a phone together" height="400"
+                            src="https://storage.googleapis.com/a1aa/image/ich0XrByvrpFCdjapmJOkhkol2qyiaaRbrozbo5EvIHyewzJA.jpg"
+                            width="600" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Kost List Start -->
         <div class="container-xxl py-5">
             <div class="container">
@@ -374,7 +428,7 @@ function limit_characters($string, $char_limit)
 
                             <?php
                             // Fetch Kost listings from the database
-                            $result = $conn->query("SELECT * FROM kost ORDER BY RAND() LIMIT 12");
+                            $result = $conn->query("SELECT * FROM kost ORDER BY RAND() LIMIT 8");
                             while ($row = $result->fetch_assoc()) {
                                 ?>
                                 <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
@@ -437,62 +491,63 @@ function limit_characters($string, $char_limit)
                     <h1 class="mb-1">Sedang Diskon</h1>
                     <p class="mb-4">Beberapa kost yang sedang diskon saat ini</p>
                 </div>
-                <div class="row g-3">
-                    <div class="col-lg-7 col-md-6">
-                        <div class="row g-3">
-                            <div class="col-lg-12 col-md-12 wow zoomIn" data-wow-delay="0.1s">
-                                <a class="position-relative d-block overflow-hidden" href=""
-                                    style="border-radius: 10px;">
-                                    <img class="img-fluid" src="img2/kost1.jpg" alt="">
+                <div class="row g-4">
+
+                    <?php
+                    // Fetch Kost listings from the database
+                    $result = $conn->query("SELECT * FROM kost ORDER BY RAND() LIMIT 4");
+                    while ($row = $result->fetch_assoc()) {
+                        ?>
+                        <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                            <div class="property-item rounded overflow-hidden">
+                                <div class="position-relative overflow-hidden">
+                                    <a href="user-detail.php?id=<?php echo $row['id']; ?>">
+                                        <img class="img-fluid" src="<?php echo $row['gambar_1']; ?>" alt="">
+                                    </a>
                                     <div
-                                        class="bg-white text-danger fw-bold position-absolute top-0 start-0 m-3 py-1 px-2">
-                                        30% OFF</div>
-                                    <div
-                                        class="bg-white text-primary fw-bold position-absolute bottom-0 end-0 m-3 py-1 px-2">
-                                        Malang</div>
-                                </a>
-                            </div>
-                            <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.3s">
-                                <a class="position-relative d-block overflow-hidden" href=""
-                                    style="border-radius: 10px;">
-                                    <img class="img-fluid" src="img2/gbr-kost2.jpg" alt="">
-                                    <div
-                                        class="bg-white text-danger fw-bold position-absolute top-0 start-0 m-3 py-1 px-2">
-                                        25% OFF</div>
-                                    <div
-                                        class="bg-white text-primary fw-bold position-absolute bottom-0 end-0 m-3 py-1 px-2">
-                                        Malang</div>
-                                </a>
-                            </div>
-                            <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.5s">
-                                <a class="position-relative d-block overflow-hidden" href=""
-                                    style="border-radius: 10px;">
-                                    <img class="img-fluid" src="img2/gbr-kost3.jpg" alt="">
-                                    <div
-                                        class="bg-white text-danger fw-bold position-absolute top-0 start-0 m-3 py-1 px-2">
-                                        35% OFF</div>
-                                    <div
-                                        class="bg-white text-primary fw-bold position-absolute bottom-0 end-0 m-3 py-1 px-2">
-                                        Malang</div>
-                                </a>
+                                        class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
+                                        <?php echo $row['kategori']; ?>
+                                    </div>
+                                    <div class="dropdown position-absolute top-0 end-0 mt-2 me-2">
+                                        <div
+                                            class="bg-white text-primary position-absolute end-0 bottom-3 pt-1 px-3 jenis-kost-label">
+                                            <?php echo $row['jenis_kost']; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-4 pb-0">
+                                    <a class="d-block h5 mb-2"
+                                        href=""><?php echo limit_characters($row['nama_kost'], 17); ?></a>
+                                    <h5 class="text-primary mb-1">Rp.
+                                        <?php echo number_format($row['harga'], 0, ',', '.'); ?>
+                                    </h5>
+                                    <p><i
+                                            class="fa fa-map-marker-alt text-primary me-2"></i><?php echo limit_characters($row['alamat'], 48); ?>
+                                    </p>
+                                </div>
+                                <div class="d-flex border-top">
+                                    <small class="flex-fill text-center border-end py-2"><i
+                                            class="fa fa-ruler-combined text-primary me-2"></i><?php echo $row['ukuran_kamar']; ?></small>
+                                    <small class="flex-fill text-center border-end py-2"><i
+                                            class="fa fa-bed text-primary me-2"></i><?php echo $row['banyak_kasur']; ?>
+                                        Bed</small>
+                                    <small class="flex-fill text-center py-2"><i
+                                            class="fa fa-bath text-primary me-2"></i><?php echo $row['banyak_kamar_mandi']; ?>
+                                        Bath</small>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-5 col-md-6 wow zoomIn" data-wow-delay="0.7s" style="min-height: 350px;">
-                        <a class="position-relative d-block h-100 overflow-hidden" href="" style="border-radius: 10px;">
-                            <img class="img-fluid position-absolute w-100 h-100" src="img2/kost1.jpg" alt=""
-                                style="object-fit: cover;">
-                            <div class="bg-white text-danger fw-bold position-absolute top-0 start-0 m-3 py-1 px-2">20%
-                                OFF</div>
-                            <div class="bg-white text-primary fw-bold position-absolute bottom-0 end-0 m-3 py-1 px-2">
-                                Malang</div>
-                        </a>
+                        <?php
+                    }
+                    ?>
+
+                    <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.1s">
+                        <a class="btn btn-primary py-3 px-5" href="user-kost.php">Lihat Lainnya</a>
                     </div>
                 </div>
             </div>
         </div>
         <!-- Destination Start -->
-
 
         <!--Kontak Start -->
         <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
@@ -685,15 +740,29 @@ function limit_characters($string, $char_limit)
         </div>
         <!-- Testimonial End -->
 
-        <!-- Kost Book Button Start -->
+        <!-- history book -->
         <div class="container-xxl py-5">
-            <div class="container text-end">
-                <a href="user-booking.php" class="btn btn-primary btn-lg px-4 shadow position-relative hover-animate">
-                    Kost yang Anda Booking <i class="bi bi-arrow-right"></i>
-                </a>
+            <div class="container">
+                <div class="konten wow slideInLeft" data-wow-delay="0.1s">
+                    <div class="image-contentt">
+                        <img alt="Two people looking at a phone together" height="400"
+                            src="https://storage.googleapis.com/a1aa/image/ich0XrByvrpFCdjapmJOkhkol2qyiaaRbrozbo5EvIHyewzJA.jpg"
+                            width="600" />
+                    </div>
+                    <div class="text-content">
+                        <h3>
+                            Riwayat kost yang telah anda booking
+                        </h3>
+                        <p>
+                            Riwayat kost yang telah anda booking
+                        </p>
+                        <a class="btn btn-primary" href="user-booking.php">
+                            Lihat kost
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
-        <!-- Kost Book Button End -->
 
         <!-- Footer Start -->
         <div class="container-fluid bg-dark text-white-50 footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
