@@ -167,7 +167,9 @@ $username = $_SESSION['username'];
                                             <h5 class="card-title">Kost Aisyah Palembang</h5>
                                             <p><i class="bi bi-calendar"></i> 1 Jan 2022 - 1 Jan 2023</p>
                                             <p><i class="bi bi-geo-alt"></i> Palembang, Sumatra Selatan</p>
+                             
                                             <p class="mb-3 text-primary"><i class="bi bi-check-circle-fill text-primary"></i> Pembayaran Selesai</p>
+                                            <p><i class="bi bi-exclamation-circle-fill"></i> Menungu konfirmasi</p>
                                             <a href="#" class="btn btn-primary btn-sm">Lihat Detail</a>
                                             <a href="#" class="btn btn-secondary btn-sm">Tulis Ulasan</a>
                                         </div>
