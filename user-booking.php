@@ -17,7 +17,7 @@ $username = $_SESSION['username'];
 
 <head>
     <meta charset="utf-8">
-    <title>home-SMARTKOST</title>
+    <title>Riwayat-SMARTKOST</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -151,7 +151,7 @@ $username = $_SESSION['username'];
             <div class="row justify-content-center">
                 <div class="col-lg-10">
                     <div class="row">
-                        
+
                         <!-- Card 1 (Kiri) -->
                         <div class="col-md-6 mb-4">
                             <div class="card shadow-md h-100">
@@ -167,11 +167,14 @@ $username = $_SESSION['username'];
                                             <h5 class="card-title">Kost Aisyah Palembang</h5>
                                             <p><i class="bi bi-calendar"></i> 1 Jan 2022 - 1 Jan 2023</p>
                                             <p><i class="bi bi-geo-alt"></i> Palembang, Sumatra Selatan</p>
-                             
-                                            <p class="mb-3 text-primary"><i class="bi bi-check-circle-fill text-primary"></i> Pembayaran Selesai</p>
+
+                                            <p class="text-primary"><i class="bi bi-check-circle-fill text-primary"></i>
+                                                Pembayaran Selesai</p>
                                             <p><i class="bi bi-exclamation-circle-fill"></i> Menungu konfirmasi</p>
-                                            <a href="#" class="btn btn-primary btn-sm">Lihat Detail</a>
-                                            <a href="#" class="btn btn-secondary btn-sm">Tulis Ulasan</a>
+                                            <di class="d-flex mt-2">
+                                                <a href="#" class="btn btn-primary btn-sm">Lihat Detail</a>
+                                                <a href="#" class="ms-2 btn btn-secondary btn-sm">Tulis Ulasan</a>
+                                            </di>
                                         </div>
                                     </div>
                                 </div>
@@ -193,9 +196,13 @@ $username = $_SESSION['username'];
                                             <h5 class="card-title">Kost Aisyah Palembang</h5>
                                             <p><i class="bi bi-calendar"></i> 1 Jan 2022 - 1 Jan 2023</p>
                                             <p><i class="bi bi-geo-alt"></i> Palembang, Sumatra Selatan</p>
-                                            <p class="mb-3 text-primary"><i class="bi bi-check-circle-fill text-primary"></i> Pembayaran Selesai</p>
-                                            <a href="#" class="btn btn-primary btn-sm">Lihat Detail</a>
-                                            <a href="#" class="btn btn-secondary btn-sm">Tulis Ulasan</a>
+                                            <p class="text-primary"><i class="bi bi-check-circle-fill text-primary"></i>
+                                                Pembayaran Selesai</p>
+                                            <p><i class="bi bi-exclamation-circle-fill"></i> Menungu konfirmasi</p>
+                                            <di class="d-flex mt-2">
+                                                <a href="#" class="btn btn-primary btn-sm">Lihat Detail</a>
+                                                <a href="#" class="ms-2 btn btn-secondary btn-sm">Tulis Ulasan</a>
+                                            </di>
                                         </div>
                                     </div>
                                 </div>

@@ -1006,3 +1006,53 @@ if ($result->num_rows > 0) {
             </div>
         </div>
 
+
+
+
+
+
+
+
+        <form id="codForm">
+        <div class="row">
+            <!-- Kolom Kiri -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="ewalletSenderName" class="form-label">Nama Pengirim</label>
+                    <input type="text" class="form-control" id="ewalletSenderName" placeholder="${namaPenyewa}">
+                </div>
+                <div class="mb-3">
+                    <label for="senderEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="senderName" placeholder="${emailPenyewa}">
+                </div>
+                <div class="mb-3">
+                    <label for="ewalletPaymentDate" class="form-label">Lama Sewa</label>
+                    <div class="d-flex justify-content-between mb-3">
+                        <div class="date-box">
+                            <strong>Mulai:</strong> ${<?php echo json_encode($mulai_sewa); ?>}
+                        </div>
+                        <div class="date-box">
+                            <strong>Selesai:</strong> ${<?php echo json_encode($selesai_sewa); ?>}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kolom Kanan -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="Platform" class="form-label">Platform</label>
+                    <select class="form-select" id="Platform">
+                        <option value="ovo" data-icon="fas fa-wallet">COD</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="transferAmount" class="form-label">Jumlah yang harus dibayarkan</label>
+                    <input type="text" class="form-control" id="transferAmount" value="Rp <?php echo number_format($total_harga, 0, ',', '.'); ?>"
+                        style="background-color: white;">
+                </div>
+            </div>
+            <div class="d-flex justify-content-end mt-3">
+                <button type="submit" class="btn btn-primary w-50">Konfirmasi Transfer</button>
+            </div>
+    </form>
