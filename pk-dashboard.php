@@ -10,11 +10,60 @@ if (!isset($_SESSION['pkname'])) {
 
 $pkname = $_SESSION['pkname']; // Ambil username dari sesi
 
+// Handle delete request
+if (isset($_GET['delete'])) {
+    $id = intval($_GET['delete']);
+    $sql = "DELETE FROM bookings WHERE id = $id";
+
+    if (mysqli_query($conn, $sql)) {
+        // Setelah penghapusan, reset urutan ID
+        $reset_id_query = "
+            SET @count = 0;
+            UPDATE bookings SET id = @count := @count + 1;
+            ALTER TABLE bookings AUTO_INCREMENT = 1;
+        ";
+        mysqli_multi_query($conn, $reset_id_query);
+
+        // Set session status to 'deleted' after successful deletion
+        $_SESSION['status'] = "deleted";
+    } else {
+        // Set session status to 'error' if deletion fails
+        $_SESSION['status'] = "error";
+    }
+
+    // Redirect setelah penghapusan dan reset
+    header('Location: pk-dashboard-booking.php');
+    exit();
+}
+
+// Perbaiki query untuk menghitung jumlah booking dengan JOIN pada tabel kost
+$query_count_bookings = "
+    SELECT COUNT(*) AS total_bookings
+    FROM bookings b
+    JOIN kost k ON b.nama_kost = k.nama_kost
+    WHERE k.pkname = '$pkname'
+";
+$result_count_bookings = mysqli_query($conn, $query_count_bookings);
+$row_count_bookings = mysqli_fetch_assoc($result_count_bookings);
+$total_bookings = $row_count_bookings['total_bookings']; 
+
 // Query untuk menghitung jumlah kost milik pemilik kost yang login
 $query_count_kost = "SELECT COUNT(*) AS total_kost FROM kost WHERE pkname = '$pkname'";
 $result_count_kost = mysqli_query($conn, $query_count_kost);
 $row_count_kost = mysqli_fetch_assoc($result_count_kost);
 $total_kost = $row_count_kost['total_kost'];
+
+// Query untuk mengambil data booking yang sesuai dengan kost yang dimiliki pemilik kost
+$query_bookings = "
+    SELECT b.id, b.nama_penyewa, b.telp_penyewa, b.email_penyewa, k.nama_kost, 
+           b.metode_pembayaran, b.total_harga, b.mulai_sewa, b.selesai_sewa
+    FROM bookings b
+    JOIN kost k ON b.nama_kost = k.nama_kost
+    WHERE k.pkname = '$pkname'
+    ORDER BY b.id ASC
+    LIMIT 10
+";
+$result_bookings = mysqli_query($conn, $query_bookings);
 
 function limit_characters($string, $char_limit)
 {
@@ -24,7 +73,19 @@ function limit_characters($string, $char_limit)
     return $string;
 }
 
+// Query untuk menghitung total pendapatan
+$query_total_pendapatan = "
+    SELECT SUM(b.total_harga) AS total_pendapatan
+    FROM bookings b
+    JOIN kost k ON b.nama_kost = k.nama_kost
+    WHERE k.pkname = '$pkname'
+";
+$result_total_pendapatan = mysqli_query($conn, $query_total_pendapatan);
+$row_total_pendapatan = mysqli_fetch_assoc($result_total_pendapatan);
+$total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -63,6 +124,16 @@ function limit_characters($string, $char_limit)
         .card {
             box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
             border: none;
+        }
+
+        .btn-view {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 31px;
+            height: 31px;
+            border-radius: 3px;
+            padding: 0;
         }
 
         .btn-trash {
@@ -217,7 +288,7 @@ function limit_characters($string, $char_limit)
                         <div class="card" style="height: 150px; background-color: #009774;">
                             <div class="card-body">
                                 <h5 class="card-title text-light">Booking</h5>
-                                <h3 class="card-text text-light">0</h3>
+                                <h3 class="card-text text-light"><?php echo $total_bookings; ?></h3>
                             </div>
                         </div>
                     </div>
@@ -225,13 +296,13 @@ function limit_characters($string, $char_limit)
                         <div class="card bg-primary" style="height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title text-light">Pendapatan</h5>
-                                <h3 class="card-text text-light">Rp. 0</h3>
+                                <h3 class="card-text text-light">Rp. <?php echo number_format($total_pendapatan, 0, ',', '.'); ?></h3>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- Listings -->
-                <div class="row mt-5">
+                <div class="row mt-4">
                     <div class="col-md-12">
                         <h2 class="h4 mb-3">Booking</h2>
                         <table class="table table-hover">
@@ -239,6 +310,8 @@ function limit_characters($string, $char_limit)
                                 <tr class="text-light">
                                     <th scope="col">ID</th>
                                     <th scope="col">Nama</th>
+                                    <th scope="col">No. Telp</th>
+                                    <th scope="col">Email</th>
                                     <th scope="col">Kost</th>
                                     <th scope="col">Metode</th>
                                     <th scope="col">Bayar</th>
@@ -248,25 +321,37 @@ function limit_characters($string, $char_limit)
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Tutik Handayani</td>
-                                    <td>Kost Malang</td>
-                                    <td>Trasnfer Bank</td>
-                                    <td>Rp. 500.000</td>
-                                    <td>2024-08-09</td>
-                                    <td>2024-08-09</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary">Edit</button>
-                                        <button class="btn btn-sm btn-danger">Delete</button>
-                                    </td>
-                                </tr>
-                                </tr>
+                                <?php while ($row = mysqli_fetch_assoc($result_bookings)) { ?>
+                                    <tr class="wow fadeIn" data-wow-delay="0.1s" >
+                                        <td class="align-middle"><?php echo $row['id']; ?></td>
+                                        <td class="align-middle"><?php echo htmlspecialchars($row['nama_penyewa']); ?></td>
+                                        <td class="align-middle"><?php echo limit_characters($row['telp_penyewa'], 10); ?>
+                                        <td class="align-middle"><?php echo htmlspecialchars($row['email_penyewa']); ?></td>
+                                        <td class="align-middle"><?php echo htmlspecialchars($row['nama_kost']); ?></td>
+                                        <td class="align-middle"><?php echo htmlspecialchars($row['metode_pembayaran']); ?>
+                                        </td>
+                                        <td class="align-middle">Rp.
+                                            <?php echo number_format($row['total_harga'], 0, ',', '.'); ?>
+                                        </td>
+                                        <td class="align-middle"><?php echo htmlspecialchars($row['mulai_sewa']); ?></td>
+                                        <td class="align-middle"><?php echo htmlspecialchars($row['selesai_sewa']); ?>
+                                        </td>
+                                        <td>
+                                            <a href="#"><button class="btn btn-sm btn-primary btn-view mt-2"><img
+                                                        src="img2/view.png" class="w-75"></button></a>
+                                            <a href="?delete=<?php echo $row['id']; ?>"
+                                                class="btn btn-sm btn-danger mt-2 btn-trash"
+                                                onclick="return confirm('Apa kamu yakin akan menghapus?');">
+                                                <img src="img2/sampah.png" class="w-75">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
                                 <!-- More rows as needed -->
                             </tbody>
                         </table>
                     </div>
-                    <a href="pk-dashboard-booking.html" class="text-end" style="color: grey;">View More</a>
+                    <a href="pk-dashboard-booking.php" class="text-end" style="color: grey;">View More</a>
                 </div>
 
                 <!-- List Kost -->
@@ -283,7 +368,7 @@ function limit_characters($string, $char_limit)
                         <div class="tab-content">
                             <div id="tab-1" class="tab-pane fade show p-0 active">
                                 <div class="row g-4">
-                                    
+
                                     <?php
                                     // Fetch Kost listings from the database
                                     $pkname = $_SESSION['pkname']; // Ambil pkname dari sesi
@@ -335,7 +420,8 @@ function limit_characters($string, $char_limit)
                                                 </div>
 
                                                 <div class="p-4 pb-0">
-                                                    <a class="d-block h5 mb-2" href=""><?php echo limit_characters($row['nama_kost'], 14); ?></a>
+                                                    <a class="d-block h5 mb-2"
+                                                        href=""><?php echo limit_characters($row['nama_kost'], 14); ?></a>
                                                     <h5 class="text-primary mb-2">Rp.
                                                         <?php echo number_format($row['harga'], 0, ',', '.'); ?>
                                                     </h5>

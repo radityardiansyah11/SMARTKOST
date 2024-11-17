@@ -108,6 +108,18 @@ $count_email_sql = "SELECT COUNT(*) AS total_email FROM kontak";
 $count_email_result = mysqli_query($conn, $count_email_sql);
 $email_data = mysqli_fetch_assoc($count_email_result);
 $total_email = $email_data['total_email'];
+
+// Query untuk menghitung 5% dari total harga booking
+$query_pendapatan = "SELECT SUM(total_harga * 0.10) AS total_pendapatan FROM bookings";
+$result_pendapatan = mysqli_query($conn, $query_pendapatan);
+
+if (!$result_pendapatan) {
+    die("Query error: " . mysqli_error($conn));
+}
+
+// Ambil hasil query
+$row_pendapatan = mysqli_fetch_assoc($result_pendapatan);
+$total_pendapatan = $row_pendapatan['total_pendapatan'] ?? 0; // Default ke 0 jika NULL
 ?>
 
 <!DOCTYPE html>
@@ -142,6 +154,7 @@ $total_email = $email_data['total_email'];
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+    <link href="css/grafik.css" rel="stylesheet">
 
     <style>
         .card {
@@ -183,6 +196,8 @@ $total_email = $email_data['total_email'];
         .row {
             overflow: visible;
         }
+
+        
     </style>
 </head>
 
@@ -229,6 +244,12 @@ $total_email = $email_data['total_email'];
                         <a href="admin-dashboard-kost.php" class="nav-link text-light">
                             <i class="bi bi-house-door me-2"></i>
                             Kost
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-dashboard-booking.php" class="nav-link text-light">
+                            <i class="bi bi-bookmarks me-2"></i>
+                            Booking
                         </a>
                     </li>
                     <li>
@@ -306,16 +327,8 @@ $total_email = $email_data['total_email'];
                                     <div class="col-md-4">
                                         <div class="card" style="height: 160px; margin: 10px 0;">
                                             <div class="card-body">
-                                                <h5 class="card-title">Promosi</h5>
-                                                <h3 class="card-text">Rp. 0</h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card" style="height: 160px; margin: 10px 0;">
-                                            <div class="card-body">
                                                 <h5 class="card-title">Pendapatan</h5>
-                                                <h3 class="card-text">Rp. 0</h3>
+                                                <h3 class="card-text">Rp. <?php echo number_format($total_pendapatan, 0, ',', '.'); ?></h3>
                                             </div>
                                         </div>
                                     </div>
@@ -356,7 +369,7 @@ $total_email = $email_data['total_email'];
                             </thead>
                             <tbody>
                                 <?php while ($row = mysqli_fetch_assoc($result_user_sessions)): ?>
-                                    <tr>
+                                    <tr class="wow fadeIn" data-wow-delay="0.1s" >
                                         <td class="align-middle"><?php echo $row['id']; ?></td>
                                         <td class="align-middle">
                                             <div class="d-flex justify-content-center align-items-center">
@@ -414,7 +427,7 @@ $total_email = $email_data['total_email'];
                             </thead>
                             <tbody>
                                 <?php while ($row = mysqli_fetch_assoc($result)): ?>
-                                    <tr>
+                                    <tr class="wow fadeIn" data-wow-delay="0.1s" >
                                         <th class="align-middle" scope="row"><?php echo $row['id']; ?></th>
                                         <td class="align-middle">
                                             <div class="d-flex justify-content-center align-items-center">

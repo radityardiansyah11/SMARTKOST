@@ -1,14 +1,13 @@
 <?php
-session_start();
 include 'config.php';
+session_start();
 
-// Pastikan pengguna telah login
-if (!isset($_SESSION['pkname'])) {
-    header("Location: login-pk.php"); // Redirect ke halaman login jika belum login
-    exit();
+$sql = "SELECT id, nama_penyewa, telp_penyewa, 	email_penyewa, pemilik_kost, nama_kost, metode_pembayaran, total_harga, mulai_sewa, order_id FROM bookings";
+$result = mysqli_query($conn, $sql);
+
+if (!$result) {
+    die("Query error: " . mysqli_error($conn));
 }
-
-$pkname = $_SESSION['pkname']; // Ambil username dari sesi
 
 // Handle delete request
 if (isset($_GET['delete'])) {
@@ -32,26 +31,51 @@ if (isset($_GET['delete'])) {
     }
 
     // Redirect setelah penghapusan dan reset
-    header('Location: pk-dashboard-booking.php');
+    header('Location: admin-dashboard-booking.php');
     exit();
 }
 
-// Perbaiki query untuk menghitung jumlah booking dengan JOIN pada tabel kost
-$query_count_bookings = "
-    SELECT COUNT(*) AS total_bookings
-    FROM bookings b
-    JOIN kost k ON b.nama_kost = k.nama_kost
-    WHERE k.pkname = '$pkname'
-";
-$result_count_bookings = mysqli_query($conn, $query_count_bookings);
-$row_count_bookings = mysqli_fetch_assoc($result_count_bookings);
-$total_bookings = $row_count_bookings['total_bookings'];
+// Cek apakah query berhasil
+if (!$result) {
+    die("Query error: " . mysqli_error($conn));
+}
 
-// Query untuk menghitung jumlah kost milik pemilik kost yang login
-$query_count_kost = "SELECT COUNT(*) AS total_kost FROM kost WHERE pkname = '$pkname'";
-$result_count_kost = mysqli_query($conn, $query_count_kost);
-$row_count_kost = mysqli_fetch_assoc($result_count_kost);
-$total_kost = $row_count_kost['total_kost'];
+// Query to count the total number of users
+$count_user_sql = "SELECT COUNT(*) AS total_users FROM login_system";
+$count_user_result = mysqli_query($conn, $count_user_sql);
+$user_data = mysqli_fetch_assoc($count_user_result);
+$total_users = $user_data['total_users'];
+
+// Query to count the number of pemilik kost
+$count_pk_sql = "SELECT COUNT(*) AS total_pk FROM logsys_pk";
+$count_pk_result = mysqli_query($conn, $count_pk_sql);
+$pk_data = mysqli_fetch_assoc($count_pk_result);
+$total_pk = $pk_data['total_pk'];
+
+// Query to count the number of kost
+$count_kost_sql = "SELECT COUNT(*) AS total_kost FROM kost";
+$count_kost_result = mysqli_query($conn, $count_kost_sql);
+$kost_data = mysqli_fetch_assoc($count_kost_result);
+$total_kost = $kost_data['total_kost'];
+
+// Query to count the number of email
+$count_email_sql = "SELECT COUNT(*) AS total_email FROM kontak";
+$count_email_result = mysqli_query($conn, $count_email_sql);
+$email_data = mysqli_fetch_assoc($count_email_result);
+$total_email = $email_data['total_email'];
+
+// Query untuk menghitung 5% dari total harga booking
+$query_pendapatan = "SELECT SUM(total_harga * 0.10) AS total_pendapatan FROM bookings";
+$result_pendapatan = mysqli_query($conn, $query_pendapatan);
+
+if (!$result_pendapatan) {
+    die("Query error: " . mysqli_error($conn));
+}
+
+// Ambil hasil query
+$row_pendapatan = mysqli_fetch_assoc($result_pendapatan);
+$total_pendapatan = $row_pendapatan['total_pendapatan'] ?? 0; // Default ke 0 jika NULL
+
 
 function limit_characters($string, $char_limit)
 {
@@ -61,38 +85,45 @@ function limit_characters($string, $char_limit)
     return $string;
 }
 
-// Tangkap input pencarian
-$search = isset($_GET['search']) ? trim($_GET['search']) : ''; // Bersihkan input dari spasi
+// Ambil input pencarian dari user
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
 
-// Query untuk mengambil data booking yang sesuai dengan kost yang dimiliki pemilik kost
+// Tentukan query dasar dengan JOIN ke tabel `kost` untuk mendapatkan detail kost
 $query_bookings = "
-   SELECT b.id, b.nama_penyewa, b.telp_penyewa, b.email_penyewa, k.nama_kost, 
-       b.metode_pembayaran, b.total_harga, b.mulai_sewa, b.selesai_sewa, 
-       k.pkname AS pemilik_kost, k.alamat AS alamat_kost, 
-       b.order_id, b.status_pembayaran, b.tanggal_booking
-FROM bookings b
-JOIN kost k ON b.nama_kost = k.nama_kost
-WHERE k.pkname = '$pkname'";
+    SELECT b.id, b.nama_penyewa, b.telp_penyewa, b.email_penyewa, 
+           b.nama_kost, b.metode_pembayaran, b.total_harga, 
+           b.mulai_sewa, b.selesai_sewa, b.order_id, 
+           b.status_pembayaran, b.tanggal_booking,
+           k.pkname AS pemilik_kost, k.alamat AS alamat_kost
+    FROM bookings b
+    LEFT JOIN kost k ON b.nama_kost = k.nama_kost
+";
 
-// Menambahkan kondisi pencarian jika ada input pencarian
+// Tambahkan kondisi pencarian jika ada input pencarian
 if ($search) {
     $search = $conn->real_escape_string($search); // Mencegah SQL injection
-    $query_bookings .= " AND (b.nama_penyewa LIKE '%$search%' OR b.nama_kost LIKE '%$search%' OR b.email_penyewa LIKE '%$search%' OR b.telp_penyewa LIKE '%$search%')";
+    $query_bookings .= " WHERE (b.nama_penyewa LIKE '%$search%' OR b.nama_kost LIKE '%$search%')";
 }
 
+// Tambahkan klausa ORDER BY agar hasil query diurutkan berdasarkan id secara ascending
+$query_bookings .= " ORDER BY b.id ASC";
+
 $result_bookings = mysqli_query($conn, $query_bookings);
+if (!$result_bookings) {
+    die("Query error: " . mysqli_error($conn));
+}
 
-// Query untuk menghitung total pendapatan
-$query_total_pendapatan = "
-    SELECT SUM(b.total_harga) AS total_pendapatan
-    FROM bookings b
-    JOIN kost k ON b.nama_kost = k.nama_kost
-    WHERE k.pkname = '$pkname'
-";
-$result_total_pendapatan = mysqli_query($conn, $query_total_pendapatan);
-$row_total_pendapatan = mysqli_fetch_assoc($result_total_pendapatan);
-$total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
+include 'midtrans-transaction.php'; // Include file fungsi Midtrans
 
+$order_ids = ['YOUR_ORDER_ID1', 'YOUR_ORDER_ID2']; // Daftar Order ID yang ingin diambil
+$transactions = [];
+
+foreach ($order_ids as $order_id) {
+    $transaction = getMidtransTransactions($order_id);
+    if ($transaction) {
+        $transactions[] = $transaction;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -100,7 +131,7 @@ $total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
 
 <head>
     <meta charset="utf-8">
-    <title><?php echo htmlspecialchars($pkname); ?> Dashboard - SMARTKOST</title>
+    <title>Admin Dashboard - SMARTKOST</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -132,6 +163,8 @@ $total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
         .card {
             box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
             border: none;
+            margin: 10px 0;
+            margin: 0 5px;
         }
 
         .btn-view {
@@ -152,6 +185,19 @@ $total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
             height: 31px;
             border-radius: 3px;
             padding: 0;
+        }
+
+        .carousel-item {
+            padding: 0 15px;
+        }
+
+        .carousel-item .row {
+            padding: 15px 0;
+        }
+
+        .carousel-item,
+        .row {
+            overflow: visible;
         }
 
         /* CSS */
@@ -242,7 +288,7 @@ $total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
         <!-- Spinner Start -->
         <div id="spinner"
             class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-border" style="color: #00B98E; width: 3rem; height: 3rem;" role="status">
+            <div class="spinner-border" style="color: #0D6EFD; width: 3rem; height: 3rem;" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
@@ -251,35 +297,47 @@ $total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
         <div class="d-flex">
             <!-- Sidebar Start -->
             <div class="d-flex flex-column flex-shrink-0 p-3"
-                style=" width: 220px; height: 100vh; position: fixed; background-color: #00765a;">
+                style="width: 220px; height: 100vh; position: fixed; background-color: #00765a;">
                 <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-                    <h3 class=" mt-2 text-light">Dashboard</h3>
+                    <h3 class="mt-2 text-light">Dashboard</h3>
                 </a>
                 <hr class="text-light">
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
-                        <a href="pk-dashboard.php" class="nav-link text-light">
+                        <a href="admin-dashboard.php" class="nav-link text-light">
                             <i class="bi bi-speedometer2 me-2"></i>
                             Dashboard
                         </a>
                     </li>
                     <li>
-                        <a href="pk-dashboard-kost.php" class="nav-link text-light">
+                        <a href="admin-dahsboard-pk.php" class="nav-link text-light">
+                            <i class="bi bi-person me-2"></i>
+                            Pemilik Kost
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-dashboard-user.php" class="nav-link text-light">
+                            <i class="bi bi-people me-2"></i>
+                            User
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-dashboard-kost.php" class="nav-link text-light">
                             <i class="bi bi-house-door me-2"></i>
                             Kost
                         </a>
                     </li>
                     <li>
-                        <a href="pk-dashboard-booking.php" class="nav-link active text-light"
+                        <a href="admin-dashboard-booking.php" class="nav-link active text-light"
                             style="background-color: #00B98E;" aria-current="page">
-                            <i class="bi bi-people me-2"></i>
+                            <i class="bi bi-bookmarks me-2"></i>
                             Booking
                         </a>
                     </li>
                     <li>
-                        <a href="pk-profile.php" class="nav-link text-light">
-                            <i class="bi bi-person me-2"></i>
-                            Profile
+                        <a href="admin-dashboard-email.php" class="nav-link text-light">
+                            <i class="bi bi-envelope me-2"></i>
+                            Email
                         </a>
                     </li>
                 </ul>
@@ -287,14 +345,12 @@ $total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center text-light text-decoration-none dropdown-toggle"
                         id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="<?php echo isset($_SESSION['image_profile']) ? htmlspecialchars($_SESSION['image_profile']) : 'https://via.placeholder.com/50'; ?>"
-                            alt="Admin" width="32" height="32" class="rounded-circle me-2">
-                        <strong>Hi,
-                            <?php echo htmlspecialchars($pkname); ?>
-                        </strong>
+                        <img src="img2/mini logo smartkost.png" alt="Admin" width="32" height="32"
+                            class="rounded-circle me-2">
+                        <strong>Admin</strong>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-light text-small shadow">
-                        <li><a class="dropdown-item" href="logout.php" onclick="confirmLogout()">log out</a></li>
+                    <ul class="dropdown-menu dropdown-menu-light text-small shadow" onclick="confirmLogout()">
+                        <li><a class="dropdown-item" href="logout.php">Sign out</a></li>
                     </ul>
                 </div>
             </div>
@@ -307,32 +363,73 @@ $total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
                         <img class="img-fluid w-25 mb-2" src="img2/logo smartkost.png" alt="SMARTKOST Logo">
                     </div>
 
-                    <!-- Stats Overview -->
-                    <div class="col-md-4 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="card bg-primary" style="height: 150px;">
-                            <div class="card-body">
-                                <h5 class="card-title text-light">Kost</h5>
-                                <h3 class="card-text text-light">
-                                    <?php echo $total_kost; ?>
-                                </h3>
+                    <!-- Stats Overview Carousel -->
+                    <div id="statsCarousel" class="carousel slide wow fadeInUp" data-bs-ride="carousel"
+                        data-wow-delay="0.1s">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="row" style="overflow: visible; padding: 15px 0;">
+                                    <div class="col-md-4">
+                                        <div class="card" style="height: 160px; margin: 10px 0;">
+                                            <div class="card-body">
+                                                <h5 class="card-title">User</h5>
+                                                <h3 class="card-text"><?php echo $total_users; ?></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card" style="height: 160px; margin: 10px 0;">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Pemilik Kost</h5>
+                                                <h3 class="card-text"><?php echo $total_pk; ?></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card" style="height: 160px; margin: 10px 0;">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Kost</h5>
+                                                <h3 class="card-text"><?php echo $total_kost; ?></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="carousel-item">
+                                <div class="row" style="overflow: visible; padding: 15px 0;">
+                                    <div class="col-md-4">
+                                        <div class="card" style="height: 160px; margin: 10px 0;">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Email</h5>
+                                                <h3 class="card-text"><?php echo $total_email; ?></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card" style="height: 160px; margin: 10px 0;">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Pendapatan</h5>
+                                                <h3 class="card-text">Rp. <?php echo number_format($total_pendapatan, 0, ',', '.'); ?>
+                                                </h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4 wow fadeInUp" data-wow-delay="0.2s">
-                        <div class="card" style="height: 150px; background-color: #009774;">
-                            <div class="card-body">
-                                <h5 class="card-title text-light">Booking</h5>
-                                <h3 class="card-text text-light"><?php echo $total_bookings; ?></h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 wow fadeInUp" data-wow-delay="0.3s">
-                        <div class="card bg-primary" style="height: 150px;">
-                            <div class="card-body">
-                                <h5 class="card-title text-light">Pendapatan</h5>
-                                <h3 class="card-text text-light">Rp. <?php echo number_format($total_pendapatan, 0, ',', '.'); ?></h3>
-                            </div>
-                        </div>
+
+                        <!-- Carousel Controls -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#statsCarousel"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#statsCarousel"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
                     </div>
                 </div>
 
@@ -341,7 +438,6 @@ $total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
                     <div class="col-md-12">
                         <div class="col-lg-6 d-flex align-items-center">
                             <h4 class="mb-3 me-3">Booking</h4>
-                            <!-- Form Pencarian -->
                             <form class="d-flex mb-3" action="" method="GET">
                                 <input class="form-control me-2" type="search" name="search" placeholder="Cari Booking"
                                     aria-label="Search" value="<?php echo htmlspecialchars($search); ?>">
@@ -349,6 +445,7 @@ $total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
                                         class="bi bi-search"></i></button>
                             </form>
                         </div>
+
                         <table class="table table-hover">
                             <thead class="table" style="background-color: #009270;">
                                 <tr class="text-light">
@@ -356,11 +453,10 @@ $total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
                                     <th scope="col">Nama</th>
                                     <th scope="col">No. Telp</th>
                                     <th scope="col">Email</th>
+                                    <th scope="col">P. Kost</th>
                                     <th scope="col">Kost</th>
                                     <th scope="col">Metode</th>
                                     <th scope="col">Bayar</th>
-                                    <th scope="col">Tgl Mulai</th>
-                                    <th scope="col">Tgl Selesai</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Actions</th>
                                 </tr>
@@ -371,33 +467,31 @@ $total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
                                         <td class="align-middle"><?php echo $row['id']; ?></td>
                                         <td class="align-middle"><?php echo limit_characters($row['nama_penyewa'], 7); ?>
                                         </td>
-                                        <td class="align-middle"><?php echo limit_characters($row['telp_penyewa'], 8); ?>
+                                        <td class="align-middle"><?php echo limit_characters($row['telp_penyewa'], 12); ?>
                                         </td>
-                                        <td class="align-middle"><?php echo limit_characters($row['email_penyewa'], 12); ?>
+                                        <td class="align-middle"><?php echo limit_characters($row['email_penyewa'], 16); ?>
                                         </td>
-                                        <td class="align-middle"><?php echo limit_characters($row['nama_kost'], 10); ?></td>
-                                        <td class="align-middle"><?php echo ($row['metode_pembayaran']); ?></td>
+                                        <td class="align-middle"><?php echo limit_characters($row['pemilik_kost'], 9); ?>
+                                        </td>
+                                        <td class="align-middle"><?php echo limit_characters($row['nama_kost'], 13); ?></td>
+                                        <td class="align-middle"><?php echo $row['metode_pembayaran']; ?></td>
                                         <td class="align-middle">Rp.
                                             <?php echo number_format($row['total_harga'], 0, ',', '.'); ?>
                                         </td>
-                                        <td class="align-middle"><?php echo ($row['mulai_sewa']); ?></td>
-                                        <td class="align-middle"><?php echo ($row['selesai_sewa']); ?>
                                         <td class="align-middle"><?php echo $row['status_pembayaran']; ?></td>
-                                        </td>
                                         <td>
                                             <button class="btn btn-sm btn-primary btn-view mt-2"
                                                 onclick='openBookingModal(<?php echo json_encode($row); ?>)'>
                                                 <img src="img2/view.png" class="w-75">
                                             </button>
-                                            </button>
                                             <a href="?delete=<?php echo $row['id']; ?>"
                                                 class="btn btn-sm btn-danger mt-2 btn-trash"
                                                 onclick="return confirm('Apa kamu yakin akan menghapus?');">
                                                 <img src="img2/sampah.png" class="w-75">
+                                            </a>
                                         </td>
                                     </tr>
                                 <?php } ?>
-                                <!-- More rows as needed -->
                             </tbody>
                         </table>
 
@@ -502,7 +596,6 @@ $total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
                     </div>
                 </div>
             </div>
-            <!-- Content End -->
         </div>
 
         <!-- Footer Start -->
@@ -529,13 +622,15 @@ $total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
             document.getElementById("modalEmailPenyewa").textContent = booking.email_penyewa;
             document.getElementById("modalTelpPenyewa").textContent = booking.telp_penyewa;
             document.getElementById("modalMetodePembayaran").textContent = booking.metode_pembayaran;
-            document.getElementById("modalStatusPembayaran").value = booking.status_pembayaran;
+            document.getElementById("modalStatusPembayaran").value = booking.status_pembayaran; 
             document.getElementById("modalTanggalBooking").textContent = booking.tanggal_booking;
+
+            // Tambahkan ini untuk menampilkan order_id
             document.getElementById("modalOrderId").textContent = booking.order_id;
 
             // Tampilkan modal
-            var viewBookingModal = new bootstrap.Modal(document.getElementById('viewBookingModal'));
-            viewBookingModal.show();
+            var modal = new bootstrap.Modal(document.getElementById('viewBookingModal'));
+            modal.show();
         }
 
         function saveStatusPembayaran() {

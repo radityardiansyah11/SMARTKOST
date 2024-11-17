@@ -473,6 +473,7 @@ if ($result->num_rows > 0) {
                             <!-- Tombol Ajukan Sewa -->
                             <form action="pembayaran.php" method="POST">
                                 <!-- Input tersembunyi untuk mengirim nama kost, alamat, harga, dan lainnya -->
+                                 <input type="hidden" name="pemilik_kost" value="<?php echo $row['pkname']; ?>">
                                 <input type="hidden" name="nama_kost" value="<?php echo $row['nama_kost']; ?>">
                                 <input type="hidden" name="alamat_kost" value="<?php echo $row['alamat']; ?>">
                                 <input type="hidden" name="harga_kost" id="hargaKost"

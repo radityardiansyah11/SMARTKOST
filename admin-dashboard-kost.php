@@ -68,6 +68,18 @@ $count_email_result = mysqli_query($conn, $count_email_sql);
 $email_data = mysqli_fetch_assoc($count_email_result);
 $total_email = $email_data['total_email'];
 
+// Query untuk menghitung 5% dari total harga booking
+$query_pendapatan = "SELECT SUM(total_harga * 0.10) AS total_pendapatan FROM bookings";
+$result_pendapatan = mysqli_query($conn, $query_pendapatan);
+
+if (!$result_pendapatan) {
+    die("Query error: " . mysqli_error($conn));
+}
+
+// Ambil hasil query
+$row_pendapatan = mysqli_fetch_assoc($result_pendapatan);
+$total_pendapatan = $row_pendapatan['total_pendapatan'] ?? 0; // Default ke 0 jika NULL
+
 // Tangkap input pencarian
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 $sql_kost = "SELECT * FROM kost";
@@ -270,6 +282,12 @@ function limit_characters($string, $char_limit)
                         </a>
                     </li>
                     <li>
+                        <a href="admin-dashboard-booking.php" class="nav-link text-light">
+                            <i class="bi bi-bookmarks me-2"></i>
+                            Booking
+                        </a>
+                    </li>
+                    <li>
                         <a href="admin-dashboard-email.php" class="nav-link text-light">
                             <i class="bi bi-envelope me-2"></i>
                             Email
@@ -344,16 +362,8 @@ function limit_characters($string, $char_limit)
                                     <div class="col-md-4">
                                         <div class="card" style="height: 160px; margin: 10px 0;">
                                             <div class="card-body">
-                                                <h5 class="card-title">Promosi</h5>
-                                                <h3 class="card-text">Rp. 0</h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card" style="height: 160px; margin: 10px 0;">
-                                            <div class="card-body">
                                                 <h5 class="card-title">Pendapatan</h5>
-                                                <h3 class="card-text">Rp. 0</h3>
+                                                <h3 class="card-text">Rp. <?php echo number_format($total_pendapatan, 0, ',', '.'); ?></h3>
                                             </div>
                                         </div>
                                     </div>

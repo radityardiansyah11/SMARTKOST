@@ -2,57 +2,74 @@
 include 'config.php';
 session_start();
 
-// Ambil data dari database
-$sql = "SELECT id, nama, email, pesan, tanggal, status_baca FROM kontak ORDER BY tanggal DESC";
-$result = $conn->query($sql);
+$sql = "SELECT id, username, email, password, created_at, profile_image FROM login_system";
+$result = mysqli_query($conn, $sql);
 
-$messages = [];
-$unreadMessages = false;
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $messages[] = $row;
-        // Jika ada pesan yang belum dibaca, beri tanda
-        if ($row['status_baca'] == 0) {
-            $unreadMessages = true;
-        }
-    }
+// Cek apakah query berhasil
+if (!$result) {
+    die("Query error: " . mysqli_error($conn));
 }
 
-// Jika admin telah membuka dashboard, tandai semua pesan sebagai sudah dibaca
-$sqlUpdate = "UPDATE kontak SET status_baca = 1 WHERE status_baca = 0";
-$conn->query($sqlUpdate);
-
-if (isset($_GET['delete'])) {
-    $id = intval($_GET['delete']);
-    $sql = "DELETE FROM kontak WHERE id = $id";
+// Handle delete request for user
+if (isset($_GET['delete_user'])) {
+    $id = intval($_GET['delete_user']);
+    $sql = "DELETE FROM login_system WHERE id = $id";
     if (mysqli_query($conn, $sql)) {
-        // Setelah penghapusan, reset urutan ID jika diperlukan
+        // Setelah penghapusan, reset urutan ID
         $reset_id_query = "
             SET @count = 0;
-            UPDATE kontak SET id = @count := @count + 1;
-            ALTER TABLE kontak AUTO_INCREMENT = 1;
+            UPDATE login_system SET id = @count := @count + 1;
+            ALTER TABLE login_system AUTO_INCREMENT = 1;
         ";
-        $_SESSION['status'] = 'deleted';
-        header('Location: admin-dashboard-email.php');
-        exit();
         mysqli_multi_query($conn, $reset_id_query);
 
         // Redirect setelah penghapusan dan reset
-        header('Location: admin-dashboard-email.php');
+        header('Location: admin-dashboard.php');
         exit();
     } else {
         echo "Error deleting record: " . mysqli_error($conn);
-        $_SESSION['status'] = 'error';
-        header('Location: admin-dashboard-email.php');
-        exit();
     }
 }
 
-// Get all user sessions
-$sql = "SELECT * FROM logsys_pk ORDER BY id ASC";
+$sql = "SELECT id, pkname, email, password, nomor_hp, created_at, image_profile FROM logsys_pk";
 $result = mysqli_query($conn, $sql);
 
-// Query to count the number of users
+// Cek apakah query berhasil
+if (!$result) {
+    die("Query error: " . mysqli_error($conn));
+}
+
+// Handle delete request for pemilik kost
+if (isset($_GET['delete_pk'])) {
+    $id = intval($_GET['delete_pk']);
+    $sql = "DELETE FROM logsys_pk WHERE id = $id";
+    if (mysqli_query($conn, $sql)) {
+        // Setelah penghapusan, reset urutan ID
+        $reset_id_query = "
+            SET @count = 0;
+            UPDATE logsys_pk SET id = @count := @count + 1;
+            ALTER TABLE logsys_pk AUTO_INCREMENT = 1;
+        ";
+        mysqli_multi_query($conn, $reset_id_query);
+
+        // Redirect setelah penghapusan dan reset
+        header('Location: admin-dashboard.php');
+        exit();
+    } else {
+        echo "Error deleting record: " . mysqli_error($conn);
+    }
+}
+
+
+// Mendapatkan semua pengguna dari tabel login_system
+$sql = "SELECT id, email FROM login_system";
+$result_users = mysqli_query($conn, $sql);
+
+// Get only 10 user sessions
+$sql = "SELECT * FROM login_system ORDER BY id ASC LIMIT 10";
+$result_user_sessions = mysqli_query($conn, $sql);
+
+// Query to count the total number of users
 $count_user_sql = "SELECT COUNT(*) AS total_users FROM login_system";
 $count_user_result = mysqli_query($conn, $count_user_sql);
 $user_data = mysqli_fetch_assoc($count_user_result);
@@ -60,6 +77,10 @@ $total_users = $user_data['total_users'];
 
 // Get all pemilik kost
 $sql_pk = "SELECT * FROM logsys_pk ORDER BY id ASC";
+$result_pk = mysqli_query($conn, $sql_pk);
+
+// Get only 10 pemilik kost sessions
+$sql_pk = "SELECT * FROM logsys_pk ORDER BY id ASC LIMIT 10";
 $result_pk = mysqli_query($conn, $sql_pk);
 
 // Query to count the number of pemilik kost
@@ -99,7 +120,6 @@ if (!$result_pendapatan) {
 // Ambil hasil query
 $row_pendapatan = mysqli_fetch_assoc($result_pendapatan);
 $total_pendapatan = $row_pendapatan['total_pendapatan'] ?? 0; // Default ke 0 jika NULL
-
 ?>
 
 <!DOCTYPE html>
@@ -107,7 +127,7 @@ $total_pendapatan = $row_pendapatan['total_pendapatan'] ?? 0; // Default ke 0 ji
 
 <head>
     <meta charset="utf-8">
-    <title>Admin-Dashboard - SMARTKOST</title>
+    <title>Admin Dashboard - SMARTKOST</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -135,40 +155,32 @@ $total_pendapatan = $row_pendapatan['total_pendapatan'] ?? 0; // Default ke 0 ji
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
 
-    <!-- Include SweetAlert CSS and JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
     <style>
-        * {
-            box-sizing: border-box;
-        }
-
         .card {
-            display: flex;
-            flex-direction: column;
             box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
             border: none;
+            margin: 10px 0;
+            margin: 0 5px;
         }
 
-        .card-body {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
+        .btn-trash {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 31px;
+            height: 31px;
+            border-radius: 3px;
+            padding: 0;
         }
 
-        .card-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .card {
-            flex: 1 1 calc(50% - 1rem);
-            /* Set 50% width minus gap */
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 1rem;
+        .btn-edit {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 31px;
+            height: 31px;
+            border-radius: 3px;
+            padding: 0;
         }
 
         .carousel-item {
@@ -191,13 +203,13 @@ $total_pendapatan = $row_pendapatan['total_pendapatan'] ?? 0; // Default ke 0 ji
         <!-- Spinner Start -->
         <div id="spinner"
             class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-border" style="color: #00B98E; width: 3rem; height: 3rem;" role="status">
+            <div class="spinner-border" style="color: #0D6EFD; width: 3rem; height: 3rem;" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
         <!-- Spinner End -->
 
-        <class="d-flex">
+        <div class="d-flex">
             <!-- Sidebar Start -->
             <div class="d-flex flex-column flex-shrink-0 p-3"
                 style="width: 220px; height: 100vh; position: fixed; background-color: #00765a;">
@@ -207,7 +219,7 @@ $total_pendapatan = $row_pendapatan['total_pendapatan'] ?? 0; // Default ke 0 ji
                 <hr class="text-light">
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
-                        <a href="admin-dashboard.php" class="nav-link text-light" aria-current="page">
+                        <a href="admin-dashboard.php" class="nav-link text-light">
                             <i class="bi bi-speedometer2 me-2"></i>
                             Dashboard
                         </a>
@@ -237,10 +249,22 @@ $total_pendapatan = $row_pendapatan['total_pendapatan'] ?? 0; // Default ke 0 ji
                         </a>
                     </li>
                     <li>
-                        <a href="admin-dashboard-email.php" class="nav-link active text-light"
-                            style="background-color: #00B98E;" aria-current="page">
+                        <a href="admin-dashboard-email.php" class="nav-link text-light">
                             <i class="bi bi-envelope me-2"></i>
                             Email
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-dashboard-promosi.php" class="nav-link text-light">
+                            <i class="bi bi-wallet me-2"></i>
+                            Promosi
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin-dashboard-pendapatan.php" class="nav-link active text-light"
+                            style="background-color: #00B98E;" aria-current="page">
+                            <i class="bi bi-wallet2 me-2"></i>
+                            Pendapatan
                         </a>
                     </li>
                 </ul>
@@ -266,7 +290,7 @@ $total_pendapatan = $row_pendapatan['total_pendapatan'] ?? 0; // Default ke 0 ji
                         <img class="img-fluid w-25 mb-2" src="img2/logo smartkost.png" alt="SMARTKOST Logo">
                     </div>
 
-                    <!-- Stats Overview -->
+                    <!-- Stats Overview Carousel -->
                     <div id="statsCarousel" class="carousel slide wow fadeInUp" data-bs-ride="carousel"
                         data-wow-delay="0.1s">
                         <div class="carousel-inner">
@@ -335,117 +359,49 @@ $total_pendapatan = $row_pendapatan['total_pendapatan'] ?? 0; // Default ke 0 ji
                     </div>
                 </div>
 
+                <table class="table table-hover">
+                    <thead class="table text-light" style="background-color: #009270;">
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Kost</th>
+                            <th>Pemilik Kost</th>
+                            <th>Mulai Promosi</th>
+                            <th>Jumlah Pembayaran</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Kost</th>
+                            <th>Pemilik Kost</th>
+                            <th>Mulai Promosi</th>
+                            <th>Jumlah Pembayaran</th>
+                        </tr>
+                    </tbody>
+                </table>
 
-                <div class="row mt-5">
-                    <h3 class="wow fadeInUp mb-4 text-center" data-wow-delay="0.1s">Pesan dari User</h3>
-                    <?php if (!empty($messages)): ?>
-                        <?php foreach ($messages as $message): ?>
-                            <div class="col-md-6 wow fadeInUp mb-4" data-wow-delay="0.1s">
-                                <div class="card border-0 shadow-lg h-100">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar rounded-circle me-3"
-                                                style="background-color: #009270; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; color: white; font-size: 20px;">
-                                                <i class="bi bi-person"></i>
-                                            </div>
-                                            <h5 class="card-title mb-0"><?php echo htmlspecialchars($message['nama']); ?></h5>
-                                        </div>
-                                        <hr>
-                                        <p><strong>Email:</strong> <?php echo htmlspecialchars($message['email']); ?></p>
-                                        <p class="mb-2"><strong>Pesan:</strong>
-                                            <?php echo htmlspecialchars($message['pesan']); ?></p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <small class="text-muted"><i
-                                                    class="fa fa-clock me-1"></i><?php echo date("d F Y, H:i", strtotime($message['tanggal'])); ?></small>
-                                            <div>
-                                                <button class="btn btn-sm btn-outline-primary rounded-pill"
-                                                    style="margin-right: 0.5rem;"><i class="fa fa-reply me-2"></i>Balas</button>
-                                                <a href="?delete=<?php echo $message['id']; ?>"
-                                                    class="btn btn-sm btn-outline-danger rounded-pill"
-                                                    onclick="return confirm('Anda yakin ingin menghapus pesan ini?')"><i
-                                                        class="fa fa-trash"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <p class="text-center">Tidak ada pesan dari user.</p>
-                    <?php endif; ?>
-                </div>
             </div>
 
-            <!-- Content End -->
-
-    </div>
-
-
-    <!-- Footer Start -->
-    <footer class="text-light py-4" style="background-color: #000;">
-        <div class="container text-center">
-            <p class="mb-0">&copy; 2024 SMARTKOST. All rights reserved.</p>
         </div>
-    </footer>
-    <!-- Footer End -->
+
+        <!-- Footer Start -->
+        <footer class="text-light py-4 mt-5" style="background-color: #000;">
+            <div class="container text-center">
+                <p class="mb-0">&copy; 2024 SMARTKOST. All rights reserved.</p>
+            </div>
+        </footer>
+        <!-- Footer End -->
     </div>
 
     <!-- JavaScript Libraries -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            <?php if ($unreadMessages): ?>
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Pesan Terbaru!',
-                    text: 'Anda memiliki pesan baru dari user.',
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: '#00B98E',
-                    background: '#f4f4f9',
-                    width: '350px',
-                    customClass: {
-                        title: 'custom-title',
-                        content: 'custom-content'
-                    }
-                });
-            <?php endif; ?>
-
-            <?php if (isset($_SESSION['status'])): ?>
-                var status = "<?php echo $_SESSION['status']; ?>";
-
-                if (status === "deleted") {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Pesan Berhasil Dihapus!',
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: '#00B98E',
-                        background: '#f4f4f9',
-                        width: '350px',
-                        customClass: {
-                            title: 'custom-title',
-                            content: 'custom-content'
-                        }
-                    });
-                } else if (status === "error") {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal Menghapus Pesan!',
-                        text: 'Terjadi kesalahan saat menghapus pesan. Silakan coba lagi.',
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: '#00765a',
-                        width: '350px',
-                        customClass: {
-                            title: 'custom-title',
-                            content: 'custom-content'
-                        }
-                    });
-                }
-
-                // Clear session status after displaying the message
-                <?php unset($_SESSION['status']); ?>
-            <?php endif; ?>
-        });
+        function confirmLogout() {
+            if (confirm("Anda yakin ingin logout?")) {
+                // Jika konfirmasi diterima, arahkan ke logout.php
+                window.location.href = "logout.php";
+            }
+        }
     </script>
-
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/wow/wow.min.js"></script>

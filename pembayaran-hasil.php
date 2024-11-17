@@ -1,3 +1,12 @@
+<?php
+// Mulai session
+session_start();
+
+// Ambil status dari URL
+$status = isset($_GET['status']) ? $_GET['status'] : 'failed'; // Default status adalah "failed"
+
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -130,33 +139,31 @@
 </head>
 
 <body>
-
-    <!-- Container Pembayaran Berhasil -->
-    <div id="success" class="container success">
-        <div class="icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24">
-                <path
-                    d="M12 0c6.627 0 12 5.373 12 12s-5.373 12-12 12-12-5.373-12-12 5.373-12 12-12zm-1.25 17l8.25-8.25-1.75-1.75-6.5 6.5-3-3-1.75 1.75 4.75 4.75z" />
-            </svg>
+    <?php if ($status == 'success') : ?>
+        <!-- Container Pembayaran Berhasil -->
+        <div id="success" class="container success active">
+            <div class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24">
+                    <path d="M12 0c6.627 0 12 5.373 12 12s-5.373 12-12 12-12-5.373-12-12 5.373-12 12-12zm-1.25 17l8.25-8.25-1.75-1.75-6.5 6.5-3-3-1.75 1.75 4.75 4.75z"/>
+                </svg>
+            </div>
+            <h1 class="text-primary">Pembayaran Berhasil!</h1>
+            <p>Terima kasih telah melakukan pembayaran. <br> Transaksi Anda telah berhasil.</p>
+            <a href="user-kost.php" class="btn btn-primary">Kembali</a>
         </div>
-        <h1 class="text-primary">Pembayaran Berhasil!</h1>
-        <p>Terima kasih telah melakukan pembayaran. <br> Transaksi Anda telah berhasil.</p>
-        <a href="#" class="btn btn-primary">Kembali</a>
-    </div>
-
-    <!-- Container Pembayaran Gagal -->
-    <div id="failed" class="container failed">
-        <div class="icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24">
-                <path
-                    d="M12 0c6.627 0 12 5.373 12 12s-5.373 12-12 12-12-5.373-12-12 5.373-12 12-12zm-2.121 12l-4.95 4.95 1.415 1.414 4.95-4.95 4.95 4.95 1.415-1.414-4.95-4.95 4.95-4.95-1.415-1.414-4.95 4.95-4.95-4.95-1.415 1.414 4.95 4.95z" />
-            </svg>
+    <?php else : ?>
+        <!-- Container Pembayaran Gagal -->
+        <div id="failed" class="container failed active">
+            <div class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24">
+                    <path d="M12 0c6.627 0 12 5.373 12 12s-5.373 12-12 12-12-5.373-12-12 5.373-12 12-12zm-2.121 12l-4.95 4.95 1.415 1.414 4.95-4.95 4.95 4.95 1.415-1.414-4.95-4.95 4.95-4.95-1.415-1.414-4.95 4.95-4.95-4.95-1.415 1.414 4.95 4.95z"/>
+                </svg>
+            </div>
+            <h1>Pembayaran Gagal!</h1>
+            <p>Maaf, terjadi masalah dalam proses pembayaran. Silakan coba lagi nanti.</p>
+            <a href="user-kost.php" class="btn btn-primary">Kembali</a>
         </div>
-        <h1 class="tect">Pembayaran Gagal!</h1>
-        <p>Maaf, terjadi masalah dalam proses pembayaran. Silakan coba lagi nanti.</p>
-        <a href="#" class="btn btn-primary">Kembali</a>
-    </div>
-
+    <?php endif; ?>
 </body>
 
 </html>

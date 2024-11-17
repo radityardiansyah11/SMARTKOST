@@ -838,221 +838,262 @@ if ($result->num_rows > 0) {
 </html>
 
 
-        /* Navbar */
-        .navbar {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
+/* Navbar */
+.navbar {
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
 
-        .navbar .navbar-brand img {
-            width: 180px;
-        }
+.navbar .navbar-brand img {
+width: 180px;
+}
 
-        .profile-image {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
+.profile-image {
+width: 40px;
+height: 40px;
+border-radius: 50%;
+object-fit: cover;
+}
 
-        /* Hero Section */
-        .container-fluid h2 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 600;
-        }
+/* Hero Section */
+.container-fluid h2 {
+font-family: 'Poppins', sans-serif;
+font-size: 2.5rem;
+font-weight: 600;
+}
 
-        .card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
+.card {
+border: none;
+border-radius: 12px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+transition: transform 0.3s ease;
+}
 
-        .card:hover {
-            transform: scale(1.02);
-        }
+.card:hover {
+transform: scale(1.02);
+}
 
-        .card-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
+.card-title {
+font-family: 'Poppins', sans-serif;
+font-size: 1.25rem;
+font-weight: 600;
+}
 
-        .card img {
-            border-top-left-radius: 12px;
-            border-bottom-left-radius: 12px;
-        }
-
-
+.card img {
+border-top-left-radius: 12px;
+border-bottom-left-radius: 12px;
+}
 
 
-    <!-- carousel diskon -->
-    @media (max-width: 767px) {
-            .carousel-inner .carousel-item>div {
-                display: none;
-            }
 
-            .carousel-inner .carousel-item>div:first-child {
-                display: block;
-            }
-        }
 
-        /* Menambahkan border-radius ke gambar dan kartu */
-        .card-img img {
-            border-radius: 15px;
-        }
+<!-- carousel diskon -->
+@media (max-width: 767px) {
+.carousel-inner .carousel-item>div {
+display: none;
+}
 
-        .card {
-            border-radius: 20px;
-            overflow: hidden;
-        }
+.carousel-inner .carousel-item>div:first-child {
+display: block;
+}
+}
 
-        .carousel-inner .carousel-item.active,
-        .carousel-inner .carousel-item-next,
-        .carousel-inner .carousel-item-prev {
-            display: flex;
-            justify-content: center;
-            /* Centering the items */
-            gap: 15px;
-            /* Add gap between items */
-        }
+/* Menambahkan border-radius ke gambar dan kartu */
+.card-img img {
+border-radius: 15px;
+}
 
-        @media (min-width: 768px) {
+.card {
+border-radius: 20px;
+overflow: hidden;
+}
 
-            .carousel-inner .carousel-item-end.active,
-            .carousel-inner .carousel-item-next {
-                transform: translateX(50%);
-            }
+.carousel-inner .carousel-item.active,
+.carousel-inner .carousel-item-next,
+.carousel-inner .carousel-item-prev {
+display: flex;
+justify-content: center;
+/* Centering the items */
+gap: 15px;
+/* Add gap between items */
+}
 
-            .carousel-inner .carousel-item-start.active,
-            .carousel-inner .carousel-item-prev {
-                transform: translateX(-50%);
-            }
-        }
+@media (min-width: 768px) {
 
-        .carousel-inner .carousel-item-end,
-        .carousel-inner .carousel-item-start {
-            transform: translateX(0);
-        }
+.carousel-inner .carousel-item-end.active,
+.carousel-inner .carousel-item-next {
+transform: translateX(50%);
+}
 
-        <!-- carousel promo -->
-        <div class="container text-center my-3">
-            <h1 class="font-weight-light">Promo</h1>
-            <div class="row mx-auto my-auto justify-content-center mt-4">
-                <div id="recipeCarousel" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner" role="listbox">
+.carousel-inner .carousel-item-start.active,
+.carousel-inner .carousel-item-prev {
+transform: translateX(-50%);
+}
+}
 
-                        <div class="carousel-item active">
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-img">
-                                        <img src="img2/promo.jpg" class="img-fluid">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-img">
-                                        <img src="img2/promo.jpg" class="img-fluid">
-                                    </div>
-                                </div>
+.carousel-inner .carousel-item-end,
+.carousel-inner .carousel-item-start {
+transform: translateX(0);
+}
+
+<!-- carousel promo -->
+<div class="container text-center my-3">
+    <h1 class="font-weight-light">Promo</h1>
+    <div class="row mx-auto my-auto justify-content-center mt-4">
+        <div id="recipeCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner" role="listbox">
+
+                <div class="carousel-item active">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-img">
+                                <img src="img2/promo.jpg" class="img-fluid">
                             </div>
                         </div>
-
-                        <div class="carousel-item">
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-img">
-                                        <img src="img2/promo.jpg" class="img-fluid">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-img">
-                                        <img src="img2/promo.jpg" class="img-fluid">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="carousel-item">
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-img">
-                                        <img src="img2/promo.jpg" class="img-fluid">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-img">
-                                        <img src="img2/promo.jpg" class="img-fluid">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
-                    <a class="carousel-control-prev bg-transparent w-aut" href="#recipeCarousel" role="button"
-                        data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    </a>
-                    <a class="carousel-control-next bg-transparent w-aut" href="#recipeCarousel" role="button"
-                        data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    </a>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-img">
+                                <img src="img2/promo.jpg" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-item">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-img">
+                                <img src="img2/promo.jpg" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-img">
+                                <img src="img2/promo.jpg" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-item">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-img">
+                                <img src="img2/promo.jpg" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-img">
+                                <img src="img2/promo.jpg" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <a class="carousel-control-prev bg-transparent w-aut" href="#recipeCarousel" role="button"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            </a>
+            <a class="carousel-control-next bg-transparent w-aut" href="#recipeCarousel" role="button"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<form id="codForm">
+    <div class="row">
+        <!-- Kolom Kiri -->
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="ewalletSenderName" class="form-label">Nama Pengirim</label>
+                <input type="text" class="form-control" id="ewalletSenderName" placeholder="${namaPenyewa}">
+            </div>
+            <div class="mb-3">
+                <label for="senderEmail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="senderName" placeholder="${emailPenyewa}">
+            </div>
+            <div class="mb-3">
+                <label for="ewalletPaymentDate" class="form-label">Lama Sewa</label>
+                <div class="d-flex justify-content-between mb-3">
+                    <div class="date-box">
+                        <strong>Mulai:</strong> ${<?php echo json_encode($mulai_sewa); ?>}
+                    </div>
+                    <div class="date-box">
+                        <strong>Selesai:</strong> ${<?php echo json_encode($selesai_sewa); ?>}
+                    </div>
                 </div>
             </div>
         </div>
 
-
-
-
-
-
-
-
-        <form id="codForm">
-        <div class="row">
-            <!-- Kolom Kiri -->
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="ewalletSenderName" class="form-label">Nama Pengirim</label>
-                    <input type="text" class="form-control" id="ewalletSenderName" placeholder="${namaPenyewa}">
-                </div>
-                <div class="mb-3">
-                    <label for="senderEmail" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="senderName" placeholder="${emailPenyewa}">
-                </div>
-                <div class="mb-3">
-                    <label for="ewalletPaymentDate" class="form-label">Lama Sewa</label>
-                    <div class="d-flex justify-content-between mb-3">
-                        <div class="date-box">
-                            <strong>Mulai:</strong> ${<?php echo json_encode($mulai_sewa); ?>}
-                        </div>
-                        <div class="date-box">
-                            <strong>Selesai:</strong> ${<?php echo json_encode($selesai_sewa); ?>}
-                        </div>
-                    </div>
-                </div>
+        <!-- Kolom Kanan -->
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="Platform" class="form-label">Platform</label>
+                <select class="form-select" id="Platform">
+                    <option value="ovo" data-icon="fas fa-wallet">COD</option>
+                </select>
             </div>
+            <div class="mb-3">
+                <label for="transferAmount" class="form-label">Jumlah yang harus dibayarkan</label>
+                <input type="text" class="form-control" id="transferAmount"
+                    value="Rp <?php echo number_format($total_harga, 0, ',', '.'); ?>" style="background-color: white;">
+            </div>
+        </div>
+        <div class="d-flex justify-content-end mt-3">
+            <button type="submit" class="btn btn-primary w-50">Konfirmasi Transfer</button>
+        </div>
+</form>
 
-            <!-- Kolom Kanan -->
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="Platform" class="form-label">Platform</label>
-                    <select class="form-select" id="Platform">
-                        <option value="ovo" data-icon="fas fa-wallet">COD</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="transferAmount" class="form-label">Jumlah yang harus dibayarkan</label>
-                    <input type="text" class="form-control" id="transferAmount" value="Rp <?php echo number_format($total_harga, 0, ',', '.'); ?>"
-                        style="background-color: white;">
-                </div>
-            </div>
-            <div class="d-flex justify-content-end mt-3">
-                <button type="submit" class="btn btn-primary w-50">Konfirmasi Transfer</button>
-            </div>
-    </form>
+
+
+
+
+document.getElementById('modalBody').innerHTML = modalContent;
+
+// Inisialisasi modal dan tampilkan
+const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+paymentModal.show();
+
+document.getElementById('confirmCodButton').addEventListener('click', function () {
+    const formData = {
+        pemilik_kost: '<?php echo $pemilik_kost; ?>',
+        nama_kost: '<?php echo $nama_kost; ?>',
+        total_harga: '<?php echo $total_harga; ?>',
+        mulai_sewa: '<?php echo $mulai_sewa; ?>',
+        selesai_sewa: '<?php echo $selesai_sewa; ?>',
+        nama_penyewa: document.getElementById('ewalletSenderName').value,
+        email_penyewa: document.getElementById('senderEmail').value,
+        metode_pembayaran: 'COD'
+    };
+
+    $.ajax({
+        url: 'proses-booking.php',
+        type: 'POST',
+        data: formData,
+        success: function (response) {
+            const result = JSON.parse(response);
+            alert(result.message);
+            if (result.success) {
+                paymentModal.hide();
+                location.reload(); // Refresh to update bookings or redirect as needed
+            }
+        },
+        error: function () {
+            alert('Error occurred while saving the booking.');
+        }
+    });
+});
+}

@@ -9,7 +9,23 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-$username = $_SESSION['username'];
+$username = $_SESSION['username']; // Mengambil username dari session
+$email = $_SESSION['email']; // Mengambil email dari session
+
+// Ambil data pemesanan kost untuk pengguna yang sedang login
+$bookings = [];
+$sql = "SELECT * FROM bookings WHERE nama_penyewa = ? OR email_penyewa = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ss", $username, $email); // Bind username dan email yang login
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Menyimpan hasil query ke dalam array $bookings
+while ($row = $result->fetch_assoc()) {
+    $bookings[] = $row;
+}
+
+$stmt->close();
 ?>
 
 <!DOCTYPE html>
@@ -50,17 +66,13 @@ $username = $_SESSION['username'];
     <style>
         .custom-height {
             height: 500px;
-            /* Tinggi yang diinginkan */
             object-fit: cover;
-            /* Memastikan gambar memenuhi area tanpa distorsi */
             width: 100%;
-            /* Memastikan gambar tetap full-width */
         }
 
         @media (max-width: 768px) {
             .custom-height {
                 height: 300px;
-                /* Tinggi lebih pendek untuk layar kecil */
             }
         }
 
@@ -100,15 +112,12 @@ $username = $_SESSION['username'];
 
 <body class="bg-white">
     <div class="container-xxl bg-white p-0">
-        <!-- Spinner Start -->
         <div id="spinner"
             class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
             <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
-        <!-- Spinner End -->
-
 
         <!-- Navbar Start -->
         <div class="container-fluid nav-bar bg-transparent">
@@ -145,75 +154,43 @@ $username = $_SESSION['username'];
         </div>
         <!-- Navbar End -->
 
-        <!-- kost book Section Start -->
         <div class="container-fluid my-5 px-0">
             <h2 class="text-center mb-5">Riwayat Pemesanan Kost</h2>
             <div class="row justify-content-center">
                 <div class="col-lg-10">
                     <div class="row">
-
-                        <!-- Card 1 (Kiri) -->
-                        <div class="col-md-6 mb-4">
-                            <div class="card shadow-md h-100">
-                                <div class="row g-0">
-                                    <!-- Image Section -->
-                                    <div class="col-md-4">
-                                        <img src="img2/kost1.jpg" class="img-fluid w-100 h-100"
-                                            style="object-fit: cover;" alt="Kost Aisyah Image">
-                                    </div>
-                                    <!-- Content Section -->
-                                    <div class="col-md-8">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Kost Aisyah Palembang</h5>
-                                            <p><i class="bi bi-calendar"></i> 1 Jan 2022 - 1 Jan 2023</p>
-                                            <p><i class="bi bi-geo-alt"></i> Palembang, Sumatra Selatan</p>
-
-                                            <p class="text-primary"><i class="bi bi-check-circle-fill text-primary"></i>
-                                                Pembayaran Selesai</p>
-                                            <p><i class="bi bi-exclamation-circle-fill"></i> Menungu konfirmasi</p>
-                                            <di class="d-flex mt-2">
-                                                <a href="#" class="btn btn-primary btn-sm">Lihat Detail</a>
-                                                <a href="#" class="ms-2 btn btn-secondary btn-sm">Tulis Ulasan</a>
-                                            </di>
+                        <?php foreach ($bookings as $booking): ?>
+                            <div class="col-md-6 mb-4 wow fadeInUp" data-wow-delay="0.1s">
+                                <div class="card shadow-md h-100">
+                                    <div class="row g-0">
+                                        <div class="col-md-4">
+                                            <img src="img2/kost1.jpg" class="img-fluid w-100 h-100"
+                                                style="object-fit: cover;" alt="Kost Aisyah Image">
+                                        </div>
+                                        <div class="col-md-8" >
+                                            <div class="card-body">
+                                                <h5 class="card-title"><?= htmlspecialchars($booking['nama_kost']); ?></h5>
+                                                <p><i class="bi bi-calendar"></i>
+                                                    <?= htmlspecialchars($booking['mulai_sewa']) ?> -
+                                                    <?= htmlspecialchars($booking['selesai_sewa']) ?></p>
+                                                <p><i class="bi bi-geo-alt"></i>
+                                                    <?= htmlspecialchars($booking['alamat_kost']) ?></p>
+                                                <p class="text-primary"><i class="bi bi-check-circle-fill text-primary"></i>
+                                                    <?= htmlspecialchars($booking['status_pembayaran']) ?></p>
+                                                <div class="d-flex mt-2">
+                                                    <a href="#" class="btn btn-primary btn-sm">Lihat Detail</a>
+                                                    <a href="#" class="ms-2 btn btn-secondary btn-sm">Tulis Ulasan</a>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- Card 2 (Kanan) -->
-                        <div class="col-md-6 mb-4">
-                            <div class="card shadow-md h-100">
-                                <div class="row g-0">
-                                    <!-- Image Section -->
-                                    <div class="col-md-4">
-                                        <img src="img2/kost1.jpg" class="img-fluid w-100 h-100"
-                                            style="object-fit: cover;" alt="Kost Aisyah Image">
-                                    </div>
-                                    <!-- Content Section -->
-                                    <div class="col-md-8">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Kost Aisyah Palembang</h5>
-                                            <p><i class="bi bi-calendar"></i> 1 Jan 2022 - 1 Jan 2023</p>
-                                            <p><i class="bi bi-geo-alt"></i> Palembang, Sumatra Selatan</p>
-                                            <p class="text-primary"><i class="bi bi-check-circle-fill text-primary"></i>
-                                                Pembayaran Selesai</p>
-                                            <p><i class="bi bi-exclamation-circle-fill"></i> Menungu konfirmasi</p>
-                                            <di class="d-flex mt-2">
-                                                <a href="#" class="btn btn-primary btn-sm">Lihat Detail</a>
-                                                <a href="#" class="ms-2 btn btn-secondary btn-sm">Tulis Ulasan</a>
-                                            </di>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
-                    <!-- Tambahkan lebih banyak card di sini jika diperlukan -->
                 </div>
             </div>
         </div>
-        <!-- kost book Section End -->
 
         <!-- Footer Start -->
         <div class="container-fluid bg-dark text-white-50 footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">

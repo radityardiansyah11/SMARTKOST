@@ -21,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($password, $user['password'])) {
             // Password benar, login berhasil
             $_SESSION['username'] = $user['username'];
+            $_SESSION['email'] = $email;
 
             // Ambil gambar profil dari database
             $sql_profile_image = "SELECT profile_image FROM login_system WHERE username = ?";

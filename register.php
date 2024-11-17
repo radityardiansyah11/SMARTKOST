@@ -33,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($stmt->execute()) {
                 // Setelah pendaftaran berhasil, simpan informasi pengguna ke dalam sesi
                 $_SESSION['username'] = $username;
+                $_SESSION['email'] = $email;
 
                 // Arahkan ke halaman user-home
                 header("Location: user-home.php");

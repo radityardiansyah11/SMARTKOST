@@ -10,6 +10,10 @@ if (!isset($_SESSION['pkname'])) {
 
 $pkname = $_SESSION['pkname']; // Ambil username dari sesi
 
+ // Fetch Kost listings from the database
+ $pkname = $_SESSION['pkname']; // Ambil pkname dari sesi
+ $result = $conn->query("SELECT * FROM kost WHERE pkname = '$pkname'");
+
 // Handle delete request
 if (isset($_GET['delete'])) {
     $id = intval($_GET['delete']);
@@ -37,11 +41,42 @@ if (isset($_GET['delete'])) {
     exit();
 }
 
+// Perbaiki query untuk menghitung jumlah booking dengan JOIN pada tabel kost
+$query_count_bookings = "
+    SELECT COUNT(*) AS total_bookings
+    FROM bookings b
+    JOIN kost k ON b.nama_kost = k.nama_kost
+    WHERE k.pkname = '$pkname'
+";
+$result_count_bookings = mysqli_query($conn, $query_count_bookings);
+$row_count_bookings = mysqli_fetch_assoc($result_count_bookings);
+$total_bookings = $row_count_bookings['total_bookings'];
+
 // Query untuk menghitung jumlah kost milik pemilik kost yang login
 $query_count_kost = "SELECT COUNT(*) AS total_kost FROM kost WHERE pkname = '$pkname'";
 $result_count_kost = mysqli_query($conn, $query_count_kost);
 $row_count_kost = mysqli_fetch_assoc($result_count_kost);
 $total_kost = $row_count_kost['total_kost'];
+
+// Query untuk menghitung jumlah kost milik pemilik kost yang login
+$query_count_kost = "SELECT COUNT(*) AS total_kost FROM kost WHERE pkname = '$pkname'";
+$result_count_kost = mysqli_query($conn, $query_count_kost);
+$row_count_kost = mysqli_fetch_assoc($result_count_kost);
+$total_kost = $row_count_kost['total_kost'];
+
+// Tangani parameter pencarian
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+
+// Query untuk menghitung jumlah kost yang dimiliki oleh pkname
+$sql_kost = "SELECT * FROM kost WHERE pkname = '$pkname'";
+
+// Jika ada parameter pencarian
+if ($search) {
+    $search = $conn->real_escape_string($search);  // Sanitize input
+    $sql_kost .= " AND nama_kost LIKE '%$search%'";  // Mencari berdasarkan nama kost
+}
+
+$result = $conn->query($sql_kost);  // Eksekusi query
 
 function limit_characters($string, $char_limit)
 {
@@ -50,6 +85,17 @@ function limit_characters($string, $char_limit)
     }
     return $string;
 }
+
+// Query untuk menghitung total pendapatan
+$query_total_pendapatan = "
+    SELECT SUM(b.total_harga) AS total_pendapatan
+    FROM bookings b
+    JOIN kost k ON b.nama_kost = k.nama_kost
+    WHERE k.pkname = '$pkname'
+";
+$result_total_pendapatan = mysqli_query($conn, $query_total_pendapatan);
+$row_total_pendapatan = mysqli_fetch_assoc($result_total_pendapatan);
+$total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
 
 ?>
 
@@ -225,7 +271,7 @@ function limit_characters($string, $char_limit)
                     </div>
 
                     <!-- Stats Overview -->
-                    <div class="col-md-4">
+                    <div class="col-md-4 wow fadeInUp" data-wow-delay="0.1s">
                         <div class="card bg-primary" style="height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title text-light">Kost</h5>
@@ -236,19 +282,19 @@ function limit_characters($string, $char_limit)
                         </div>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-4 wow fadeInUp" data-wow-delay="0.2s">
                         <div class="card" style="height: 150px; background-color: #009774;">
                             <div class="card-body">
                                 <h5 class="card-title text-light">Booking</h5>
-                                <h3 class="card-text text-light">0</h3>
+                                <h3 class="card-text text-light"><?php echo $total_bookings; ?></h3>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 wow fadeInUp" data-wow-delay="0.3s">
                         <div class="card bg-primary" style="height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title text-light">Pendapatan</h5>
-                                <h3 class="card-text text-light">Rp. 0</h3>
+                                <h3 class="card-text text-light">Rp. <?php echo number_format($total_pendapatan, 0, ',', '.'); ?></h3>
                             </div>
                         </div>
                     </div>
@@ -257,15 +303,19 @@ function limit_characters($string, $char_limit)
                 <!-- Listings -->
                 <div class="container-xxl py-5">
                     <div class="container">
-                        <div class="row mt-2 g-0 gx-5">
+                        <div class="row mt-2 g-0 gx-5 mb-4">
                             <div class="col-lg-6 d-flex align-items-center">
                                 <h4 class="mb-3">List Kost Anda</h4>
-                            </div>
-                            <div class="col-lg-6 d-flex mb-3 justify-content-end">
-                                <a href="pk-tambah kost.php" class="btn btn-primary px-3 d-none d-lg-flex">Tambah
-                                    Kost</a>
+                                <form class="d-flex mb-3 ms-3" action="" method="GET">
+                                    <input class="form-control me-2" type="search" name="search" placeholder="Cari Kost"
+                                        aria-label="Search"
+                                        value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                                    <button class="btn btn-outline-success" type="submit"><i
+                                            class="bi bi-search"></i></button>
+                                </form>
                             </div>
                         </div>
+
 
                         <!-- list kost -->
                         <div class="tab-content">
@@ -273,9 +323,7 @@ function limit_characters($string, $char_limit)
                                 <div class="row g-4">
 
                                     <?php
-                                    // Fetch Kost listings from the database
-                                    $pkname = $_SESSION['pkname']; // Ambil pkname dari sesi
-                                    $result = $conn->query("SELECT * FROM kost WHERE pkname = '$pkname'");
+                                   
                                     while ($row = $result->fetch_assoc()) {
                                         ?>
                                         <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
@@ -323,7 +371,8 @@ function limit_characters($string, $char_limit)
                                                 </div>
 
                                                 <div class="p-4 pb-0">
-                                                    <a class="d-block h5 mb-2" href=""><?php echo limit_characters($row['nama_kost'], 14); ?></a>
+                                                    <a class="d-block h5 mb-2"
+                                                        href=""><?php echo limit_characters($row['nama_kost'], 14); ?></a>
                                                     <h5 class="text-primary mb-2">Rp.
                                                         <?php echo number_format($row['harga'], 0, ',', '.'); ?>
                                                     </h5>
@@ -368,7 +417,7 @@ function limit_characters($string, $char_limit)
     </div>
 
     <!-- JavaScript Libraries -->
-     <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function () {
             <?php if (isset($_SESSION['status'])): ?>
                 var status = "<?php echo $_SESSION['status']; ?>";
@@ -406,7 +455,7 @@ function limit_characters($string, $char_limit)
                 <?php unset($_SESSION['status']); ?>
             <?php endif; ?>
         });
-     </script>
+    </script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/wow/wow.min.js"></script>
