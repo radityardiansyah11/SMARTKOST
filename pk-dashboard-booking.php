@@ -389,7 +389,6 @@ $total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
                                                 onclick='openBookingModal(<?php echo json_encode($row); ?>)'>
                                                 <img src="img2/view.png" class="w-75">
                                             </button>
-                                            </button>
                                             <a href="?delete=<?php echo $row['id']; ?>"
                                                 class="btn btn-sm btn-danger mt-2 btn-trash"
                                                 onclick="return confirm('Apa kamu yakin akan menghapus?');">

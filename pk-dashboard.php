@@ -45,7 +45,7 @@ $query_count_bookings = "
 ";
 $result_count_bookings = mysqli_query($conn, $query_count_bookings);
 $row_count_bookings = mysqli_fetch_assoc($result_count_bookings);
-$total_bookings = $row_count_bookings['total_bookings']; 
+$total_bookings = $row_count_bookings['total_bookings'];
 
 // Query untuk menghitung jumlah kost milik pemilik kost yang login
 $query_count_kost = "SELECT COUNT(*) AS total_kost FROM kost WHERE pkname = '$pkname'";
@@ -55,14 +55,13 @@ $total_kost = $row_count_kost['total_kost'];
 
 // Query untuk mengambil data booking yang sesuai dengan kost yang dimiliki pemilik kost
 $query_bookings = "
-    SELECT b.id, b.nama_penyewa, b.telp_penyewa, b.email_penyewa, k.nama_kost, 
-           b.metode_pembayaran, b.total_harga, b.mulai_sewa, b.selesai_sewa
-    FROM bookings b
-    JOIN kost k ON b.nama_kost = k.nama_kost
-    WHERE k.pkname = '$pkname'
-    ORDER BY b.id ASC
-    LIMIT 10
-";
+   SELECT b.id, b.nama_penyewa, b.telp_penyewa, b.email_penyewa, k.nama_kost, 
+       b.metode_pembayaran, b.total_harga, b.mulai_sewa, b.selesai_sewa, 
+       k.pkname AS pemilik_kost, k.alamat AS alamat_kost, 
+       b.order_id, b.status_pembayaran, b.tanggal_booking
+FROM bookings b
+JOIN kost k ON b.nama_kost = k.nama_kost
+WHERE k.pkname = '$pkname'";
 $result_bookings = mysqli_query($conn, $query_bookings);
 
 function limit_characters($string, $char_limit)
@@ -195,6 +194,87 @@ $total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
             object-fit: cover;
             object-position: center;
         }
+
+        /* CSS */
+        .clean-modal {
+            border-radius: 10px;
+            box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.15);
+            font-family: 'Arial', sans-serif;
+        }
+
+        .modal-header {
+            background-color: #00B98E;
+            border-bottom: none;
+            padding: 20px 24px;
+        }
+
+        .modal-body {
+            padding: 20px 24px;
+            background-color: #ffffff;
+        }
+
+        .modal-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #6c757d;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+
+        .modal-info {
+            font-size: 1rem;
+            color: #333;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .section-header {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.25rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            background-color: #00B98E;
+            border-top: none;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .modal-footer .btn {
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .form-select {
+            border: none;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        /* Responsiveness untuk 4 Kolom */
+        @media (min-width: 992px) {
+            .modal-body .row .col-md-3 {
+                width: 25%;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .modal-body .row .col-md-3 {
+                width: 50%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .modal-body .row .col-md-3 {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -296,7 +376,9 @@ $total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
                         <div class="card bg-primary" style="height: 150px;">
                             <div class="card-body">
                                 <h5 class="card-title text-light">Pendapatan</h5>
-                                <h3 class="card-text text-light">Rp. <?php echo number_format($total_pendapatan, 0, ',', '.'); ?></h3>
+                                <h3 class="card-text text-light">Rp.
+                                    <?php echo number_format($total_pendapatan, 0, ',', '.'); ?>
+                                </h3>
                             </div>
                         </div>
                     </div>
@@ -322,7 +404,7 @@ $total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
                             </thead>
                             <tbody>
                                 <?php while ($row = mysqli_fetch_assoc($result_bookings)) { ?>
-                                    <tr class="wow fadeIn" data-wow-delay="0.1s" >
+                                    <tr class="wow fadeIn" data-wow-delay="0.1s">
                                         <td class="align-middle"><?php echo $row['id']; ?></td>
                                         <td class="align-middle"><?php echo htmlspecialchars($row['nama_penyewa']); ?></td>
                                         <td class="align-middle"><?php echo limit_characters($row['telp_penyewa'], 10); ?>
@@ -337,8 +419,10 @@ $total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
                                         <td class="align-middle"><?php echo htmlspecialchars($row['selesai_sewa']); ?>
                                         </td>
                                         <td>
-                                            <a href="#"><button class="btn btn-sm btn-primary btn-view mt-2"><img
-                                                        src="img2/view.png" class="w-75"></button></a>
+                                            <button class="btn btn-sm btn-primary btn-view mt-2"
+                                                onclick='openBookingModal(<?php echo json_encode($row); ?>)'>
+                                                <img src="img2/view.png" class="w-75">
+                                            </button>
                                             <a href="?delete=<?php echo $row['id']; ?>"
                                                 class="btn btn-sm btn-danger mt-2 btn-trash"
                                                 onclick="return confirm('Apa kamu yakin akan menghapus?');">
@@ -350,6 +434,103 @@ $total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
                                 <!-- More rows as needed -->
                             </tbody>
                         </table>
+                        <div class="modal fade" id="viewBookingModal" tabindex="-1"
+                            aria-labelledby="viewBookingModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content clean-modal">
+                                    <div class="modal-header">
+                                        <h5 class="text-white" id="viewBookingModalLabel">Detail Booking</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- User booking detail -->
+                                        <div class="section-header">User Booking Detail</div>
+                                        <div class="row gy-3">
+                                            <!-- User details here -->
+                                            <div class="col-12 col-md-3">
+                                                <label class="modal-label">ID Booking</label>
+                                                <div class="modal-info" id="modalBookingId"></div>
+                                            </div>
+                                            <div class="col-12 col-md-3">
+                                                <label class="modal-label">Nama Penyewa</label>
+                                                <div class="modal-info" id="modalNamaPenyewa"></div>
+                                            </div>
+                                            <div class="col-12 col-md-3">
+                                                <label class="modal-label">Email Penyewa</label>
+                                                <div class="modal-info" id="modalEmailPenyewa"></div>
+                                            </div>
+                                            <div class="col-12 col-md-3">
+                                                <label class="modal-label">Telp Penyewa</label>
+                                                <div class="modal-info" id="modalTelpPenyewa"></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Kost detail booking -->
+                                        <div class="section-header">Kost Detail Booking</div>
+                                        <div class="row gy-3">
+                                            <!-- Kost details here -->
+                                            <div class="col-12 col-md-3">
+                                                <label class="modal-label">Nama Kost</label>
+                                                <div class="modal-info" id="modalNamaKost"></div>
+                                            </div>
+                                            <div class="col-12 col-md-3">
+                                                <label class="modal-label">Pemilik Kost</label>
+                                                <div class="modal-info" id="modalPemilikKost"></div>
+                                            </div>
+                                            <div class="col-12 col-md-3">
+                                                <label class="modal-label">Alamat Kost</label>
+                                                <div class="modal-info" id="modalAlamatKost"></div>
+                                            </div>
+                                            <div class="col-12 col-md-3">
+                                                <label class="modal-label">Tanggal Mulai Sewa</label>
+                                                <div class="modal-info" id="modalMulaiSewa"></div>
+                                            </div>
+                                            <div class="col-12 col-md-3">
+                                                <label class="modal-label">Tanggal Selesai Sewa</label>
+                                                <div class="modal-info" id="modalSelesaiSewa"></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Price detail booking -->
+                                        <div class="section-header">Price Detail Booking</div>
+                                        <div class="row gy-3">
+                                            <!-- Price details here -->
+                                            <div class="col-12 col-md-3">
+                                                <label class="modal-label">Order ID</label>
+                                                <div class="modal-info" id="modalOrderId"></div>
+                                            </div>
+                                            <div class="col-12 col-md-3">
+                                                <label class="modal-label">Total Harga</label>
+                                                <div class="modal-info" id="modalTotalHarga"></div>
+                                            </div>
+                                            <div class="col-12 col-md-3">
+                                                <label class="modal-label">Metode Pembayaran</label>
+                                                <div class="modal-info" id="modalMetodePembayaran"></div>
+                                            </div>
+                                            <div class="col-12 col-md-3">
+                                                <label class="modal-label">Status Pembayaran</label>
+                                                <select id="modalStatusPembayaran" class="form-select">
+                                                    <option value="Pending">Pending</option>
+                                                    <option value="Paid">Paid</option>
+                                                    <option value="Canceled">Canceled</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-12 col-md-3">
+                                                <label class="modal-label">Tanggal Booking</label>
+                                                <div class="modal-info" id="modalTanggalBooking"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-light"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            onclick="saveStatusPembayaran()">Confirm</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <a href="pk-dashboard-booking.php" class="text-end" style="color: grey;">View More</a>
                 </div>
@@ -467,6 +648,56 @@ $total_pendapatan = $row_total_pendapatan['total_pendapatan'] ?? 0;
 
     <!-- JavaScript Libraries -->
     <script>
+        function openBookingModal(booking) {
+            // Isi elemen modal dengan data booking yang diklik
+            document.getElementById("modalBookingId").textContent = booking.id;
+            document.getElementById("modalPemilikKost").textContent = booking.pemilik_kost;
+            document.getElementById("modalNamaKost").textContent = booking.nama_kost;
+            document.getElementById("modalAlamatKost").textContent = booking.alamat_kost;
+            document.getElementById("modalTotalHarga").textContent = "Rp. " + new Intl.NumberFormat().format(booking.total_harga);
+            document.getElementById("modalMulaiSewa").textContent = booking.mulai_sewa;
+            document.getElementById("modalSelesaiSewa").textContent = booking.selesai_sewa;
+            document.getElementById("modalNamaPenyewa").textContent = booking.nama_penyewa;
+            document.getElementById("modalEmailPenyewa").textContent = booking.email_penyewa;
+            document.getElementById("modalTelpPenyewa").textContent = booking.telp_penyewa;
+            document.getElementById("modalMetodePembayaran").textContent = booking.metode_pembayaran;
+            document.getElementById("modalStatusPembayaran").value = booking.status_pembayaran;
+            document.getElementById("modalTanggalBooking").textContent = booking.tanggal_booking;
+            document.getElementById("modalOrderId").textContent = booking.order_id;
+
+            // Tampilkan modal
+            var viewBookingModal = new bootstrap.Modal(document.getElementById('viewBookingModal'));
+            viewBookingModal.show();
+        }
+
+        function saveStatusPembayaran() {
+            const bookingId = document.getElementById('modalBookingId').innerText; // Ambil ID Booking
+            const statusPembayaran = document.getElementById('modalStatusPembayaran').value; // Status yang dipilih
+
+            // Kirim data ke server menggunakan fetch API
+            fetch('update_status.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `booking_id=${bookingId}&status_pembayaran=${statusPembayaran}`
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert('Status pembayaran berhasil diperbarui.');
+                        // Reload halaman untuk melihat perubahan
+                        location.reload();
+                    } else {
+                        alert('Gagal memperbarui status: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan.');
+                });
+        }
+
         function confirmLogout() {
             if (confirm("Anda yakin ingin logout?")) {
                 // Jika konfirmasi diterima, arahkan ke logout.php
